@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ES2022"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "ES2022",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2020",
+    "isolatedModules": true,
+    "preserveSymlinks": true,
+    "outDir": "dist",
+    "emitDeclarationOnly": false,
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}

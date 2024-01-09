@@ -1,0 +1,27 @@
+{
+  "name": "authorization-server",
+  "scripts": {
+    "build:request": "cd ../request-jwt-auth-grant && yarn install && yarn build && cd ..",
+    "server": "node server.js",
+    "server:todo": "node -r dotenv/config server.js dotenv_config_path=./.env.todo",
+    "server:wiki": "node -r dotenv/config server.js dotenv_config_path=./.env.wiki"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "desm": "^1.3.1",
+    "dotenv": "^16.4.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
+    "find-config": "^1.0.0",
+    "jose": "^5.2.1",
+    "lodash": "^4.17.21",
+    "oidc-provider": "^8.4.5",
+    "passport": "^0.7.0",
+    "passport-openidconnect": "aaronpk/passport-openidconnect#master",
+    "request-jwt-auth-grant": "file:../request-jwt-auth-grant",
+    "vite": "^5.0.12"
+  }
+}

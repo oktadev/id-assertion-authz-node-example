@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-mongo
+{
+  "name": "id-assertion-authz-node-example Dev Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "id-assertion-authz-node-example",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+  // Configure tool-specific properties.
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        "Orta.vscode-jest",
+        "Gruntfuggly.todo-tree",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "marclipovsky.string-manipulation",
+        "Tyriar.sort-lines"
+      ],
+      "settings": {
+        "typescript.inlayHints.parameterNames.enabled": "literals",
+        "typescript.inlayHints.variableTypes.enabled": true,
+        "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+        "typescript.inlayHints.parameterTypes.enabled": true,
+        "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+        "typescript.referencesCodeLens.enabled": true,
+        "typescript.implementationsCodeLens.enabled": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true,
+          "source.fixAll": true
+        },
+        "editor.formatOnSave": true,
+        "typescript.format.semicolons": "insert",
+        "todo-tree.tree.showCountsInTree": true,
+        "todo-tree.general.showActivityBarBadge": true
+      }
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [3000, 27017],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "yarn preinstall && yarn install && yarn postinstall && yarn server:install"
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}

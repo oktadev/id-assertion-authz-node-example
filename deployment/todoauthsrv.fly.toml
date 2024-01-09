@@ -1,0 +1,33 @@
+# fly.toml app configuration file generated for todo-srv on 2024-01-02T15:00:37-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'todo-auth-srv'
+primary_region = "sjc"
+
+[build]
+  dockerfile = "./auth.fly.dockerfile"
+
+[env]
+  SERVER_START_APP_NAME="todo"
+  AUTH_SERVER_PORT="5001"
+  AUTH_SERVER="https://todo-auth-srv.fly.dev"
+  TODO_SERVER="https://todo0.app"
+  APP_RESOURCE="https://todo0.app/"
+  CLIENT1_CALLBACK="https://todo0.app/api/openid/callback/"
+  CUSTOMER1_EMAIL_DOMAIN="tables.fake"
+  CUSTOMER1_AUTH_ISSUER="https://localgrid.clouditude.com"
+
+[http_service]
+  internal_port = 5001
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024

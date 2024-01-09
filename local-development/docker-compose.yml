@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # cross-app-authz-node-example:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ../..:/cross-app-authz-node-example:cached
+  #     # The line below speeds up slowness of running jest tests (see https://github.com/docker/for-mac/issues/1358).
+  #     - /workspaces/cross-app-authz-node-example/node_modules
+
+  #   # Overrides default command so things don't shut down after the process ends.
+  #   # command: sleep infinity
+
+  #   # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+  #   network_mode: service:db
+  db:
+    image: mariadb:latest
+    environment:
+      # Default for local development only
+      MYSQL_ROOT_PASSWORD: 'avocado'
+    restart: unless-stopped
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    expose:
+    - "127.0.0.1:3306"
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    # # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    # network_mode: service:db
+    ports:
+      - "127.0.0.1:6379:6379"
+    expose:
+    - "127.0.0.1:6379"
+
+volumes:
+  mysqldata:

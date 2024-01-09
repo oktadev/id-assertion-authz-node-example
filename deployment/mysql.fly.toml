@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for mysql-srv on 2023-12-15T14:09:06-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "mysql-srv"
+primary_region = "sjc"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[mounts]
+  source="mysqldata"
+  destination="/var/lib/mysql"
+
+[processes]
+  app = ""
+
+[build]
+  dockerfile = "./mysql.fly.dockerfile"
