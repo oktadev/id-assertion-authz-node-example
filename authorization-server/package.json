@@ -1,7 +1,7 @@
 {
   "name": "authorization-server",
   "scripts": {
-    "build:request": "cd ../request-jwt-auth-grant && yarn install && yarn build && cd ..",
+    "build:request": "cd ../id-assert-authz-grant-client && yarn install && yarn build && cd ..",
     "server": "node server.js",
     "server:todo": "node -r dotenv/config server.js dotenv_config_path=./.env.todo",
     "server:wiki": "node -r dotenv/config server.js dotenv_config_path=./.env.wiki"
@@ -21,7 +21,7 @@
     "oidc-provider": "^8.4.5",
     "passport": "^0.7.0",
     "passport-openidconnect": "aaronpk/passport-openidconnect#master",
-    "request-jwt-auth-grant": "file:../request-jwt-auth-grant",
+    "id-assert-authz-grant-client": "file:../id-assert-authz-grant-client",
     "vite": "^5.0.12"
   }
 }

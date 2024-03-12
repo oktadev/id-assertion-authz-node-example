@@ -2,11 +2,11 @@ import * as jose from 'jose';
 import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
+import { OAuthGrantType } from 'id-assert-authz-grant-client';
 import makeConfiguration from './server-configuration.js';
 import { validateSignatureJWKs } from './utils/jwks.js';
 
 export default async (_, provider) => {
-  const grantType = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
   const parameters = ['assertion', 'scope'];
 
   const configuration = await makeConfiguration();
@@ -143,5 +143,5 @@ export default async (_, provider) => {
     await next();
   }
 
-  provider.registerGrantType(grantType, jwtAuthorizationGrantHandler, parameters);
+  provider.registerGrantType(OAuthGrantType.JWT_BEARER, jwtAuthorizationGrantHandler, parameters);
 };

@@ -1,16 +1,13 @@
 export const enum OAuthGrantType {
+  JWT_BEARER = 'urn:ietf:params:oauth:grant-type:jwt-bearer',
   TOKEN_EXCHANGE = 'urn:ietf:params:oauth:grant-type:token-exchange',
 }
 
 export const enum OAuthTokenType {
+  ACCESS_TOKEN = 'urn:ietf:params:oauth:token-type:access_token',
   ID_TOKEN = 'urn:ietf:params:oauth:token-type:id_token',
-  // Deprecated
   JWT_ID_JAG = 'urn:ietf:params:oauth:token-type:id-jag',
-  JWT_AUTHORIZATION_GRANT = 'urn:ietf:params:oauth:token-type:jwt-authorization-grant',
   SAML2 = 'urn:ietf:params:oauth:token-type:saml2',
-
-  // Not applicable
-  N_A = 'N_A',
 }
 
 export const enum OAuthClientAssertionType {
@@ -34,10 +31,29 @@ export type OAuthError = {
   error_uri?: string;
 };
 
-export type JwtAuthorizationGrant = {
+export type OAuthAccessTokenResponseType = {
   access_token: string;
-  issued_token_type: OAuthTokenType.JWT_AUTHORIZATION_GRANT | OAuthTokenType.JWT_ID_JAG;
-  token_type: OAuthTokenType.N_A;
+  token_type: string;
   scope?: string;
   expires_in?: number;
+  refresh_token?: string;
+};
+
+export type OAuthTokenExchangeResponseType = {
+  access_token: string;
+  issued_token_type: OAuthTokenType;
+  token_type: string;
+  scope?: string;
+  expires_in?: number;
+  refresh_token?: string;
+};
+
+export type ClientIdFields = {
+  client_id: string;
+  client_secret?: string;
+};
+
+export type ClientAssertionFields = {
+  client_assertion_type: OAuthClientAssertionType;
+  client_assertion: string;
 };

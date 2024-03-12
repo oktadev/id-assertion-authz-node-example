@@ -1,9 +1,6 @@
 import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
-import {
-  authorizationGrantTokenExchange,
-  authorizationGrantTokenExchangeType,
-  idaagTokenExchangeType,
-} from './jwt-authorization-grant-token-exchange.js';
+import { OAuthTokenType } from 'id-assert-authz-grant-client';
+import { authorizationGrantTokenExchange } from './jwt-authorization-grant-token-exchange.js';
 import makeConfiguration from './server-configuration.js';
 
 export default async (_, provider) => {
@@ -25,10 +22,7 @@ export default async (_, provider) => {
   async function tokenExchangeHandler(ctx, next) {
     const { requested_token_type } = ctx.oidc.params;
 
-    if (
-      requested_token_type === authorizationGrantTokenExchangeType ||
-      requested_token_type === idaagTokenExchangeType
-    ) {
+    if (requested_token_type === OAuthTokenType.JWT_ID_JAG) {
       await authorizationGrantTokenExchange(ctx, configuration);
     } else {
       throw new CustomOIDCProviderError(
