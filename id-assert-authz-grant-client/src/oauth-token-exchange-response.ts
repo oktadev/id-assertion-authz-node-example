@@ -59,7 +59,7 @@ export default class OauthTokenExchangeResponse implements OAuthTokenExchangeRes
       this.scope = scope;
     }
 
-    if (typeof expires_in === 'number' && !(expires_in > 0)) {
+    if (typeof expires_in === 'number' && expires_in > 0) {
       this.expires_in = expires_in;
     }
 

@@ -3,6 +3,7 @@ import {
   ExchangeTokenResult,
   exchangeIdJwtAuthzGrant,
   requestIdJwtAuthzGrant,
+  AccessTokenResult
 } from 'id-assert-authz-grant-client';
 import passport from 'passport';
 import OpenIDConnectStrategy, { Profile, VerifyCallback } from 'passport-openidconnect';
@@ -139,7 +140,7 @@ const verify = async (
 
   const { payload: authGrantToken } = authGrantResponse;
 
-  let accessTokenResponse: ExchangeTokenResult;
+  let accessTokenResponse: AccessTokenResult;
 
   try {
     accessTokenResponse = await exchangeIdJwtAuthzGrant({
