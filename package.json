@@ -6,8 +6,8 @@
   "scripts": {
     "postinstall": "npx prisma generate --schema=todo0/prisma/schema.prisma && npx prisma generate --schema=wiki0/prisma/schema.prisma",
     "server:install": "cd ./authorization-server && yarn install && cd ../",
-    "preinstall": "yarn build:request && yarn link request-jwt-auth-grant",
-    "build:request": "cd request-jwt-auth-grant && yarn link && yarn install && yarn build && cd ..",
+    "preinstall": "yarn build:request && yarn link id-assert-authz-grant-client",
+    "build:request": "cd id-assert-authz-grant-client && yarn link && yarn install && yarn build && cd ..",
     "dev:todo": "cd todo0 && nodemon -e ts -w src/server -x 'tsx src/server/main.ts'",
     "dev:wiki": "cd wiki0 && nodemon -e ts -w src/server -x 'tsx src/server/main.ts'",
     "auth:todo": "cd ./authorization-server && yarn server:todo",
@@ -50,7 +50,7 @@
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.21.3",
     "redis": "^4.6.13",
-    "request-jwt-auth-grant": "file:./request-jwt-auth-grant",
+    "id-assert-authz-grant-client": "file:./id-assert-authz-grant-client",
     "tsx": "^4.7.0",
     "vite-express": "*"
   },

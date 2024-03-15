@@ -2,13 +2,10 @@ import * as jose from 'jose';
 import { CustomOIDCProviderError, OIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
-import { OAuthBadRequest, getJwtAuthGrant } from 'request-jwt-auth-grant';
+import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
 import { getIdToken } from './utils/id-token-cache.js';
-// Final name TBD
-export const authorizationGrantTokenExchangeType =
-  'urn:ietf:params:oauth:token-type:jwt-authorization-grant';
-export const idaagTokenExchangeType = 'urn:ietf:params:oauth:token-type:id-jag';
 
+// eslint-disable-next-line import/prefer-default-export
 export async function authorizationGrantTokenExchange(ctx, configuration) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
 
@@ -35,7 +32,7 @@ export async function authorizationGrantTokenExchange(ctx, configuration) {
   // Lookup by payload.sub and get the last idToken saved
   const savedIdToken = getIdToken(payload.sub);
 
-  const { error, payload: jwtAuthGrant } = await getJwtAuthGrant({
+  const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,
     subjectToken: savedIdToken,

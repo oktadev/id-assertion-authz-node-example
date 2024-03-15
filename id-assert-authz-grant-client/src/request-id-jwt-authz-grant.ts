@@ -1,22 +1,17 @@
 import qs from 'qs';
-import { InvalidArgumentError } from './exceptions';
+import { InvalidArgumentError, InvalidPayloadError } from './exceptions';
 import HttpResponse from './http-response';
-import JwtAuthGrantResponse from './jwt-auth-grant-response';
+import OauthTokenExchangeResponse from './oauth-token-exchange-response';
 import OAuthBadRequest from './oauth-bad-request';
 import {
-  JwtAuthorizationGrant,
+  ClientAssertionFields,
+  ClientIdFields,
   OAuthClientAssertionType,
-  OAuthError,
   OAuthGrantType,
   OAuthTokenType,
 } from './oauth.types';
-
-export * from './exceptions';
-export * from './oauth.types';
-
-export { default as HttpResponse } from './http-response';
-export { default as JwtAuthGrantResponse } from './jwt-auth-grant-response';
-export { default as OAuthBadRequest } from './oauth-bad-request';
+import { transformScopes } from './oauth.utilities';
+import { ClientAssertionOption, ClientIdOption, ExchangeTokenResult } from './types';
 
 export type GetJwtAuthGrantBaseOptions = {
   tokenUrl: string;
@@ -26,48 +21,20 @@ export type GetJwtAuthGrantBaseOptions = {
   scopes?: string | Set<string> | string[];
 };
 
-export type GetJwtAuthGrantClientSecretOption = {
-  clientID: string;
-  clientSecret?: string;
-};
-
-export type GetJwtAuthGrantClientAssertionOption = {
-  clientAssertion: string;
-};
-
 export type SubjectTokenType = 'oidc' | 'saml';
-
-export type GetJwtAuthGrantResult =
-  | {
-      payload: JwtAuthorizationGrant;
-    }
-  | {
-      error: OAuthError | HttpResponse;
-    };
 
 type RequestFields = {
   grant_type: OAuthGrantType.TOKEN_EXCHANGE;
-  requested_token_type: OAuthTokenType.JWT_ID_JAG | OAuthTokenType.JWT_AUTHORIZATION_GRANT;
+  requested_token_type: OAuthTokenType.JWT_ID_JAG;
   resource: string;
   scope: string;
   subject_token: string;
   subject_token_type: OAuthTokenType;
 };
 
-type ClientIdFields = {
-  client_id: string;
-  client_secret?: string;
-};
-
-type ClientAssertionFields = {
-  client_assertion_type: OAuthClientAssertionType;
-  client_assertion: string;
-};
-
-export const getJwtAuthGrant = async (
-  opts: GetJwtAuthGrantBaseOptions &
-    (GetJwtAuthGrantClientSecretOption | GetJwtAuthGrantClientAssertionOption)
-): Promise<GetJwtAuthGrantResult> => {
+export const requestIdJwtAuthzGrant = async (
+  opts: GetJwtAuthGrantBaseOptions & (ClientIdOption | ClientAssertionOption)
+): Promise<ExchangeTokenResult> => {
   const { resource, subjectToken, subjectTokenType, scopes, tokenUrl } = opts;
 
   if (!tokenUrl || typeof tokenUrl !== 'string') {
@@ -98,24 +65,7 @@ export const getJwtAuthGrant = async (
       );
   }
 
-  let scope: string;
-
-  if (scopes) {
-    if (Array.isArray(scopes)) {
-      scope = scopes.join(' ');
-    } else if (scopes instanceof Set) {
-      scope = Array.from(scopes).join(' ');
-    } else if (typeof scopes === 'string') {
-      scope = scopes;
-    } else {
-      throw new InvalidArgumentError(
-        'scopes',
-        'Expected a valid string, array of strings, or Set of strings.'
-      );
-    }
-  } else {
-    scope = '';
-  }
+  const scope = transformScopes(scopes);
 
   let clientAssertionData: ClientIdFields | ClientAssertionFields;
 
@@ -175,7 +125,19 @@ export const getJwtAuthGrant = async (
     };
   }
 
-  return {
-    payload: new JwtAuthGrantResponse((await response.json()) as Record<string, any>),
-  };
+  const payload = new OauthTokenExchangeResponse((await response.json()) as Record<string, any>);
+
+  if (payload.issued_token_type !== OAuthTokenType.JWT_ID_JAG) {
+    throw new InvalidPayloadError(
+      `The field 'issued_token_type' must have the value '${OAuthTokenType.JWT_ID_JAG}' per the Identity Assertion Authorization Grant Draft Section 5.2.`
+    );
+  }
+
+  if (payload.token_type.toLowerCase() !== 'n_a') {
+    throw new InvalidPayloadError(
+      `The field 'token_type' must have the value 'n_a' per the Identity Assertion Authorization Grant Draft Section 5.2.`
+    );
+  }
+
+  return { payload };
 };

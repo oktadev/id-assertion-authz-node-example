@@ -27,7 +27,7 @@ COPY tsconfig.json tsconfig.json
 COPY package.json package.json
 COPY yarn.lock yarn.lock
 COPY deployment deployment
-COPY request-jwt-auth-grant request-jwt-auth-grant
+COPY id-assert-authz-grant-client id-assert-authz-grant-client
 
 RUN yarn install
 RUN yarn build:todo

@@ -1,7 +1,7 @@
 {
-  "name": "request-jwt-auth-grant",
+  "name": "id-assert-authz-grant-client",
   "version": "1.0.0",
-  "description": "Request JWT Authorization Grant using Token Exchange",
+  "description": "Token Exchange client for requesting and exchanging ID Assertion Authorization Grants",
   "type": "module",
   "exports": {
     ".": {

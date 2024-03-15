@@ -1,8 +1,12 @@
 import { Router } from 'express';
+import {
+  ExchangeTokenResult,
+  exchangeIdJwtAuthzGrant,
+  requestIdJwtAuthzGrant,
+  AccessTokenResult
+} from 'id-assert-authz-grant-client';
 import passport from 'passport';
 import OpenIDConnectStrategy, { Profile, VerifyCallback } from 'passport-openidconnect';
-import qs from 'qs';
-import { GetJwtAuthGrantResult, getJwtAuthGrant } from 'request-jwt-auth-grant';
 import prisma from '../../../prisma/client';
 
 // Most of the code below comes from https://developer.okta.com/blog/2023/07/28/oidc_workshop
@@ -100,10 +104,10 @@ const verify = async (
   }
 
   // For all resources, do this flow
-  let authGrantResponse: GetJwtAuthGrantResult;
+  let authGrantResponse: ExchangeTokenResult;
 
   try {
-    authGrantResponse = await getJwtAuthGrant({
+    authGrantResponse = await requestIdJwtAuthzGrant({
       tokenUrl: `${process.env.AUTH_SERVER}/token`,
       resource: `${process.env.TODO_AUTH_SERVER}/token`,
       subjectToken: idToken.toString(),
@@ -115,7 +119,7 @@ const verify = async (
       clientSecret: process.env.CLIENT1_CLIENT_SECRET!,
     });
   } catch (error: unknown) {
-    // Errors if there was an issue making one of the requests, or parsing the response.
+    // Errors if there was an issue making the request or parsing the response.
     console.log('Failed to obtain authorization grant', { idToken });
     console.log(error);
 
@@ -136,53 +140,74 @@ const verify = async (
 
   const { payload: authGrantToken } = authGrantResponse;
 
-  const accessTokenResponse = await fetch(`${process.env.TODO_AUTH_SERVER}/token`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-    },
-    body: qs.stringify({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion: authGrantToken.access_token,
-      scope: 'read write',
-      client_id: process.env.CLIENT2_CLIENT_ID,
-      client_secret: process.env.CLIENT2_CLIENT_SECRET,
-    }),
-  });
+  let accessTokenResponse: AccessTokenResult;
 
-  const accessToken = (await accessTokenResponse.json()) as {
-    token_type: string;
-    access_token: string;
-    expires_in: number;
-    refresh_token: string;
-  };
+  try {
+    accessTokenResponse = await exchangeIdJwtAuthzGrant({
+      tokenUrl: `${process.env.TODO_AUTH_SERVER}/token`,
+      authorizationGrant: authGrantToken.access_token,
+      scopes: ['read', 'write'],
+      clientID: process.env.CLIENT2_CLIENT_ID!,
+      clientSecret: process.env.CLIENT2_CLIENT_SECRET,
+    });
+  } catch (error: unknown) {
+    // Errors if there was an issue making the request or parsing the response.
+    console.log('Failed to exchange the authorization grant', {
+      authorizationGrant: authGrantToken.access_token,
+    });
+    console.log(error);
 
-  await prisma.authorizationToken.upsert({
-    where: {
-      orgId_userId_resource: {
+    done(null, user);
+    return;
+  }
+
+  if ('error' in accessTokenResponse) {
+    console.log('Failed to exchange authorization grant for access token', {
+      accessToken: authGrantToken.access_token,
+      error: accessTokenResponse.error,
+    });
+    console.log(accessTokenResponse.error);
+
+    done(null, user);
+    return;
+  }
+
+  // TODO: Refresh token
+  const accessToken = accessTokenResponse.payload;
+
+  try {
+    await prisma.authorizationToken.upsert({
+      where: {
+        orgId_userId_resource: {
+          userId: user.id,
+          orgId: user.orgId,
+          resource: 'CLIENT2',
+        },
+      },
+      create: {
         userId: user.id,
         orgId: user.orgId,
         resource: 'CLIENT2',
+        accessToken: accessToken.access_token,
+        refreshToken: accessToken.refresh_token,
+        jagToken: authGrantToken.access_token,
+        expiresAt: new Date(Date.now() + (accessToken.expires_in ?? 0) * 1000),
+        status: 'ACTIVE',
       },
-    },
-    create: {
-      userId: user.id,
-      orgId: user.orgId,
-      resource: 'CLIENT2',
-      accessToken: accessToken.access_token,
-      refreshToken: accessToken.refresh_token,
-      jagToken: authGrantToken.access_token,
-      expiresAt: new Date(Date.now() + accessToken.expires_in * 1000),
-      status: 'ACTIVE',
-    },
-    update: {
-      accessToken: accessToken.access_token,
-      refreshToken: accessToken.refresh_token,
-      jagToken: authGrantToken.access_token,
-      expiresAt: new Date(Date.now() + accessToken.expires_in * 1000),
-      status: 'ACTIVE',
-    },
-  });
+      update: {
+        accessToken: accessToken.access_token,
+        refreshToken: accessToken.refresh_token,
+        jagToken: authGrantToken.access_token,
+        expiresAt: new Date(Date.now() + (accessToken.expires_in ?? 0) * 1000),
+        status: 'ACTIVE',
+      },
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      done(error);
+    }
+    return;
+  }
 
   done(null, user);
 };
