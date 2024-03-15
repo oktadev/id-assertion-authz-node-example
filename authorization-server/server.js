@@ -17,10 +17,15 @@ const ISSUER = process.env.AUTH_SERVER;
 
 const app = express();
 
+const cookieSecret = process.env.COOKIE_SECRET;
+if (!cookieSecret) {
+  throw new Error('Missing env variable COOKIE_SECRET');
+}
+
 app.use(session({
   resave: false,
   saveUninitialized: false,
-  secret: 'top secret',
+  secret: cookieSecret,
   cookie: {
     http: false,
     sameSite: 'lax'
