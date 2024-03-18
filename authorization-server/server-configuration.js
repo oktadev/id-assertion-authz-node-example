@@ -6,6 +6,12 @@ import jwks from './utils/jwks.js';
 // Find the nearest .env and load it into process.ENV
 dotenv.config({ path: findConfig('.env') });
 
+const authInteractionSecret = process.env.AUTH_INTERACTION_COOKIE_SECRET;
+
+if (!authInteractionSecret) {
+  throw new Error('Missing env variable AUTH_INTERACTION_COOKIE_SECRET');
+}
+
 const clients = [
   {
     client: {
@@ -117,7 +123,7 @@ const configuration = {
     // custom claims - end
   },
   cookies: {
-    keys: ['one secret key', 'two secret key', 'three secret key'],
+    keys: [authInteractionSecret],
     short: {
       path: '/',
     },

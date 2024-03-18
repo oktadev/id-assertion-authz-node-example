@@ -3,7 +3,7 @@ import {
   ExchangeTokenResult,
   exchangeIdJwtAuthzGrant,
   requestIdJwtAuthzGrant,
-  AccessTokenResult
+  AccessTokenResult,
 } from 'id-assert-authz-grant-client';
 import passport from 'passport';
 import OpenIDConnectStrategy, { Profile, VerifyCallback } from 'passport-openidconnect';
