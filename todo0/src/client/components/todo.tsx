@@ -13,6 +13,7 @@ async function loadTodo(id?: string) {
     return res.task;
   } catch (error: unknown) {
     console.error(error);
+    return null;
   }
 }
 
@@ -21,7 +22,7 @@ function Todo() {
   const [task, setTask] = useState('');
 
   useEffect(() => {
-    loadTodo(id).then((task) => setTask(task));
+    loadTodo(id).then((loadedTask) => setTask(loadedTask));
   }, []);
 
   return (

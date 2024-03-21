@@ -1,6 +1,5 @@
 import { TextInput } from 'flowbite-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthState } from './authState';
 
 import signinLogo from '../assets/signin.svg';
@@ -11,7 +10,6 @@ export default function Signin() {
   const [usernameError, setUsernameError] = useState<string | undefined>(undefined);
 
   const { onUsernameEnteredFn } = useAuthState();
-  const navigate = useNavigate();
 
   const onAuthenticate = async () => {
     if (username) {
@@ -30,7 +28,7 @@ export default function Signin() {
       <main className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
         <div className="w-full p-8 lg:w-1/2">
           <div className="text-2xl font-semibold text-gray-700 text-center">
-            <img src={wikiIcon} className="inline" />
+            <img src={wikiIcon} className="inline" alt="Logo" />
             <span className="text-xl text-blue-500 text-center ml-2">Wiki0</span>
           </div>
 
@@ -39,32 +37,34 @@ export default function Signin() {
 
           <form className="m-6">
             <div className="mb-6 mt-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Work Email</label>
-
-              <TextInput
-                id="email"
-                placeholder="Work email address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                color={usernameError && 'failure'}
-                helperText={usernameError}
-                theme={{
-                  field: {
-                    input: {
-                      colors: {
-                        gray: 'bg-white text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-3 px-4 block w-full appearance-nonew-full text-slate-900 placeholder-slate-400 rounded-md py-2 pl-2 ring-1 ring-slate-200',
+              <label>
+                <span className="block text-gray-700 text-sm font-bold mb-2">Work Email</span>
+                <TextInput
+                  id="email"
+                  placeholder="Work email address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  color={usernameError && 'failure'}
+                  helperText={usernameError}
+                  theme={{
+                    field: {
+                      input: {
+                        colors: {
+                          gray: 'bg-white text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-3 px-4 block w-full appearance-nonew-full text-slate-900 placeholder-slate-400 rounded-md py-2 pl-2 ring-1 ring-slate-200',
+                        },
                       },
                     },
-                  },
-                }}
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-              />
+                  }}
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                />
+              </label>
             </div>
 
             <button
+              type="submit"
               className="bg-blue-500 text-white font-bold py-2.5 px-4 w-full rounded-lg hover:bg-gray-600"
               onClick={(e) => {
                 e.preventDefault();

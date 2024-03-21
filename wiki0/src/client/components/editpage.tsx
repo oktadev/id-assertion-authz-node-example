@@ -21,96 +21,6 @@ function prefixLine(prefix: string, text: string) {
     .join('\n');
 }
 
-function EditPage() {
-  const { id } = useParams();
-  const [page, setPage] = useState<IPage | null>(null);
-  const [links, setLinks] = useState<Record<string, UnfurlLinkStorage>>({});
-  const [requests, setRequests] = useState<RequestLogItem[]>([]);
-
-  const savePage = async (
-    idToSave: number,
-    html: string,
-    linksToUnfurl: Partial<Record<string, UnfurlLinkStorage>>
-  ) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/${idToSave}`, {
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...page,
-          content: html,
-        }),
-      });
-      const res = await response.json();
-      setPage(res);
-
-      const urlsToUnfurl = Object.keys(linksToUnfurl).filter((url) => {
-        const unfurl = linksToUnfurl[url];
-        return unfurl?.status === 'initiate';
-      });
-
-      if (urlsToUnfurl.length > 0) {
-        unfurlLinks(urlsToUnfurl);
-      }
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  };
-
-  const unfurlLinks = async (urls: string[]) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/unfurl`, {
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          urls,
-        }),
-      });
-      const res = (await response.json()) as {
-        links: Record<string, UnfurlLinkStorage>;
-        requests: RequestLogItem[];
-      };
-      setLinks({
-        ...links,
-        ...res.links,
-      });
-      setRequests(res.requests);
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    const getPage = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/${id}`, {
-          credentials: 'same-origin',
-          mode: 'same-origin',
-        });
-        const res = await response.json();
-        setPage(res);
-      } catch (error: unknown) {
-        console.error(error);
-      }
-    };
-    getPage();
-  }, [id]);
-
-  return (
-    <div>
-      {page && <Editor page={page} savePage={savePage} links={links} requests={requests} />}
-    </div>
-  );
-}
-
 function Editor({
   page,
   savePage,
@@ -150,6 +60,96 @@ function Editor({
           links={links}
         />
       </div>
+    </div>
+  );
+}
+
+function EditPage() {
+  const { id } = useParams();
+  const [page, setPage] = useState<IPage | null>(null);
+  const [links, setLinks] = useState<Record<string, UnfurlLinkStorage>>({});
+  const [requests, setRequests] = useState<RequestLogItem[]>([]);
+
+  const unfurlLinks = async (urls: string[]) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/unfurl`, {
+        credentials: 'same-origin',
+        mode: 'same-origin',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          urls,
+        }),
+      });
+      const res = (await response.json()) as {
+        links: Record<string, UnfurlLinkStorage>;
+        requests: RequestLogItem[];
+      };
+      setLinks({
+        ...links,
+        ...res.links,
+      });
+      setRequests(res.requests);
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
+
+  const savePage = async (
+    idToSave: number,
+    html: string,
+    linksToUnfurl: Partial<Record<string, UnfurlLinkStorage>>
+  ) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${idToSave}`, {
+        credentials: 'same-origin',
+        mode: 'same-origin',
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...page,
+          content: html,
+        }),
+      });
+      const res = await response.json();
+      setPage(res);
+
+      const urlsToUnfurl = Object.keys(linksToUnfurl).filter((url) => {
+        const unfurl = linksToUnfurl[url];
+        return unfurl?.status === 'initiate';
+      });
+
+      if (urlsToUnfurl.length > 0) {
+        unfurlLinks(urlsToUnfurl);
+      }
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const getPage = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/${id}`, {
+          credentials: 'same-origin',
+          mode: 'same-origin',
+        });
+        const res = await response.json();
+        setPage(res);
+      } catch (error: unknown) {
+        console.error(error);
+      }
+    };
+    getPage();
+  }, [id]);
+
+  return (
+    <div>
+      {page && <Editor page={page} savePage={savePage} links={links} requests={requests} />}
     </div>
   );
 }
