@@ -1,8 +1,8 @@
+import { OAuthGrantType } from 'id-assert-authz-grant-client';
 import * as jose from 'jose';
 import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
-import { OAuthGrantType } from 'id-assert-authz-grant-client';
 import makeConfiguration from './server-configuration.js';
 import { validateSignatureJWKs } from './utils/jwks.js';
 
