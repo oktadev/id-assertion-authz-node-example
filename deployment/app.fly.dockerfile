@@ -29,6 +29,7 @@ COPY yarn.lock yarn.lock
 COPY deployment deployment
 COPY id-assert-authz-grant-client id-assert-authz-grant-client
 
+RUN yarn preinstall
 RUN yarn install
 RUN yarn build:todo
 RUN yarn build:wiki

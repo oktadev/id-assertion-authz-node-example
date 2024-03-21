@@ -26,5 +26,6 @@ COPY yarn.lock yarn.lock
 COPY deployment deployment
 COPY id-assert-authz-grant-client id-assert-authz-grant-client
 
+RUN yarn preinstall
 RUN cd authorization-server && yarn install
 ENTRYPOINT ./deployment/start-auth.sh
