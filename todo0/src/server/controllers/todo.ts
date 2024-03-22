@@ -22,7 +22,8 @@ controller.get('/:id', async (req, res) => {
   const idNum = Number(req.params.id);
 
   if (Number.isNaN(idNum)) {
-    return res.sendStatus(400);
+    res.sendStatus(400);
+    return;
   }
 
   const todo = await prisma.todo.findUnique({

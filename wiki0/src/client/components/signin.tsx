@@ -77,7 +77,7 @@ export default function Signin() {
           </form>
         </div>
         <div className="hidden lg:block lg:w-1/2 bg-cover">
-          <img src={signinLogo} />
+          <img src={signinLogo} alt="Logo" />
         </div>
       </main>
     </div>

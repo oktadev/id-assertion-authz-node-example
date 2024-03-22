@@ -3,6 +3,14 @@ import { IconContext } from 'react-icons';
 import { HiUserCircle } from 'react-icons/hi';
 import { Outlet } from 'react-router-dom';
 
+function profileIcon() {
+  return (
+    <IconContext.Provider value={{ className: 'w-8 h-8', color: '#2dd4bf' }}>
+      <HiUserCircle className="w-50" />
+    </IconContext.Provider>
+  );
+}
+
 function DefaultLayout() {
   return (
     <div>
@@ -12,14 +20,7 @@ function DefaultLayout() {
         </Sidebar.Logo>
         <Sidebar.Items>
           <Sidebar.ItemGroup>
-            <Sidebar.Item
-              href="/profile"
-              icon={() => (
-                <IconContext.Provider value={{ className: 'w-8 h-8', color: '#2dd4bf' }}>
-                  <HiUserCircle className="w-50" />
-                </IconContext.Provider>
-              )}
-            >
+            <Sidebar.Item href="/profile" icon={profileIcon}>
               My profile
             </Sidebar.Item>
           </Sidebar.ItemGroup>

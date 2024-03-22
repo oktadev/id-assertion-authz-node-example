@@ -39,7 +39,7 @@ export default function Signin() {
 
           <h1 className="text-center mb-6 mt-6">Ready to take on the day?</h1>
           <h3 className="text-center mb-6">
-            You won't miss a task with this fantastic Todo app - sign in and get tasking!
+            You won&apos;t miss a task with this fantastic Todo app - sign in and get tasking!
           </h3>
           <form>
             <div className="mb-6 mt-4">
