@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import homeLogo from '../assets/home_logo.png';
-import { parseJwt, prefixLine } from '../utils';
+import { parseJwt } from '../utils';
 import DebugDrawer from './DebugDrawer';
 import TokenViewer from './tokenViewer';
 
@@ -140,15 +140,19 @@ function Home() {
             <pre>
               <strong>POST {idpTokenUrl}</strong>
             </pre>
-
             <pre className="pt-2">
-              {requestInfo.request && prefixLine('>', JSON.stringify(requestInfo.request, null, 2))}
+              <strong>Request</strong>
             </pre>
-
+            <pre>
+              {requestInfo.request &&
+                decodeURIComponent(new URLSearchParams(requestInfo.request).toString())
+                  .toString()
+                  .replaceAll('&', '\n&')}
+            </pre>
             <pre className="pt-2">
-              {requestInfo.response &&
-                prefixLine('<', JSON.stringify(requestInfo.response, null, 2))}
+              <strong>Response</strong>
             </pre>
+            <pre>{requestInfo.response && JSON.stringify(requestInfo.response, null, 2)}</pre>
           </DebugCard>
           <div className="p-2">
             <p>
@@ -164,8 +168,10 @@ function Home() {
             <pre>
               <strong>POST {requestInfo?.request?.resource} </strong>
             </pre>
-
-            <pre>{tokens.length && tokens[0].jagToken && prefixLine('>', exchangeRequest)}</pre>
+            <pre className="pt-2">
+              <strong>Request</strong>
+            </pre>
+            <pre>{tokens.length && tokens[0].jagToken && exchangeRequest}</pre>
           </DebugCard>
         </div>
       </DebugDrawer>

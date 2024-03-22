@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { prefixLine } from '../utils';
 import DebugDrawer from './DebugDrawer';
 import TipTapEditor, { UnfurlLinkStorage } from './tiptapeditor';
 import TokenViewer from './tokenViewer';
@@ -32,20 +31,27 @@ function Editor({
       <pre>
         <strong>GET {r.url} </strong>
       </pre>
+
       <pre>{r.requestedAt && new Date(r.requestedAt).toUTCString()}</pre>
       <pre className="pt-2">
+        <strong>Request</strong>
+      </pre>
+      <pre>
         {r.requestHeaders.split('Bearer ')?.length === 2 ? (
           <>
-            {prefixLine('>', 'Authorization: Bearer ')}
+            {'{ \n   '}
+            &quot;Authorization&quot;: &quot;Bearer{' '}
             <TokenViewer token={r.requestHeaders.split('Bearer ')[1]} />
+            {'\n}'}
           </>
         ) : (
           ''
         )}
       </pre>
       <pre className="pt-2">
-        {prefixLine('<', JSON.stringify(JSON.parse(r.responseBody), null, 2))}
+        <strong>Response</strong>
       </pre>
+      <pre>{JSON.stringify(JSON.parse(r.responseBody), null, 2)}</pre>
       <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
     </div>
   ));
