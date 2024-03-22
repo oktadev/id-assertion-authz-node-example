@@ -83,13 +83,15 @@ class AccessTokenHandler {
       return [refreshedToken.accessToken];
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code == 'P2001') {
-          if (retryCount == 10) {
+        if (error.code === 'P2001') {
+          if (retryCount === 10) {
             return [undefined, 'RetryLater'];
           }
 
           // sleep for a litte bit
-          await new Promise((r) => setTimeout(r, 100));
+          await new Promise((r) => {
+            setTimeout(r, 100);
+          });
           return this.loadToken(user, resource, retryCount + 1);
         }
       }

@@ -147,7 +147,7 @@ controller.post('/signout', async (req, res, next) => {
 /**
  * Frontend UI can call this to see if the domain matches an Organization in the database.
  */
-controller.post('/check', async (req, res, next) => {
+controller.post('/check', async (req, res) => {
   const { username } = req.body;
 
   const domain = getDomainFromEmail(username);

@@ -60,6 +60,12 @@ module.exports = {
         'prettier/prettier': 'error',
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
+        'jsx-a11y/label-has-associated-control': [
+          'error',
+          {
+            controlComponents: ['TextInput'],
+          },
+        ],
       },
     },
   ],

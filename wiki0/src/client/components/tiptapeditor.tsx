@@ -14,6 +14,7 @@ function MenuBar({ editor }: { editor: Editor }) {
   return (
     <div className="flex flex-wrap gap-2">
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={`${editor.isActive('bold') ? 'is-active' : ''} ${buttonCss}`}
@@ -22,6 +23,7 @@ function MenuBar({ editor }: { editor: Editor }) {
       </button>
 
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={`${editor.isActive('italic') ? 'is-active' : ''} ${buttonCss}`}
@@ -29,6 +31,7 @@ function MenuBar({ editor }: { editor: Editor }) {
         italic
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editor.can().chain().focus().toggleStrike().run()}
         className={`${editor.isActive('strike') ? 'is-active' : ''} ${buttonCss}`}
@@ -36,94 +39,120 @@ function MenuBar({ editor }: { editor: Editor }) {
         strike
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleCode().run()}
         disabled={!editor.can().chain().focus().toggleCode().run()}
         className={`${editor.isActive('code') ? 'is-active' : ''} ${buttonCss}`}
       >
         code
       </button>
-      <button onClick={() => editor.chain().focus().unsetAllMarks().run()} className={buttonCss}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().unsetAllMarks().run()}
+        className={buttonCss}
+      >
         clear marks
       </button>
-      <button onClick={() => editor.chain().focus().clearNodes().run()} className={buttonCss}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().clearNodes().run()}
+        className={buttonCss}
+      >
         clear nodes
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().setParagraph().run()}
         className={`${editor.isActive('paragraph') ? 'is-active' : ''} ${buttonCss}`}
       >
         paragraph
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={`${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h1
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h2
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={`${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h3
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
         className={`${editor.isActive('heading', { level: 4 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h4
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
         className={`${editor.isActive('heading', { level: 5 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h5
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
         className={`${editor.isActive('heading', { level: 6 }) ? 'is-active' : ''} ${buttonCss}`}
       >
         h6
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`${editor.isActive('bulletList') ? 'is-active' : ''} ${buttonCss}`}
       >
         bullet list
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`${editor.isActive('orderedList') ? 'is-active' : ''} ${buttonCss}`}
       >
         ordered list
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         className={`${editor.isActive('codeBlock') ? 'is-active' : ''} ${buttonCss}`}
       >
         code block
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         className={`${editor.isActive('blockquote') ? 'is-active' : ''} ${buttonCss}`}
       >
         blockquote
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         className={buttonCss}
       >
         horizontal rule
       </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()} className={buttonCss}>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setHardBreak().run()}
+        className={buttonCss}
+      >
         hard break
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
         className={buttonCss}
@@ -131,6 +160,7 @@ function MenuBar({ editor }: { editor: Editor }) {
         undo
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
         className={buttonCss}
@@ -138,6 +168,7 @@ function MenuBar({ editor }: { editor: Editor }) {
         redo
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().focus().setColor('#958DF1').run()}
         className={`${
           editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''
@@ -172,7 +203,7 @@ const UnfurlLink = Link.extend<
 
     const parentAnchor = this.parent!({ mark, HTMLAttributes }) as readonly [string, ...unknown[]];
 
-    if (!unfurlLink || unfurlLink.status != 'unfurled') {
+    if (!unfurlLink || unfurlLink.status !== 'unfurled') {
       return parentAnchor;
     }
 
@@ -275,18 +306,18 @@ function TipTapEditor({
     {
       extensions,
       content,
-      onCreate({ editor }) {
-        onUpdate(editor.getHTML(), editor.storage[UnfurlLink.name].unfurledValues);
+      onCreate({ editor: editorArg }) {
+        onUpdate(editorArg.getHTML(), editorArg.storage[UnfurlLink.name].unfurledValues);
       },
-      onUpdate({ editor }) {
-        onUpdate(editor.getHTML(), editor.storage[UnfurlLink.name].unfurledValues);
+      onUpdate({ editor: editorArg }) {
+        onUpdate(editorArg.getHTML(), editorArg.storage[UnfurlLink.name].unfurledValues);
       },
     },
     [links]
   );
 
   if (!editor) {
-    return <></>;
+    return null;
   }
 
   editor.storage[UnfurlLink.name].unfurledValues = links;

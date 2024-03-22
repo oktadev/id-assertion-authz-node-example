@@ -21,7 +21,7 @@ controller.get('/', async (req, res) => {
 controller.get('/:id', async (req, res) => {
   const idNum = Number(req.params.id);
 
-  if (isNaN(idNum)) {
+  if (Number.isNaN(idNum)) {
     return res.sendStatus(400);
   }
 
@@ -50,7 +50,7 @@ controller.post('/', async (req, res) => {
 });
 
 controller.put('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   const { task, completed } = req.body;
   let completedAt = null;
 
@@ -70,7 +70,7 @@ controller.put('/:id', async (req, res) => {
 });
 
 controller.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   await prisma.todo.delete({
     where: {
       id,
