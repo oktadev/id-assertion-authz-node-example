@@ -12,7 +12,6 @@ type RequestLogItem = {
   requestHeaders: string;
   responseBody: string;
   requestedAt: string;
-  requestBody?: string;
 };
 
 const API_BASE_URL = '/api/articles';
