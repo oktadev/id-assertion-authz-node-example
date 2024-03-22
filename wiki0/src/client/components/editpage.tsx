@@ -34,7 +34,7 @@ function Editor({
 
       <pre>{r.requestedAt && new Date(r.requestedAt).toUTCString()}</pre>
       <pre className="pt-2">
-        <strong>Request</strong>
+        <strong>Request Headers</strong>
       </pre>
       <pre>
         {r.requestHeaders.split('Bearer ')?.length === 2 ? (
