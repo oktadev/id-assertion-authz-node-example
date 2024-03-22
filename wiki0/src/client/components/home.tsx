@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import homeLogo from '../assets/home_logo.png';
+import { parseJwt, prefixLine } from '../utils';
 import DebugDrawer from './DebugDrawer';
+import TokenViewer from './tokenViewer';
 
 type AuthTokenType = {
+  idToken: string;
   id: number;
   userId: number;
   resource: string;
@@ -13,22 +16,51 @@ type AuthTokenType = {
 
 const API_BASE_URL = '/api/tokens';
 
-function parseJwt(token: string) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split('')
-      .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-      .join('')
-  );
+const getIdpTokenUrlForDebug = (tokens: Record<string, any>[]) => {
+  const defaultUrl = 'IDP Token Endpoint';
+  if (!tokens.length || !tokens[0].jagToken) {
+    return defaultUrl;
+  }
 
-  return JSON.parse(jsonPayload);
+  const { iss } = parseJwt(tokens[0].jagToken);
+  if (!iss) {
+    return defaultUrl;
+  }
+  return `${iss}/v1/token`;
+};
+
+const formatExchangeRequest = (tokens: Record<string, any>[]) => {
+  const defaultUrl = 'IDP Token Endpoint';
+  if (!tokens.length || !tokens[0].jagToken) {
+    return defaultUrl;
+  }
+
+  return decodeURIComponent(
+    new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      scope: 'read write',
+      client_id: '<CLIENT_ID>', // Hardcoded fake assetion data
+      client_secret: '<CLIENT_SECRET>',
+      assertion: `${tokens[0].jagToken?.slice(0, 15)}...`,
+    }).toString()
+  )
+    .toString()
+    .replaceAll('&', '\n&');
+};
+
+function DebugCard({ children }: React.PropsWithChildren) {
+  return (
+    <div className="space-y-4 p-2 border-2 rounded border-dotted" style={{ fontSize: 12 }}>
+      <div className="pt-2 pl-3">{children}</div>
+    </div>
+  );
 }
 
 function Home() {
   const [tokens, setTokens] = useState<AuthTokenType[]>([]);
+  const [requestInfo, setRequestInfo] = useState<Record<string, any>>({});
+  const idpTokenUrl = useMemo(() => getIdpTokenUrlForDebug(tokens), [tokens]);
+  const exchangeRequest = useMemo(() => formatExchangeRequest(tokens), [tokens]);
   useEffect(() => {
     const getTokens = async () => {
       try {
@@ -38,21 +70,33 @@ function Home() {
         });
         const res = await response.json();
         setTokens(res.tokens);
+        setRequestInfo({
+          request: {
+            ...res.requestBody,
+            // Add the real id token to the requst for the debug console
+            subject_token: res.tokens ? `${res.tokens[0].idToken?.slice(0, 15)}...` : '',
+          },
+          response: {
+            ...res.responseBody,
+            // Add the real jag token to the requst for the debug console
+            access_token: res.tokens ? `${res.tokens[0].jagToken?.slice(0, 15)}...` : '',
+          },
+          url: res.url,
+        });
       } catch (error: unknown) {
         console.error(error);
       }
     };
+
     getTokens();
   }, []);
 
   return (
-    <>
+    <div className="p-2">
       <DebugDrawer id="debug-drawer">
-        <div>
-          The following occurs after the IDP (i.e. Okta) redirects back to the Wiki0 auth server:
-        </div>
-        <ul className="list-disc pt-4 pl-4 pb-4">
-          <li>For each resource app (e.g. Todo0) the auth server will:</li>
+        <div className="p-2 pb-4">
+          The IDP (i.e. Okta) redirects back to the Wiki0 auth server, providing an ID Token. Then,
+          for each resource app (e.g. Todo0) the auth server will:
           <ul className="list-decimal pt-4 pl-4 pb-4">
             <li>Ask the IDP to exchange the ID token for a JWT Authorization Grant (JAG)</li>
             <li>
@@ -60,19 +104,69 @@ function Home() {
               an access/refresh token pair
             </li>
           </ul>
-        </ul>
-        <div className="space-y-4">
-          <div>The following are the claims from the actual granted JAG and access tokens:</div>
-          {tokens.length > 0 && (
-            <>
-              <div className="font-bold">JAG Token (Wiki0 -&gt; Okta):</div>
+          The following are the claims from the actual granted ID, JAG and access tokens:
+        </div>
+
+        <div className="space-y-4 ">
+          <DebugCard>
+            <strong>ID Token </strong>
+            {tokens.length > 0 && (
               <pre>
-                {tokens[0].jagToken ? JSON.stringify(parseJwt(tokens[0].jagToken), null, 2) : ''}
+                <TokenViewer token={tokens[0].idToken} />
               </pre>
-              <div className="font-bold">Access Token (Wiki0 -&gt; Todo0):</div>
-              <pre>{JSON.stringify(parseJwt(tokens[0].accessToken), null, 2)}</pre>
-            </>
-          )}
+            )}
+          </DebugCard>
+          <DebugCard>
+            <strong>JAG Token </strong> (Wiki0 -&gt; Okta)
+            {tokens.length > 0 && (
+              <pre>
+                <TokenViewer token={tokens[0].jagToken} />
+              </pre>
+            )}
+          </DebugCard>
+          <DebugCard>
+            <strong>Access Token </strong> (Wiki0 -&gt; Todo0)
+            {tokens.length > 0 && (
+              <pre>
+                <TokenViewer token={tokens[0].accessToken} />
+              </pre>
+            )}
+          </DebugCard>
+          <div className="p-2">
+            The following is the request that Wiki0 made to the IDP to request a JAG token. The
+            value of the &quot;subject_token&quot; field is the ID Token.
+          </div>
+          <DebugCard>
+            <pre>
+              <strong>POST {idpTokenUrl}</strong>
+            </pre>
+
+            <pre className="pt-2">
+              {requestInfo.request && prefixLine('>', JSON.stringify(requestInfo.request, null, 2))}
+            </pre>
+
+            <pre className="pt-2">
+              {requestInfo.response &&
+                prefixLine('<', JSON.stringify(requestInfo.response, null, 2))}
+            </pre>
+          </DebugCard>
+          <div className="p-2">
+            <p>
+              Finally, the JAG token is exchanged with Todo0 for an access token. The value of the
+              &quot;assertion&quot; parameter is the JAG token from above.
+            </p>
+            <p>
+              (Checkout this console on a Wiki0 page to see the access token exchanged for protected
+              resources.)
+            </p>
+          </div>
+          <DebugCard>
+            <pre>
+              <strong>POST {requestInfo?.request?.resource} </strong>
+            </pre>
+
+            <pre>{tokens.length && tokens[0].jagToken && prefixLine('>', exchangeRequest)}</pre>
+          </DebugCard>
         </div>
       </DebugDrawer>
 
@@ -99,7 +193,7 @@ function Home() {
           <img src={homeLogo} alt="" />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

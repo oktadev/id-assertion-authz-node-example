@@ -1,6 +1,6 @@
 import { initFlowbite } from 'flowbite';
 import { FC, PropsWithChildren, useEffect } from 'react';
-import { HiPlus } from 'react-icons/hi';
+import { HiChevronLeft } from 'react-icons/hi';
 
 const DebugDrawer: FC<PropsWithChildren<{ id: string }>> = function ({ id, children }) {
   useEffect(() => {
@@ -20,7 +20,7 @@ const DebugDrawer: FC<PropsWithChildren<{ id: string }>> = function ({ id, child
           aria-controls={id}
           aria-label="Open Debug Console"
         >
-          <HiPlus />
+          <HiChevronLeft />
         </button>
       </div>
       <div

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { prefixLine } from '../utils';
 import DebugDrawer from './DebugDrawer';
 import TipTapEditor, { UnfurlLinkStorage } from './tiptapeditor';
+import TokenViewer from './tokenViewer';
 import { IPage } from './types';
 
 type RequestLogItem = {
@@ -10,15 +12,64 @@ type RequestLogItem = {
   requestHeaders: string;
   responseBody: string;
   requestedAt: string;
+  requestBody?: string;
 };
 
 const API_BASE_URL = '/api/articles';
 
-function prefixLine(prefix: string, text: string) {
-  return text
-    .split('\n')
-    .map((line) => `${prefix} ${line}`)
-    .join('\n');
+function Editor({
+  page,
+  savePage,
+  links,
+  requests,
+}: {
+  page: IPage;
+  savePage: (id: number, html: string, links: Partial<Record<string, UnfurlLinkStorage>>) => void;
+  links: Partial<Record<string, UnfurlLinkStorage>>;
+  requests: RequestLogItem[];
+}) {
+  const requestElements = requests.map((r) => (
+    <div style={{ fontSize: 12 }} key={r.id}>
+      <pre>
+        <strong>GET {r.url} </strong>
+      </pre>
+      <pre>{r.requestedAt && new Date(r.requestedAt).toUTCString()}</pre>
+      <pre className="pt-2">
+        {r.requestHeaders.split('Bearer ')?.length === 2 ? (
+          <>
+            {prefixLine('>', 'Authorization: Bearer ')}
+            <TokenViewer token={r.requestHeaders.split('Bearer ')[1]} />
+          </>
+        ) : (
+          ''
+        )}
+      </pre>
+      <pre className="pt-2">
+        {prefixLine('<', JSON.stringify(JSON.parse(r.responseBody), null, 2))}
+      </pre>
+      <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+    </div>
+  ));
+
+  return (
+    <div className="space-y-4 p-6">
+      <h1>{page.title}</h1>
+      <div>
+        <DebugDrawer id="debug-drawer">
+          {requestElements.length > 0 && (
+            <div>
+              <ul className="list-disc pl-4">{requestElements}</ul>
+            </div>
+          )}
+        </DebugDrawer>
+        <TipTapEditor
+          content={page.content}
+          onUpdate={(html, updatedLinks) => savePage(page.id, html, updatedLinks)}
+          links={links}
+        />
+      </div>
+    </div>
+  );
 }
 
 function EditPage() {
@@ -26,6 +77,32 @@ function EditPage() {
   const [page, setPage] = useState<IPage | null>(null);
   const [links, setLinks] = useState<Record<string, UnfurlLinkStorage>>({});
   const [requests, setRequests] = useState<RequestLogItem[]>([]);
+  const unfurlLinks = async (urls: string[]) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/unfurl`, {
+        credentials: 'same-origin',
+        mode: 'same-origin',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          urls,
+        }),
+      });
+      const res = (await response.json()) as {
+        links: Record<string, UnfurlLinkStorage>;
+        requests: RequestLogItem[];
+      };
+      setLinks({
+        ...links,
+        ...res.links,
+      });
+      setRequests(res.requests);
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
 
   const savePage = async (
     idToSave: number,
@@ -61,33 +138,6 @@ function EditPage() {
     }
   };
 
-  const unfurlLinks = async (urls: string[]) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/unfurl`, {
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          urls,
-        }),
-      });
-      const res = (await response.json()) as {
-        links: Record<string, UnfurlLinkStorage>;
-        requests: RequestLogItem[];
-      };
-      setLinks({
-        ...links,
-        ...res.links,
-      });
-      setRequests(res.requests);
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     const getPage = async () => {
       try {
@@ -107,49 +157,6 @@ function EditPage() {
   return (
     <div>
       {page && <Editor page={page} savePage={savePage} links={links} requests={requests} />}
-    </div>
-  );
-}
-
-function Editor({
-  page,
-  savePage,
-  links,
-  requests,
-}: {
-  page: IPage;
-  savePage: (id: number, html: string, links: Partial<Record<string, UnfurlLinkStorage>>) => void;
-  links: Partial<Record<string, UnfurlLinkStorage>>;
-  requests: RequestLogItem[];
-}) {
-  const requestElements = requests.map((r) => (
-    <div key={r.id} className="pb-4">
-      <li>{r.requestedAt}</li>
-      <pre>{r.url}</pre>
-      <pre>{prefixLine('>', JSON.stringify(JSON.parse(r.requestHeaders), null, 2))}</pre>
-      <pre className="pt-4">
-        {prefixLine('<', JSON.stringify(JSON.parse(r.responseBody), null, 2))}
-      </pre>
-    </div>
-  ));
-
-  return (
-    <div className="space-y-4 p-8">
-      <h1>{page.title}</h1>
-      <div>
-        <DebugDrawer id="debug-drawer">
-          {requestElements.length > 0 && (
-            <div>
-              <ul className="list-disc pl-4">{requestElements}</ul>
-            </div>
-          )}
-        </DebugDrawer>
-        <TipTapEditor
-          content={page.content}
-          onUpdate={(html, updatedLinks) => savePage(page.id, html, updatedLinks)}
-          links={links}
-        />
-      </div>
     </div>
   );
 }
