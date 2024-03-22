@@ -147,7 +147,7 @@ controller.post('/signout', async (req, res, next) => {
 /**
  * Frontend UI can call this to see if the domain matches an Organization in the database.
  */
-controller.post('/check', async (req, res, next) => {
+controller.post('/check', async (req, res) => {
   const { username } = req.body;
 
   const domain = getDomainFromEmail(username);
@@ -169,7 +169,8 @@ controller.post('/check', async (req, res, next) => {
       });
     }
     if (org) {
-      return res.json({ orgId: org.id });
+      res.json({ orgId: org.id });
+      return;
     }
   }
 
@@ -184,17 +185,20 @@ controller.post('/check', async (req, res, next) => {
 controller.get('/start/:username', async (req, res, next) => {
   const domain = getDomainFromEmail(req.params.username);
   if (!domain) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
 
   const org = await orgFromDomain(domain);
   if (!org) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
 
   const strategy = createStrategy(req.params.username);
   if (!strategy) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
 
   passport.authenticate(strategy)(req, res, next);
