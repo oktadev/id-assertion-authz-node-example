@@ -22,8 +22,10 @@ function Todo() {
   const [task, setTask] = useState('');
 
   useEffect(() => {
-    loadTodo(id).then((loadedTask) => setTask(loadedTask));
-  }, []);
+    if (id) {
+      loadTodo(id).then((loadedTask) => setTask(loadedTask));
+    }
+  }, [id]);
 
   return (
     <ul className="w-4/5">

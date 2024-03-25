@@ -18,8 +18,9 @@ class Account {
    *   loading some claims from external resources etc. based on this detail
    *   or not return them in id tokens but only userinfo and so on.
    */
+
+  // eslint-disable-next-line no-unused-vars
   async claims(use, scope) {
-    // eslint-disable-line no-unused-vars
     // `profile` corresponds to a passport-openidconnect strategy object.
     // see https://github.com/jaredhanson/passport-openidconnect/blob/master/lib/profile.js
     if (this.profile) {
@@ -68,8 +69,8 @@ class Account {
     return new Account(id, profile, orgId);
   }
 
+  // eslint-next-disable-line no-unused-vars
   static async findAccount(ctx, id, token) {
-    // eslint-disable-line no-unused-vars
     // token is a reference to the token used for which a given account is being loaded,
     //   it is undefined in scenarios where account claims are returned from authorization endpoint
     // ctx is the koa request context
