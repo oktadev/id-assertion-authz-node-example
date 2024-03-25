@@ -47,8 +47,8 @@ const debugExchangeRequest = (tokens: Record<string, any>[]) => {
 
 function DebugCard({ children }: React.PropsWithChildren) {
   return (
-    <div className="space-y-4 p-2 border-2 rounded border-dotted" style={{ fontSize: 12 }}>
-      <div className="pt-2 pl-3">{children}</div>
+    <div className="space-y-4 p-3 border-2 rounded border-dotted" style={{ fontSize: 12 }}>
+      <div>{children}</div>
     </div>
   );
 }
@@ -172,7 +172,7 @@ function Home() {
             <pre className="pt-2">
               <strong>Request</strong>
             </pre>
-            <pre>{tokens.length && tokens[0].jagToken && exchangeRequest}</pre>
+            <pre>{tokens.length > 0 && tokens[0].jagToken && exchangeRequest}</pre>
           </DebugCard>
         </div>
       </DebugDrawer>
