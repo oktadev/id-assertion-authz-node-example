@@ -18,7 +18,7 @@ const API_BASE_URL = '/api/tokens';
 
 const debugIDPEndpoint = (tokens: Record<string, any>[]) => {
   const defaultUrl = 'IDP Token Endpoint';
-  if (!tokens.length || !tokens[0].jagToken) {
+  if (!tokens[0]?.jagToken) {
     return defaultUrl;
   }
 
