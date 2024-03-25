@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DebugDrawer from './DebugDrawer';
 import TipTapEditor, { UnfurlLinkStorage } from './tiptapeditor';
+import TokenViewer from './tokenViewer';
 import { IPage } from './types';
 
 type RequestLogItem = {
@@ -13,13 +14,6 @@ type RequestLogItem = {
 };
 
 const API_BASE_URL = '/api/articles';
-
-function prefixLine(prefix: string, text: string) {
-  return text
-    .split('\n')
-    .map((line) => `${prefix} ${line}`)
-    .join('\n');
-}
 
 function Editor({
   page,
@@ -33,18 +27,37 @@ function Editor({
   requests: RequestLogItem[];
 }) {
   const requestElements = requests.map((r) => (
-    <div key={r.id} className="pb-4">
-      <li>{r.requestedAt}</li>
-      <pre>{r.url}</pre>
-      <pre>{prefixLine('>', JSON.stringify(JSON.parse(r.requestHeaders), null, 2))}</pre>
-      <pre className="pt-4">
-        {prefixLine('<', JSON.stringify(JSON.parse(r.responseBody), null, 2))}
+    <div style={{ fontSize: 12 }} key={r.id}>
+      <pre>
+        <strong>GET {r.url} </strong>
       </pre>
+
+      <pre>{r.requestedAt && new Date(r.requestedAt).toUTCString()}</pre>
+      <pre className="pt-2">
+        <strong>Request Headers</strong>
+      </pre>
+      <pre>
+        {r.requestHeaders?.split('Bearer ')?.length === 2 ? (
+          <>
+            {'{ \n   '}
+            &quot;Authorization&quot;: &quot;Bearer{' '}
+            <TokenViewer token={r.requestHeaders.split('Bearer ')[1]} />
+            {'\n}'}
+          </>
+        ) : (
+          ''
+        )}
+      </pre>
+      <pre className="pt-2">
+        <strong>Response</strong>
+      </pre>
+      <pre>{r.responseBody && JSON.stringify(JSON.parse(r.responseBody), null, 2)}</pre>
+      <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
     </div>
   ));
 
   return (
-    <div className="space-y-4 p-8">
+    <div className="space-y-4 p-6">
       <h1>{page.title}</h1>
       <div>
         <DebugDrawer id="debug-drawer">
@@ -69,7 +82,6 @@ function EditPage() {
   const [page, setPage] = useState<IPage | null>(null);
   const [links, setLinks] = useState<Record<string, UnfurlLinkStorage>>({});
   const [requests, setRequests] = useState<RequestLogItem[]>([]);
-
   const unfurlLinks = async (urls: string[]) => {
     try {
       const response = await fetch(`${API_BASE_URL}/unfurl`, {

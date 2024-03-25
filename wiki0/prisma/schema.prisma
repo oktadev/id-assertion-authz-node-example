@@ -70,6 +70,7 @@ model AuthorizationToken {
   accessToken     String @db.LongText
   refreshToken    String? @db.LongText
   jagToken        String? @db.LongText
+  idToken         String? @db.LongText
   expiresAt       DateTime?
   status          TokenStatus
 

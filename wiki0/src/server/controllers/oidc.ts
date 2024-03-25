@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {
+  AccessTokenResult,
   ExchangeTokenResult,
   exchangeIdJwtAuthzGrant,
   requestIdJwtAuthzGrant,
-  AccessTokenResult,
 } from 'id-assert-authz-grant-client';
 import passport from 'passport';
 import OpenIDConnectStrategy, { Profile, VerifyCallback } from 'passport-openidconnect';
@@ -191,6 +191,7 @@ const verify = async (
         accessToken: accessToken.access_token,
         refreshToken: accessToken.refresh_token,
         jagToken: authGrantToken.access_token,
+        idToken: idToken.toString(),
         expiresAt: new Date(Date.now() + (accessToken.expires_in ?? 0) * 1000),
         status: 'ACTIVE',
       },
@@ -198,6 +199,7 @@ const verify = async (
         accessToken: accessToken.access_token,
         refreshToken: accessToken.refresh_token,
         jagToken: authGrantToken.access_token,
+        idToken: idToken.toString(),
         expiresAt: new Date(Date.now() + (accessToken.expires_in ?? 0) * 1000),
         status: 'ACTIVE',
       },

@@ -106,7 +106,7 @@ Running at http://localhost:5001/
 
 ### Cleanup
 
-To stop the applications, stop the VSCode Dev Container or stop the container in Docker Desktop.
+Stop the running node processes in the terminal, and stop the VSCode Dev Container or stop the container in Docker Desktop.
 
 <br />
 <br />
@@ -186,10 +186,7 @@ docker-compose down
 
 # Troubleshooting
 
-If you have any trouble, try re-authenticating to both applications by navigating to the `/signin` pages.
-
-`http://localhost:3000/signin` & `http://localhost:3001/signin`
-Runs at http://localhost:5000/ for todo0 and http://localhost:5001/ for wiki0.
+If you have any trouble, try re-authenticating to ~both~ applications by signing out and signing in again.
 
 # Dev Tips
 
@@ -200,7 +197,13 @@ mariadb -u root --password=avocado -P 3306
 ```
 
 **Run the following after making schema changes to a schema.prisma file**
+
 Make sure to replace the content in `<>`.
+
+```
+export WIKI_DATABASE_URL=<DB_URL>
+export TODO_DATABASE_URL=<DB_URL>
+```
 
 ```
 npx prisma migrate dev --name <some nice description of the changes you made> --schema <project>/prisma/schema.prisma
