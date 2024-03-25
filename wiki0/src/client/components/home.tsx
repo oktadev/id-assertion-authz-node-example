@@ -16,7 +16,7 @@ type AuthTokenType = {
 
 const API_BASE_URL = '/api/tokens';
 
-const getIdpTokenUrlForDebug = (tokens: Record<string, any>[]) => {
+const debugIDPEndpoint = (tokens: Record<string, any>[]) => {
   const defaultUrl = 'IDP Token Endpoint';
   if (!tokens.length || !tokens[0].jagToken) {
     return defaultUrl;
@@ -26,26 +26,23 @@ const getIdpTokenUrlForDebug = (tokens: Record<string, any>[]) => {
   if (!iss) {
     return defaultUrl;
   }
-  return `${iss}/v1/token`;
+  return `${iss}/oauth/v1/token`;
 };
 
-const formatExchangeRequest = (tokens: Record<string, any>[]) => {
-  const defaultUrl = 'IDP Token Endpoint';
+const debugExchangeRequest = (tokens: Record<string, any>[]) => {
   if (!tokens.length || !tokens[0].jagToken) {
-    return defaultUrl;
+    return '';
   }
 
-  return decodeURIComponent(
-    new URLSearchParams({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      scope: 'read write',
-      client_id: '<CLIENT_ID>', // Hardcoded fake assetion data
-      client_secret: '<CLIENT_SECRET>',
-      assertion: `${tokens[0].jagToken?.slice(0, 15)}...`,
-    }).toString()
-  )
-    .toString()
-    .replaceAll('&', '\n&');
+  const searchParamsString = new URLSearchParams({
+    grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    scope: 'read write',
+    client_id: '<CLIENT_ID>',
+    client_secret: '<CLIENT_SECRET>',
+    assertion: `${tokens[0].jagToken?.slice(0, 15)}...`,
+  }).toString();
+
+  return decodeURIComponent(searchParamsString).toString().replaceAll('&', '\n&');
 };
 
 function DebugCard({ children }: React.PropsWithChildren) {
@@ -59,28 +56,32 @@ function DebugCard({ children }: React.PropsWithChildren) {
 function Home() {
   const [tokens, setTokens] = useState<AuthTokenType[]>([]);
   const [requestInfo, setRequestInfo] = useState<Record<string, any>>({});
-  const idpTokenUrl = useMemo(() => getIdpTokenUrlForDebug(tokens), [tokens]);
-  const exchangeRequest = useMemo(() => formatExchangeRequest(tokens), [tokens]);
+  const idpTokenUrl = useMemo(() => debugIDPEndpoint(tokens), [tokens]);
+  const exchangeRequest = useMemo(() => debugExchangeRequest(tokens), [tokens]);
   useEffect(() => {
     const getTokens = async () => {
       try {
-        const response = await fetch(API_BASE_URL, {
+        const apiResponse = await fetch(API_BASE_URL, {
           credentials: 'same-origin',
           mode: 'same-origin',
         });
-        const res = await response.json();
+
+        const res = await apiResponse.json();
         setTokens(res.tokens);
+
+        // Debug console data
+        const request = { ...res.requestBody } ?? {};
+        const response = { ...res.responseBody } ?? {};
+
+        // Add the real id and jag tokens to the requst for the debug console
+        if (res.tokens?.length) {
+          request.subject_token = `${res.tokens[0].idToken?.slice(0, 15)}...`;
+          response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
+        }
+
         setRequestInfo({
-          request: {
-            ...res.requestBody,
-            // Add the real id token to the requst for the debug console
-            subject_token: res.tokens ? `${res.tokens[0].idToken?.slice(0, 15)}...` : '',
-          },
-          response: {
-            ...res.responseBody,
-            // Add the real jag token to the requst for the debug console
-            access_token: res.tokens ? `${res.tokens[0].jagToken?.slice(0, 15)}...` : '',
-          },
+          request,
+          response,
           url: res.url,
         });
       } catch (error: unknown) {

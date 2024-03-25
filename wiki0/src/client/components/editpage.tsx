@@ -37,7 +37,7 @@ function Editor({
         <strong>Request Headers</strong>
       </pre>
       <pre>
-        {r.requestHeaders.split('Bearer ')?.length === 2 ? (
+        {r.requestHeaders?.split('Bearer ')?.length === 2 ? (
           <>
             {'{ \n   '}
             &quot;Authorization&quot;: &quot;Bearer{' '}
@@ -51,7 +51,7 @@ function Editor({
       <pre className="pt-2">
         <strong>Response</strong>
       </pre>
-      <pre>{JSON.stringify(JSON.parse(r.responseBody), null, 2)}</pre>
+      <pre>{r.responseBody && JSON.stringify(JSON.parse(r.responseBody), null, 2)}</pre>
       <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
     </div>
   ));

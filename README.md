@@ -106,7 +106,7 @@ Running at http://localhost:5001/
 
 ### Cleanup
 
-To stop the applications, stop the VSCode Dev Container or stop the container in Docker Desktop.
+Stop the running node processes in the terminal, and stop the VSCode Dev Container or stop the container in Docker Desktop.
 
 <br />
 <br />

@@ -7,6 +7,10 @@ type TokenViewerProps = {
 };
 
 function TokenViewer({ token }: TokenViewerProps) {
+  if (!token) {
+    return <div className="text-gray-400">No JWT token found</div>;
+  }
+
   return (
     <>
       <Popover
@@ -19,7 +23,7 @@ function TokenViewer({ token }: TokenViewerProps) {
               </h3>
             </div>
             <div className="px-3 py-2 bg-gray-100 text-slate-600" style={{ fontSize: 12 }}>
-              <pre className="pt-3">{token && JSON.stringify(parseJwt(token), null, 2)}</pre>
+              <pre className="pt-3">{JSON.stringify(parseJwt(token), null, 2)}</pre>
             </div>
           </div>
         }
@@ -29,15 +33,13 @@ function TokenViewer({ token }: TokenViewerProps) {
           style={{ cursor: 'pointer' }}
           className="inline-block border-0 hover:text-black focus:outline-none bg-transparent pl-0  hover:underline inline-block"
         >
-          {token && `${token.slice(0, 15)}...`}{' '}
+          {`${token.slice(0, 15)}...`}{' '}
         </button>
       </Popover>
       <button
         type="button"
         onClick={() => {
-          if (token) {
-            navigator.clipboard.writeText(token.toString());
-          }
+          navigator.clipboard.writeText(token.toString());
         }}
         className="inline-block focus:outline-nonetext-center hover:text-black inline-flex items-center me-2"
       >
