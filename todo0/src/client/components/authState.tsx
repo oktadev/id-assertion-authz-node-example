@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useCallback, useContext, useState } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 export interface AuthState {
   name: string | undefined;
@@ -91,13 +91,11 @@ const AuthContextProvider: React.FC<Props> = function ({ children }: Props) {
     return null;
   };
 
-  return (
-    <AuthContext.Provider
-      value={{ authState, onRevokeAuthFn, userIsAuthenticatedFn, onUsernameEnteredFn }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const authContextValue = useMemo(
+    () => ({ authState, onRevokeAuthFn, userIsAuthenticatedFn, onUsernameEnteredFn }),
+    [authState, userIsAuthenticatedFn]
   );
+  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvider;

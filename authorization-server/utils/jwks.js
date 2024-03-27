@@ -1,7 +1,7 @@
 import * as jose from 'jose';
 
-export default async (app, provider) => {
-  const { publicKey, privateKey } = await jose.generateKeyPair('RS256');
+export default async () => {
+  const { privateKey } = await jose.generateKeyPair('RS256');
   const privateJwk = await jose.exportJWK(privateKey);
   return [privateJwk];
 };
