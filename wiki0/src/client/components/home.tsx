@@ -70,18 +70,21 @@ function Home() {
         setTokens(res.tokens);
 
         // Debug console data
-        const request = { ...res.requestBody } ?? {};
-        const response = { ...res.responseBody } ?? {};
-
+        const request = res.requestBody ? { ...res.requestBody } : {};
+        const response = res.responseBody ? { ...res.responseBody } : {};
+        let assertion = '';
         // Add the real id and jag tokens to the requst for the debug console
         if (res.tokens?.length) {
-          request.subject_token = `${res.tokens[0].idToken?.slice(0, 15)}...`;
+          assertion = request?.subject_token;
+          request.subject_token = `${request?.subject_token?.slice(0, 15)}...`;
           response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
         }
 
         setRequestInfo({
           request,
           response,
+          isSaml: request?.subject_token_type?.includes('saml'),
+          assertion,
           url: res.url,
         });
       } catch (error: unknown) {
@@ -96,10 +99,11 @@ function Home() {
     <div className="p-2">
       <DebugDrawer id="debug-drawer">
         <div className="p-2 pb-4">
-          The IDP (i.e. Okta) redirects back to the Wiki0 auth server, providing an ID Token. Then,
-          for each resource app (e.g. Todo0) the auth server will:
+          The IDP (i.e. Okta) redirects back to the Wiki0 auth server, providing an ID Assertion
+          (SAML Assertion or OIDC ID Token). Then, for each resource app (e.g. Todo0) the auth
+          server will:
           <ul className="list-decimal pt-4 pl-4 pb-4">
-            <li>Ask the IDP to exchange the ID token for a JWT Authorization Grant (JAG)</li>
+            <li>Ask the IDP to exchange the ID Assertion for a JWT Authorization Grant (JAG)</li>
             <li>
               Issue a request to the resource app&#39;s authorization server to exchange the JAG for
               an access/refresh token pair
@@ -109,11 +113,19 @@ function Home() {
         </div>
 
         <div className="space-y-4 ">
-          <DebugCard>
-            <strong>ID Token </strong>
+          {/* <DebugCard>
+            <strong>ID Assertion </strong>
             {tokens.length > 0 && (
               <pre>
                 <TokenViewer token={tokens[0].idToken} />
+              </pre>
+            )}
+          </DebugCard> */}
+          <DebugCard>
+            <strong>{requestInfo.isSaml ? 'SAML Assertion' : 'ID Token'}</strong>
+            {tokens.length > 0 && (
+              <pre>
+                <TokenViewer token={requestInfo.assertion} saml={requestInfo.isSaml} />
               </pre>
             )}
           </DebugCard>
@@ -135,7 +147,7 @@ function Home() {
           </DebugCard>
           <div className="p-2">
             The following is the request that Wiki0 made to the IDP to request a JAG token. The
-            value of the &quot;subject_token&quot; field is the ID Token.
+            value of the &quot;subject_token&quot; field is the ID Assertion.
           </div>
           <DebugCard>
             <pre>

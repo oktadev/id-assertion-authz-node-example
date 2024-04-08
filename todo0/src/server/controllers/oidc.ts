@@ -44,7 +44,6 @@ const verify = async (
   const externalId = profile.id;
   const authServerOrgKey = externalId.split(':')[0];
   const userId = externalId.split(':')[1];
-
   if (!authServerOrgKey || !userId) {
     return done(
       new Error(`Could not parse profile.id for org and user id: ${JSON.stringify(profile)}`)
@@ -128,22 +127,32 @@ function createStrategy(username: string) {
   );
 }
 
-controller.post('/signout', async (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      next(err);
-    }
-  });
+controller.post(
+  '/signout',
+  async (req, res, next) => {
+    req.session.destroy((err) => {
+      if (!err) {
+        res.clearCookie(TODO_COOKIE_NAME, { path: '/' });
+        res.clearCookie('connect.sid', { path: '/' });
+        res.clearCookie('_interaction.sig', { path: '/' });
+        res.clearCookie('_session.legacy', { path: '/' });
+        res.clearCookie('_session.legacy.sig', { path: '/' });
+        res.clearCookie('_interaction', { path: '/' });
 
-  req.session.destroy((err) => {
-    if (!err) {
-      res.status(200).clearCookie(TODO_COOKIE_NAME, { path: '/' }).json({ status: 'Success' });
-    } else {
-      next(err);
-    }
-  });
-});
-
+        res.end();
+      } else {
+        next(err);
+      }
+    });
+  },
+  async (req, res, next) => {
+    req.logout((err) => {
+      if (err) {
+        next(err);
+      }
+    });
+  }
+);
 /**
  * Frontend UI can call this to see if the domain matches an Organization in the database.
  */

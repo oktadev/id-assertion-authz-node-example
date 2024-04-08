@@ -41,7 +41,9 @@ function Editor({
           <>
             {'{ \n   '}
             &quot;Authorization&quot;: &quot;Bearer{' '}
-            <TokenViewer token={r.requestHeaders.split('Bearer ')[1]} />
+            <TokenViewer
+              token={r.requestHeaders.split('Bearer ')[1].replaceAll('"', '').replaceAll('}', '')}
+            />
             {'\n}'}
           </>
         ) : (

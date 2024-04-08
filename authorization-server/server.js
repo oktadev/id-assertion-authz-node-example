@@ -4,13 +4,14 @@ import session from 'express-session';
 import * as path from 'node:path';
 import Provider from 'oidc-provider';
 import passport from 'passport';
-import jwtAuthorizationGrant from './jwt-authorization-grant.js';
-import routes from './routes.js';
+import jwtAuthorizationGrant from './lib/jwt-authorization-grant/index.js';
+import tokenExchange from './lib/token-exchange/index.js';
+import routes from './routes/oidc.js';
+import samlRoutes from './routes/saml.js';
+import demoRoutes from './routes/demo.js';
 import makeConfiguration from './server-configuration.js';
-import tokenExchange from './token-exchange.js';
 
 const __dirname = dirname(import.meta.url);
-
 
 const PORT = process.env.AUTH_SERVER_PORT;
 const ISSUER = process.env.AUTH_SERVER;
@@ -48,8 +49,12 @@ app.set('view engine', 'ejs');
 
 const provider = new Provider(ISSUER, await makeConfiguration());
 routes(app, provider);
-await jwtAuthorizationGrant(app, provider);
+samlRoutes(app, provider);
+demoRoutes(app, provider);
+
 await tokenExchange(app, provider);
+await jwtAuthorizationGrant(app, provider);
+
 app.use(provider.callback());
 
 let server = null;

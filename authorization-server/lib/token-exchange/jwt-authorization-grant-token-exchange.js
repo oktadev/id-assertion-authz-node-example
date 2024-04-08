@@ -1,17 +1,15 @@
+import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
 import * as jose from 'jose';
 import { CustomOIDCProviderError, OIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
-import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
-import { getIdToken } from './utils/id-token-cache.js';
-
+import { getSubjectToken } from '../../utils/id-token-cache.js';
 // eslint-disable-next-line import/prefer-default-export
 export async function authorizationGrantTokenExchange(ctx, configuration) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
 
   const { resource, subject_token, subject_token_type, scope } = ctx.oidc.params;
 
-  // subject_token is idToken -> get back the saved idp id Token
   // const jwks = configuration.jwks;
   const jwks = await jose.importJWK(instance(ctx.oidc.provider).jwksResponse.keys[0]);
 
@@ -29,15 +27,23 @@ export async function authorizationGrantTokenExchange(ctx, configuration) {
     );
   }
 
-  // Lookup by payload.sub and get the last idToken saved
-  const savedIdToken = getIdToken(payload.sub);
+  // This is hardcoded to what we use for Okta.
+  let subjectTokenType = 'oidc';
+  let key = payload.sub;
+
+  // TODO - SAML nameID comes in as the username in the jwt token
+  if (provider.use_saml_sso) {
+    key = `${payload.app_org}:${payload.preferred_username}`;
+    subjectTokenType = 'saml';
+  }
+
+  const { subjectToken } = getSubjectToken(key, provider.client_id);
 
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,
-    subjectToken: savedIdToken,
-    // This is hardcoded to what we use for Okta.
-    subjectTokenType: 'oidc',
+    subjectToken,
+    subjectTokenType,
     scopes: scope, // Can be undefined, will default to empty string
     clientID: provider.client_id,
     clientSecret: provider.client_secret,

@@ -3,20 +3,19 @@ import * as jose from 'jose';
 import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
-import makeConfiguration from './server-configuration.js';
-import { validateSignatureJWKs } from './utils/jwks.js';
+import makeConfiguration from '../../server-configuration.js';
+import { validateSignatureJWKs } from '../../utils/jwks.js';
 
 export default async (_, provider) => {
   const parameters = ['assertion', 'scope'];
 
   const configuration = await makeConfiguration();
-
   async function jwtAuthorizationGrantHandler(ctx, next) {
     // TODO Float error to frontend with appropriate status and code
 
     // ctx.oidc.params holds the parsed parameters
     // ctx.oidc.client has the authenticated client
-    console.log('Doing JWT Authorization Grant', ctx.oidc);
+    console.log('Doing JWT Authorization Grant');
 
     const {
       features: { resourceIndicators },
@@ -41,10 +40,8 @@ export default async (_, provider) => {
     const claims = jose.decodeJwt(assertion);
     console.log('JWT Authorization Grant claims:', claims);
 
-    // `iss` should match one of the configured providers in `server-configuration.js`
-    const providerDetails = Object.values(configuration.providers).find(
-      (p) => p.issuer === claims.iss
-    );
+    // Validate that `iss` matches one of the configured providers in `server-configuration.js`
+    const providerDetails = Object.values(configuration.providers).find((p) => p.issuer === claims.iss);
 
     if (!providerDetails) {
       throw new CustomOIDCProviderError(
@@ -105,13 +102,13 @@ export default async (_, provider) => {
       ctx.oidc.client,
       process.env.APP_RESOURCE
     );
+
     const resourceServerInfo = await resourceIndicators.getResourceServerInfo(
       ctx,
       resource,
       ctx.oidc.client
     );
 
-    // console.log(resourceServerInfo);
     at.resourceServer = new ctx.oidc.provider.ResourceServer(resource, resourceServerInfo);
 
     // Client-requested scopes are in ctx.oidc.params.scope
@@ -132,7 +129,6 @@ export default async (_, provider) => {
     const accessToken = await at.save();
 
     // TODO: issue refresh token too
-
     ctx.body = {
       access_token: accessToken,
       expires_in: at.expiration,

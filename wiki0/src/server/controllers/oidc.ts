@@ -122,7 +122,6 @@ const verify = async (
     // Errors if there was an issue making the request or parsing the response.
     console.log('Failed to obtain authorization grant', { idToken });
     console.log(error);
-
     done(null, user);
     return;
   }
@@ -264,21 +263,32 @@ controller.post('/check', async (req, res) => {
   res.json({ orgId: null });
 });
 
-controller.post('/signout', async (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      next(err);
-    }
-  });
+controller.post(
+  '/signout',
+  async (req, res, next) => {
+    req.session.destroy((err) => {
+      if (!err) {
+        res.clearCookie(WIKI_COOKIE_NAME, { path: '/' });
+        res.clearCookie('connect.sid', { path: '/' });
+        res.clearCookie('_interaction.sig', { path: '/' });
+        res.clearCookie('_session.legacy', { path: '/' });
+        res.clearCookie('_session.legacy.sig', { path: '/' });
+        res.clearCookie('_interaction', { path: '/' });
 
-  req.session.destroy((err) => {
-    if (!err) {
-      res.status(200).clearCookie(WIKI_COOKIE_NAME, { path: '/' }).json({ status: 'Success' });
-    } else {
-      next(err);
-    }
-  });
-});
+        res.end();
+      } else {
+        next(err);
+      }
+    });
+  },
+  async (req, res, next) => {
+    req.logout((err) => {
+      if (err) {
+        next(err);
+      }
+    });
+  }
+);
 
 /**
 
