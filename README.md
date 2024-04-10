@@ -1,3 +1,5 @@
+test update
+
 # id-assertion-authz-node-example
 
 This repo is proof-of-concept example of the proposed [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow. This flow is a subset of the Token Exchange grant which allows identity assertions received by a client via SSO to be exchanged with a trusted Identity Provider for an id-jag token. Such a token can then be exchanged for an access token with the resource authorization server. For for information, watch the explainer video [here](https://www.youtube.com/watch?v=I0vdmg79Ga4).
