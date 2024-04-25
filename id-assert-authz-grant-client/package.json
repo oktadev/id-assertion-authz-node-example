@@ -28,13 +28,13 @@
   "author": "Kamron Batman <kamronbatman@users.noreply.github.com>",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "@types/qs": "^6.9.11",
-    "rollup": "^4.9.6",
-    "typescript": "^5.3.3",
+    "@types/node": "^20.12.7",
+    "@types/qs": "^6.9.15",
+    "rollup": "^4.16.4",
+    "typescript": "^5.4.5",
     "unbuild": "^2.0.0"
   },
   "dependencies": {
-    "qs": "^6.11.2"
+    "qs": "^6.12.1"
   }
 }
