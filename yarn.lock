@@ -618,7 +618,7 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@prisma/client@^5.12.1":
+"@prisma/client@^5.13.0":
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.13.0.tgz#b9f1d0983d714e982675201d8222a9ecb4bdad4a"
   integrity sha512-uYdfpPncbZ/syJyiYBwGZS8Gt1PTNoErNYMuqHDa2r30rNSFtgTA/LXsSk55R7pdRTMi5pHkeP9B14K6nHmwkg==
@@ -757,11 +757,6 @@
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-s390x-gnu/-/rollup-linux-s390x-gnu-4.16.4.tgz#d46097246a187d99fc9451fe8393b7155b47c5ec"
   integrity sha512-1xwwn9ZCQYuqGmulGsTZoKrrn0z2fAur2ujE60QgyDpHmBbXbxLaQiEvzJWDrscRq43c8DnuHx3QorhMTZgisQ==
-
-"@rollup/rollup-linux-x64-gnu@4.14.3":
-  version "4.14.3"
-  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.14.3.tgz#197f27fd481ad9c861021d5cbbf21793922a631c"
-  integrity sha512-8ybV4Xjy59xLMyWo3GCfEGqtKV5M5gCSrZlxkPGvEPCGDLNla7v48S662HSGwRd6/2cSneMQWiv+QzcttLrrOA==
 
 "@rollup/rollup-linux-x64-gnu@4.16.4":
   version "4.16.4"
@@ -1145,14 +1140,14 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.7.tgz#50ae4353eaaddc04044279812f52c8c65857dbcb"
   integrity sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==
 
-"@types/react-dom@^18.2.25":
+"@types/react-dom@^18.3.0":
   version "18.3.0"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.0.tgz#0cbc818755d87066ab6ca74fbedb2547d74a82b0"
   integrity sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.2.78":
+"@types/react@*", "@types/react@^18.3.0":
   version "18.3.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.0.tgz#2e6ac50dea2f68f774b20f1bd536ef82365cd64a"
   integrity sha512-DiUcKjzE6soLyln8NNZmyhcQjVv+WsUIFSqetMN0p8927OztKT4VTfFTqsbAi5oAGIcgOmOajlfBqyptDDjZRw==
@@ -2247,7 +2242,7 @@ eslint-plugin-prettier@^4.2.1:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-react-hooks@^4.6.0:
+eslint-plugin-react-hooks@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.1.tgz#85a7e271da14ae4eb4ed717abb4db6e99700550f"
   integrity sha512-Ck77j8hF7l9N4S/rzSLOWEKpn994YH6iwUK8fr9mXIaQvGpQYmOnQLbiue1u5kI5T1y+gdgqosnEAO9NCz0DBg==
@@ -2516,10 +2511,10 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
-flowbite-react@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/flowbite-react/-/flowbite-react-0.8.0.tgz#1adf7e31cf7f6069127a2bf09ce8802a85dbf936"
-  integrity sha512-sd9Atj2l4rfxXqyayaEl+lBNPmBsbc4n+RxFtlsrCeYYB0wzY5qYiQWMaaFjKOIHHksxSndBtb2x0Jv/Y1jkrg==
+flowbite-react@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/flowbite-react/-/flowbite-react-0.9.0.tgz#5c6744173090012eff0fb55ee366501506aee5f7"
+  integrity sha512-wRGzTPHaEuRSXiAFhdTuksezABE/AjI/iyOOBGZpsFAz/sq7zuorAqjRud9FWgy3TlFPtldl7kL93wNY2nOnKQ==
   dependencies:
     "@floating-ui/core" "1.6.0"
     "@floating-ui/react" "0.26.10"
@@ -2786,7 +2781,7 @@ iconv-lite@0.4.24:
 "id-assert-authz-grant-client@file:./id-assert-authz-grant-client":
   version "1.0.0"
   dependencies:
-    qs "^6.11.2"
+    qs "^6.12.1"
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
@@ -3802,7 +3797,7 @@ prettier@^2.8.8:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
-prisma@^5.12.1:
+prisma@^5.13.0:
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.13.0.tgz#1f06e20ccfb6038ad68869e6eacd3b346f9d0851"
   integrity sha512-kGtcJaElNRAdAGsCNykFSZ7dBKpL14Cbs+VaQ8cECxQlRPDjBlMHNFYeYt0SKovAVy2Y65JXQwB3A5+zIQwnTg==
@@ -4006,7 +4001,7 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-qs@^6.11.2, qs@^6.12.1:
+qs@^6.12.1:
   version "6.12.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.12.1.tgz#39422111ca7cbdb70425541cba20c7d7b216599a"
   integrity sha512-zWmv4RSuB9r2mYQw3zxQuHWeU+42aKi1wWig/j4ele4ygELZ7PEO6MM7rim9oAQH2A5MWfsAVf/jPvTPgCbvUQ==
@@ -4038,7 +4033,7 @@ raw-body@2.5.2:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-react-dom@^18.2.0:
+react-dom@^18.3.0:
   version "18.3.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.3.0.tgz#98a3a1cc4e471d517c2a084f38ab1d58d02cada7"
   integrity sha512-zaKdLBftQJnvb7FtDIpZtsAIb2MZU087RM8bRDZU8LVCCFYjPTsDZJNFUWPcVz3HFSN1n/caxi0ca4B/aaVQGQ==
@@ -4066,7 +4061,7 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.1.tgz#b15177f9f4f3710aa5be0fd3ca244c44dab24fbc"
   integrity sha512-iZiRCtNGY3QYP3pYOSSBOvQmBpQTcJccr/VcK2blpJrpPTUDjeN51mxm5nsrkCzBwsbGUj+TN9q2oPz5E13FLg==
 
-react-router-dom@^6.22.3:
+react-router-dom@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.23.0.tgz#8b80ad92ad28f4dc38972e92d84b4c208150545a"
   integrity sha512-Q9YaSYvubwgbal2c9DJKfx6hTNoBp3iJDsl+Duva/DwxoJH+OTXkxGpql4iUK2sla/8z4RpjAm6EWx1qUDuopQ==
@@ -4081,7 +4076,7 @@ react-router@6.23.0:
   dependencies:
     "@remix-run/router" "1.16.0"
 
-react@^18.2.0:
+react@^18.3.0:
   version "18.3.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.3.0.tgz#84386d0a36fdf5ef50fa5755b7812bdfb76194a5"
   integrity sha512-RPutkJftSAldDibyrjuku7q11d3oy6wKOyPe5K1HA/HwwrXcEqBdHsLypkC2FFYjP7bPUa6gbzSBhw4sY2JcDg==
@@ -4373,6 +4368,7 @@ statuses@2.0.1:
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -4607,7 +4603,7 @@ tsconfig-paths@^3.15.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tsx@^4.7.2:
+tsx@^4.7.3:
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.7.3.tgz#c32f3f5cb928708a5c6becf617e432b395999242"
   integrity sha512-+fQnMqIp/jxZEXLcj6WzYy9FhcS5/Dfk8y4AtzJ6ejKcKqmfTF8Gso/jtrzDggCF2zTU20gJa6n8XqPYwDAUYQ==
@@ -4767,7 +4763,7 @@ vite-express@*:
   dependencies:
     picocolors "^1.0.0"
 
-vite@^5.2.8:
+vite@^5.2.10:
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/vite/-/vite-5.2.10.tgz#2ac927c91e99d51b376a5c73c0e4b059705f5bd7"
   integrity sha512-PAzgUZbP7msvQvqdSD+ErD5qGnSFiGOoWmV5yAKUEI0kdhjbH6nMWVyZQC/hSc4aXwc0oJ9aEdIiF9Oje0JFCw==
