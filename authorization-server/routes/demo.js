@@ -1,6 +1,5 @@
 import * as jose from 'jose';
 import { urlencoded } from 'express'; // eslint-disable-line import/no-unresolved
-import { cache } from 'ejs';
 import { getSubjectToken } from '../utils/id-token-cache.js';
 import makeConfiguration from '../server-configuration.js';
 import { validateSignatureJWKs } from '../utils/jwks.js';
@@ -16,20 +15,23 @@ export default async (app, provider) => {
     next();
   }
 
-  app.get('/debug/tokens', setNoCache, body, async (req, res, next) => {
+  app.get('/debug/tokens', setNoCache, body, async (req, res) => {
+    let assertion = '';
+    let tokenType = 'oidc';
+
     try {
       // Send the ID Token from the OIDC flow on the web app
       // and return the cached ID token from the SSO exchange for a JAG
       const idToken = req.header('Wiki0-Debug-ID');
-      let assertion = '';
-      let tokenType = 'oidc';
+
+      console.log({ idToken });
 
       if (!idToken) {
         res.json({
           assertion,
           type: tokenType,
         });
-        next();
+        return;
       }
 
       const claims = jose.decodeJwt(idToken);
@@ -41,7 +43,7 @@ export default async (app, provider) => {
           assertion,
           type: tokenType,
         });
-        next();
+        return;
       }
 
       const { payload } = await validateSignatureJWKs(claims.iss, idToken);
@@ -60,13 +62,11 @@ export default async (app, provider) => {
       if (subjectToken) {
         assertion = subjectToken;
       }
-
+    } finally {
       res.json({
         assertion,
         type: tokenType,
       });
-    } catch (e) {
-      next(e);
     }
   });
 };

@@ -55,6 +55,11 @@ controller.get('/', async (req, res) => {
     },
   });
 
+  if (!tokens?.length) {
+    res.send({ tokens });
+    return;
+  }
+
   const { idToken } = tokens[0];
   const { requestBody, responseBody, url } = await getTokenDebugInfo(idToken);
 
