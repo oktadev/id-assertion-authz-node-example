@@ -70,10 +70,10 @@ function Home() {
         setTokens(res.tokens);
 
         // Debug console data
-        const request = { ...res.requestBody } ?? {};
-        const response = { ...res.responseBody } ?? {};
+        const request = { ...res.requestBody };
+        const response = { ...res.responseBody };
 
-        // Add the real id and jag tokens to the requst for the debug console
+        // Add the real id and jag tokens to the request for the debug console
         if (res.tokens?.length) {
           request.subject_token = `${res.tokens[0].idToken?.slice(0, 15)}...`;
           response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
