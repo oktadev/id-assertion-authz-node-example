@@ -24,7 +24,7 @@ export default async (app, provider) => {
       // and return the cached ID token from the SSO exchange for a JAG
       const idToken = req.header('Wiki0-Debug-ID');
 
-      console.log({ idToken });
+      // console.log({ idToken });
 
       if (!idToken) {
         res.json({
