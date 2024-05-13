@@ -17,7 +17,7 @@ export default async (app, provider) => {
 
   app.get('/debug/tokens', setNoCache, body, async (req, res) => {
     let assertion = '';
-    let tokenType = 'oidc';
+    let type = 'oidc';
 
     try {
       // Send the ID Token from the OIDC flow on the web app
@@ -29,7 +29,7 @@ export default async (app, provider) => {
       if (!idToken) {
         res.json({
           assertion,
-          type: tokenType,
+          type,
         });
         return;
       }
@@ -41,31 +41,37 @@ export default async (app, provider) => {
       if (!providerDetails) {
         res.json({
           assertion,
-          type: tokenType,
+          type,
         });
         return;
       }
 
       await validateSignatureJWKs(claims.iss, idToken);
 
-      let cacheKey = claims.sub;
-      if (providerDetails.use_saml_sso) {
-        cacheKey = `${claims.app_org}:${payload.preferred_username}`;
-      }
+      const key = claims.sub;
+      // if (providerDetails.use_saml_sso) {
+      //   key = `${claims.app_org}:${claims.preferred_username}`;
+      // }
 
-      const { subjectToken, type } = getSubjectToken(cacheKey, providerDetails.client_id);
+      const { subjectToken, tokenType } = getSubjectToken(key, providerDetails.client_id);
 
-      if (type) {
-        tokenType = type;
+      if (tokenType) {
+        type = tokenType;
       }
 
       if (subjectToken) {
         assertion = subjectToken;
       }
-    } finally {
+
       res.json({
         assertion,
-        type: tokenType,
+        type,
+      });
+    } catch (e) {
+      console.log('Error getting tokens for debug console', e);
+      res.json({
+        assertion,
+        type,
       });
     }
   });

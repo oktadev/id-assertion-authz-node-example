@@ -12,10 +12,12 @@ function makeCacheKey(subject, client_id) {
   return [subject, client_id].join('|');
 }
 
-export function cacheSubjectToken(subject, client_id, token, type) {
-  cache[makeCacheKey(subject, client_id)] = { subjectToken: token, type };
+export function cacheSubjectToken(subject, client_id, subjectToken, tokenType) {
+  cache[makeCacheKey(subject, client_id)] = { subjectToken, tokenType };
 }
 
 export function getSubjectToken(subject, client_id) {
-  return cache[makeCacheKey(subject, client_id)] || { subjectToken: undefined, type: undefined };
+  return (
+    cache[makeCacheKey(subject, client_id)] || { subjectToken: undefined, tokenType: undefined }
+  );
 }

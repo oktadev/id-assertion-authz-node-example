@@ -1,4 +1,3 @@
-// import bodyParser from 'body-parser';
 import { urlencoded } from 'express'; // eslint-disable-line import/no-unresolved
 import passport from 'passport';
 import { buildErrorMessage } from 'vite';
@@ -41,8 +40,8 @@ export default async (app, provider) => {
         buildErrorMessage('invalid_request', 'Unknown provider in SAML login');
         return;
       }
-
-      const account = await Account.upsertAccount(req.user.nameID, req.user, sso_provider.name);
+      // Use the userId SAML attribute, which is the Okta user ID
+      const account = await Account.upsertAccount(req.user.userId, req.user, sso_provider.name);
 
       // eslint-disable-next-line no-param-reassign
       req.user.id = account.accountId;
