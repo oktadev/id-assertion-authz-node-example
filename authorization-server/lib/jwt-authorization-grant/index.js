@@ -41,7 +41,9 @@ export default async (_, provider) => {
     console.log('JWT Authorization Grant claims:', claims);
 
     // Validate that `iss` matches one of the configured providers in `server-configuration.js`
-    const providerDetails = Object.values(configuration.providers).find((p) => p.issuer === claims.iss);
+    const providerDetails = Object.values(configuration.providers).find(
+      (p) => p.issuer === claims.iss
+    );
 
     if (!providerDetails) {
       throw new CustomOIDCProviderError(
