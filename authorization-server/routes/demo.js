@@ -46,11 +46,11 @@ export default async (app, provider) => {
         return;
       }
 
-      const { payload } = await validateSignatureJWKs(claims.iss, idToken);
+      await validateSignatureJWKs(claims.iss, idToken);
 
-      let cacheKey = payload.sub;
+      let cacheKey = claims.sub;
       if (providerDetails.use_saml_sso) {
-        cacheKey = `${payload.app_org}:${payload.preferred_username}`;
+        cacheKey = `${claims.app_org}:${payload.preferred_username}`;
       }
 
       const { subjectToken, type } = getSubjectToken(cacheKey, providerDetails.client_id);
