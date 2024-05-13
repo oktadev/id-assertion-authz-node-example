@@ -1,4 +1,4 @@
-import '../tiptap.css';
+import '../tiptap.scss';
 
 import { Color } from '@tiptap/extension-color';
 import Link, { LinkOptions } from '@tiptap/extension-link';
