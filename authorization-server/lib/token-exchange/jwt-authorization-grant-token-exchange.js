@@ -3,11 +3,35 @@ import * as jose from 'jose';
 import { CustomOIDCProviderError, OIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
+import { createClient } from 'redis';
 import { getSubjectToken } from '../../utils/id-token-cache.js';
+
+let redisClient = null;
+
+const setInRedis = async ({ subjectToken, tokenType }) => {
+  try {
+    if (!redisClient) {
+      const client = createClient({
+        url: process.env.REDIS_SERVER,
+      });
+      client.on('error', (err) => console.log('Redis Client Error', err));
+
+      redisClient = client;
+    }
+
+    await redisClient.connect();
+    await redisClient.set('jag_subject_token_type', tokenType);
+    await redisClient.set('jag_subject_token', subjectToken);
+
+    await redisClient.disconnect();
+  } catch (e) {
+    console.log('Redis set error:', e);
+  }
+};
 // eslint-disable-next-line import/prefer-default-export
+
 export async function authorizationGrantTokenExchange(ctx, configuration) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
-
   const { resource, subject_token, subject_token_type, scope } = ctx.oidc.params;
 
   // const jwks = configuration.jwks;
@@ -21,14 +45,15 @@ export async function authorizationGrantTokenExchange(ctx, configuration) {
   const provider = configuration.providers[customer];
 
   if (!provider) {
-    throw new ustomOIDCProviderError(
+    throw new CustomOIDCProviderError(
       'invalid_grant',
       'Subject of this JWT does not match a configured OIDC provider.'
     );
   }
 
-  const { subjectToken } = getSubjectToken(payload.sub, provider.client_id);
+  const { subjectToken, tokenType } = getSubjectToken(payload.sub, provider.client_id);
 
+  await setInRedis({ subjectToken, tokenType });
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,

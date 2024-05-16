@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { createClient } from 'redis';
 import prisma from '../../../prisma/client';
 
 const controller = Router();
@@ -27,18 +28,20 @@ const getTokenDebugInfo = async (idToken: string | null): Promise<Record<string,
   };
 
   if (idToken) {
-    // Make request to auth server
+    // Get original IdP subject token from auth server to display in debug console
     try {
-      const response = await fetch(`${process.env.AUTH_SERVER}/debug/tokens`, {
-        headers: {
-          'Wiki0-Debug-ID': idToken,
-        },
+      const redisClient = createClient({
+        url: process.env.REDIS_SERVER,
       });
-      const { assertion, type } = await response.json();
+      redisClient.connect().catch(console.error);
+      const type = await redisClient.get('jag_subject_token_type');
+      const assertion = await redisClient.get('jag_subject_token');
+      console.log('{type, assertion}', { type, assertion });
+
       if (type === 'saml') {
         requestBody.subject_token_type = 'urn:ietf:params:oauth:token-type:saml2';
       }
-      requestBody.subject_token = assertion;
+      requestBody.subject_token = assertion || ""
     } catch (e) {
       console.log(e);
     }

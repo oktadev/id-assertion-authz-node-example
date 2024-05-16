@@ -8,13 +8,13 @@ import jwtAuthorizationGrant from './lib/jwt-authorization-grant/index.js';
 import tokenExchange from './lib/token-exchange/index.js';
 import routes from './routes/oidc.js';
 import samlRoutes from './routes/saml.js';
-import demoRoutes from './routes/demo.js';
 import makeConfiguration from './server-configuration.js';
 
 const __dirname = dirname(import.meta.url);
 
 const PORT = process.env.AUTH_SERVER_PORT;
 const ISSUER = process.env.AUTH_SERVER;
+
 
 const app = express();
 
@@ -50,7 +50,6 @@ app.set('view engine', 'ejs');
 const provider = new Provider(ISSUER, await makeConfiguration());
 routes(app, provider);
 samlRoutes(app, provider);
-demoRoutes(app, provider);
 
 await tokenExchange(app, provider);
 await jwtAuthorizationGrant(app, provider);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HiHashtag } from 'react-icons/hi';
+import { FaRegCopy } from 'react-icons/fa';
 import { useAuthState } from './authState';
 
 interface ITodo {
@@ -108,8 +109,9 @@ function Todos() {
           onClick={() => {
             navigator.clipboard.writeText(`${window.location.href}todos/${todo.id}`);
           }}
+          className=" inline-block focus:outline-none pr-2 hover:text-black inline-flex items-center me-2"
         >
-          <HiHashtag />
+          <FaRegCopy />
         </button>
         <button
           type="button"
