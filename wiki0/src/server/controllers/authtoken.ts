@@ -41,7 +41,7 @@ const getTokenDebugInfo = async (idToken: string | null): Promise<Record<string,
       if (type === 'saml') {
         requestBody.subject_token_type = 'urn:ietf:params:oauth:token-type:saml2';
       }
-      requestBody.subject_token = assertion || '';
+      requestBody.subject_token = assertion ?? '';
     } catch (e) {
       console.log(e);
     }
