@@ -4,10 +4,9 @@ import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
 import { getIdToken } from './utils/id-token-cache.js';
-import { storeJagTokenInRedis } from './utils/helpers.js';
 
 // eslint-disable-next-line import/prefer-default-export
-export async function authorizationGrantTokenExchange(ctx, configuration) {
+export async function authorizationGrantTokenExchange(app, ctx, configuration) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
 
   const { resource, subject_token, subject_token_type, scope } = ctx.oidc.params;
@@ -33,7 +32,7 @@ export async function authorizationGrantTokenExchange(ctx, configuration) {
   // Lookup by payload.sub and get the last idToken saved
   const savedIdToken = getIdToken(payload.sub);
 
-  await storeJagTokenInRedis(payload.sub, savedIdToken);
+  await app.locals.redisClient.set(`jag_subject_token:${payload.sub}`, savedIdToken);
 
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,

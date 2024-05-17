@@ -13,7 +13,7 @@ import authtoken from './controllers/authtoken';
 import oidc, { WIKI_COOKIE_NAME } from './controllers/oidc';
 import user from './controllers/user';
 import { JWT_STRATEGY_NAME, jwtStrategy } from './jwt/jwt-strategy';
-import redisConnection from './redis/client';
+
 // Find the nearest .env and load it into process.ENV
 dotenv.config({ path: findConfig('.env') || undefined });
 
@@ -23,11 +23,18 @@ app.use(express.json());
 // TODO uncomment when ready
 // app.use('/.well-known', wellknown);
 
-// const redisClient = createClient({
-//   url: process.env.REDIS_SERVER,
-// });
-// redisClient.connect().catch(console.error);
-const redisClient = redisConnection.getClient();
+let redisClient;
+
+(async () => {
+  redisClient = createClient();
+
+  redisClient.on('error', (error) => console.error(`Redis Error : ${error}`));
+
+  await redisClient.connect();
+})();
+
+app.locals.redisClient = redisClient;
+
 const redisStore = new RedisStore({
   client: redisClient,
   prefix: 'wiki0:',

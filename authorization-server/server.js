@@ -8,16 +8,30 @@ import jwtAuthorizationGrant from './jwt-authorization-grant.js';
 import routes from './routes.js';
 import makeConfiguration from './server-configuration.js';
 import tokenExchange from './token-exchange.js';
+import {createClient} from "redis"
 
 const __dirname = dirname(import.meta.url);
 
 
 const PORT = process.env.AUTH_SERVER_PORT;
 const ISSUER = process.env.AUTH_SERVER;
+const cookieSecret = process.env.COOKIE_SECRET;
 
 const app = express();
 
-const cookieSecret = process.env.COOKIE_SECRET;
+let redisClient;
+
+(async () => {
+  redisClient = createClient();
+
+  redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
+
+  await redisClient.connect();
+})();
+
+app.locals.redisClient = redisClient
+
+
 if (!cookieSecret) {
   throw new Error('Missing env variable COOKIE_SECRET');
 }
@@ -58,6 +72,8 @@ try {
     console.log(`application is listening on port ${PORT}: ${ISSUER}/.well-known/openid-configuration`);
   });
 } catch (err) {
+  console.error(err);
+
   if (server?.listening) server.close();
   console.error(err);
   process.exitCode = 1;
