@@ -20,18 +20,15 @@ const cookieSecret = process.env.COOKIE_SECRET;
 
 const app = express();
 
-let redisClient;
+let redisClient = createClient();
+
+redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
 
 (async () => {
-  redisClient = createClient();
-
-  redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
-
   await redisClient.connect();
 })();
 
-app.locals.redisClient = redisClient
-
+// app.locals.redisClient = redisClient
 
 if (!cookieSecret) {
   throw new Error('Missing env variable COOKIE_SECRET');
@@ -69,7 +66,7 @@ saml(app, provider);
 
 // Grants
 await jwtAuthorizationGrant(app, provider);
-await tokenExchange(app, provider);
+await tokenExchange(app, provider, redisClient);
 app.use(provider.callback());
 
 let server = null;

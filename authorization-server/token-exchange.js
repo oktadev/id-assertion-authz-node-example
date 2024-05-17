@@ -3,7 +3,7 @@ import { OAuthTokenType } from 'id-assert-authz-grant-client';
 import { authorizationGrantTokenExchange } from './jwt-authorization-grant-token-exchange.js';
 import makeConfiguration from './server-configuration.js';
 
-export default async (app, provider) => {
+export default async (_, provider, redisclient) => {
   const configuration = await makeConfiguration();
 
   const grantType = 'urn:ietf:params:oauth:grant-type:token-exchange';
@@ -23,7 +23,7 @@ export default async (app, provider) => {
     const { requested_token_type } = ctx.oidc.params;
 
     if (requested_token_type === OAuthTokenType.JWT_ID_JAG) {
-      await authorizationGrantTokenExchange(app, ctx, configuration);
+      await authorizationGrantTokenExchange(ctx, configuration, redisclient);
     } else {
       throw new CustomOIDCProviderError(
         'invalid_grant',

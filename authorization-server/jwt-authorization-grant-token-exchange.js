@@ -5,7 +5,7 @@ import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
 import { getSubjectToken } from './utils/id-token-cache.js';
 // eslint-disable-next-line import/prefer-default-export
-export async function authorizationGrantTokenExchange(app, ctx, configuration) {
+export async function authorizationGrantTokenExchange(ctx, configuration, redisclient) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
 
   const { resource, subject_token, subject_token_type, scope } = ctx.oidc.params;
@@ -33,7 +33,7 @@ export async function authorizationGrantTokenExchange(app, ctx, configuration) {
 
   // TODO store in redis for debug console
 
-  await app.locals.redisClient.set(`jag_subject_token:${payload.sub}`, savedIdToken);
+  await redisClient.set(`jag_subject_token:${payload.sub}`, savedIdToken);
 
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,

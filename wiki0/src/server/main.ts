@@ -23,13 +23,11 @@ app.use(express.json());
 // TODO uncomment when ready
 // app.use('/.well-known', wellknown);
 
-let redisClient;
+const redisClient = createClient();
+
+redisClient.on('error', (error) => console.error(`Redis Error : ${error}`));
 
 (async () => {
-  redisClient = createClient();
-
-  redisClient.on('error', (error) => console.error(`Redis Error : ${error}`));
-
   await redisClient.connect();
 })();
 
