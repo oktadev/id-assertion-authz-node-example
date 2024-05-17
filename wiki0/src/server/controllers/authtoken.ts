@@ -1,24 +1,12 @@
 import { Router } from 'express';
 import prisma from '../../../prisma/client';
-import createRedisClient from '../redis/client';
+import { getJagTokenFromRedis } from '../redis/helpers';
 
 const controller = Router();
 
-const getTokenFromRedis = async () => {
-  try {
-    const redisClient = await createRedisClient();
-    await redisClient.connect();
-    const token = await redisClient.get('jag_subject_token');
-    return token;
-  } catch (e) {
-    console.log('Failed to save token to redis');
-    return '';
-  }
-};
-
 controller.get('/', async (req, res) => {
   const user = req.user!;
-  const savedSubjectToken = await getTokenFromRedis();
+  const savedSubjectToken = await getJagTokenFromRedis(user.externalId);
   const tokens = await prisma.authorizationToken.findMany({
     where: {
       orgId: user.orgId,
