@@ -9,7 +9,7 @@ const cache = {};
  */
 
 function makeCacheKey(subject, client_id) {
-  return [subject, client_id].join('|');
+  return `${subject}|${client_id}`;
 }
 
 export function cacheSubjectToken(subject, client_id, subjectToken, tokenType) {
