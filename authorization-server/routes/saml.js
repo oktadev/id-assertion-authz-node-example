@@ -10,7 +10,7 @@ const body = urlencoded({ extended: false });
 
 export default async (app, provider) => {
   // TODO: The OIDC resource mounts this route and fails
-  if (!process.env.CUSTOMER1_SAML_ISSUER || process.env.CUSTOMER1_SAML_ISSUER === '') {
+  if (!process.env.CUSTOMER1_SAML_ISSUER) {
     return;
   }
 
