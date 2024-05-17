@@ -30,7 +30,7 @@ Steps:
 
 # Dev Setup
 
-This application runs locally using [VSCode Dev Containers](https://code.visualstudio.com/docs/devcontainers/tutorial). If you cannot use VSCode, you can follow the instructions [here](#Local-Development---Alternative-Option).
+This application runs locally using [VSCode Dev Containers](https://code.visualstudio.com/docs/devcontainers/tutorial). If you cannot use VSCode, you can follow the instructions [here](#non-vscode-alternative-option).
 
 ## Requirements
 
@@ -41,6 +41,9 @@ This application runs locally using [VSCode Dev Containers](https://code.visuals
 ## Configuration
 
 At the project root, copy over the default files into `.env` files:
+
+> [!NOTE]
+> You can run this application in either SAML or OIDC mode. In SAML mode, the Wiki0 authorization server will use SAML to SSO to the Idp as opposed to OIDC.
 
 ```
 cp todo0/.env.default todo0/.env &&
@@ -54,6 +57,16 @@ You must specify the following the issuer and client id in both your `.env.todo`
 ```
 CUSTOMER1_AUTH_ISSUER="<FILL IN>"
 CUSTOMER1_CLIENT_ID="<FILL IN>"
+```
+
+### For SAML
+For `.env.wiki` you must also specify your SAML configuraiton:
+
+```
+USE_SAML_SSO="true"
+CUSTOMER1_SAML_ENTRY_POINT="<FILL IN>"
+CUSTOMER1_SAML_ISSUER="<FILL IN>"
+CUSTOMER1_SAML_CERTIFICATE="<FILL IN>"
 ```
 
 ## Setup
@@ -147,7 +160,7 @@ Follow the section [Configuration](#Configuration)
 This install dependencies at the root and in the authorization sever, builds a local dependency package, and runs the initial DB schema migration.
 
 ```
-yarn preintall && yarn install && yarn postinstall && yarn server:install
+yarn preinstall && yarn install && yarn postinstall && yarn server:install
 ```
 
 ### Database

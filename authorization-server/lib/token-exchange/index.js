@@ -1,12 +1,12 @@
+import { OAuthGrantType, OAuthTokenType } from 'id-assert-authz-grant-client';
 import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
-import { OAuthTokenType } from 'id-assert-authz-grant-client';
+import makeConfiguration from '../../server-configuration.js';
 import { authorizationGrantTokenExchange } from './jwt-authorization-grant-token-exchange.js';
-import makeConfiguration from './server-configuration.js';
 
 export default async (_, provider) => {
   const configuration = await makeConfiguration();
 
-  const grantType = 'urn:ietf:params:oauth:grant-type:token-exchange';
+  const grantType = OAuthGrantType.TOKEN_EXCHANGE;
 
   const parameters = [
     'requested_token_type',

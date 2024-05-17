@@ -12,5 +12,5 @@ export const validateSignatureJWKs = async (issuer, token) => {
   const jwksJson = await issuerConfigResp.json();
   const JWKS = jose.createRemoteJWKSet(new URL(jwksJson.jwks_uri));
 
-  return jose.jwtVerify(token, JWKS);
+  await jose.jwtVerify(token, JWKS);
 };

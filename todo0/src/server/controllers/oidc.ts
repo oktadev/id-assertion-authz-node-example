@@ -44,7 +44,6 @@ const verify = async (
   const externalId = profile.id;
   const authServerOrgKey = externalId.split(':')[0];
   const userId = externalId.split(':')[1];
-
   if (!authServerOrgKey || !userId) {
     return done(
       new Error(`Could not parse profile.id for org and user id: ${JSON.stringify(profile)}`)
@@ -134,7 +133,6 @@ controller.post('/signout', async (req, res, next) => {
       next(err);
     }
   });
-
   req.session.destroy((err) => {
     if (!err) {
       res.status(200).clearCookie(TODO_COOKIE_NAME, { path: '/' }).json({ status: 'Success' });

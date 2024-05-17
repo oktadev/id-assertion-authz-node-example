@@ -30,7 +30,6 @@ export const jwtStrategy = new JwtStrategy(
   },
   async (req: Request, jwt, done) => {
     const { sub: externalId } = jwt;
-
     if (!externalId) {
       done(new Error(`Could not parse jwt.sub for org and user id: ${JSON.stringify(jwt)}`));
       return;

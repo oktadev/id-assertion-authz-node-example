@@ -43,14 +43,16 @@ model Organization {
 
 model User {
   id       Int    @id @default(autoincrement())
-  email    String @unique
+  email    String
   name String
   externalId String?
 
   org       Organization    @relation(fields: [orgId], references: [id])
   orgId     Int
 
+  // same prisma error as in in auth token schema
   @@unique([orgId, externalId])
+  @@unique([email, orgId, externalId])
 
   Article  Article[]
   AuthorizationToken  AuthorizationToken[]
