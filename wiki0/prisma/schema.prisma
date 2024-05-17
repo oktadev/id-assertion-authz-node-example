@@ -43,14 +43,16 @@ model Organization {
 
 model User {
   id       Int    @id @default(autoincrement())
-  email    String @unique
+  email    String
   name String
   externalId String?
 
   org       Organization    @relation(fields: [orgId], references: [id])
   orgId     Int
 
+  // Prisma wont let us delete this index and replace it
   @@unique([orgId, externalId])
+  @@unique([orgId, email, externalId])
 
   Article  Article[]
   AuthorizationToken  AuthorizationToken[]

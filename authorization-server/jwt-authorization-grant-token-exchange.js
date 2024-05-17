@@ -3,8 +3,7 @@ import { CustomOIDCProviderError, OIDCProviderError } from 'oidc-provider/lib/he
 import validatePresence from 'oidc-provider/lib/helpers/validate_presence.js';
 import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
-import { getIdToken } from './utils/id-token-cache.js';
-
+import { getSubjectToken } from './utils/id-token-cache.js';
 // eslint-disable-next-line import/prefer-default-export
 export async function authorizationGrantTokenExchange(app, ctx, configuration) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
@@ -29,17 +28,19 @@ export async function authorizationGrantTokenExchange(app, ctx, configuration) {
     );
   }
 
-  // Lookup by payload.sub and get the last idToken saved
-  const savedIdToken = getIdToken(payload.sub);
+  // Lookup by payload.sub and get the last id assertion saved
+  const { subjectToken } = getSubjectToken(payload.sub, provider.client_id);
+
+  // TODO store in redis for debug console
 
   await app.locals.redisClient.set(`jag_subject_token:${payload.sub}`, savedIdToken);
 
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,
-    subjectToken: savedIdToken,
+    subjectToken: subjectToken,
     // This is hardcoded to what we use for Okta.
-    subjectTokenType: 'oidc',
+    subjectTokenType: provider.use_saml_sso ? 'saml' : 'oidc',
     scopes: scope, // Can be undefined, will default to empty string
     clientID: provider.client_id,
     clientSecret: provider.client_secret,

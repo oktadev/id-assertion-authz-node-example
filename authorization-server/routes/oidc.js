@@ -4,13 +4,9 @@
 import { urlencoded } from 'express'; // eslint-disable-line import/no-unresolved
 import { errors } from 'oidc-provider';
 import passport from 'passport';
-import passportOIDC from 'passport-openidconnect';
 import { buildErrorMessage } from 'vite';
-import makeConfiguration from './server-configuration.js';
-import Account from './utils/account.js';
-import { cache_id_token } from './utils/id-token-cache.js';
-
-const OpenIDConnectStrategy = passportOIDC.Strategy;
+import makeConfiguration from '../server-configuration.js';
+import { createOIDCStrategy, createPassportStrategy } from '../utils/passport-strategy.js';
 
 const body = urlencoded({ extended: false });
 
@@ -50,38 +46,6 @@ export default async (app, provider) => {
   function setNoCache(req, res, next) {
     res.set('cache-control', 'no-store');
     next();
-  }
-
-  function createPassportStrategy(org) {
-    return new OpenIDConnectStrategy(
-      {
-        issuer: org.issuer,
-        authorizationURL: org.authorization_endpoint,
-        tokenURL: org.token_endpoint,
-        userInfoURL: org.userinfo_endpoint,
-        clientID: org.client_id,
-        clientSecret: org.client_secret,
-        scope: 'profile email',
-        callbackURL: `${process.env.AUTH_SERVER}/openid/callback/${org.name}`,
-        pkce: org.pkce,
-      },
-      async (issuer, profile, context, id_token, cb) => {
-        // Passport.js runs this verify function after successfully completing
-        // the OIDC flow, and gives this app a chance to do something with
-        // the response from the OIDC server, like create users on the fly.
-        console.log('Passport Verify', issuer, profile);
-
-        const account = await Account.upsertAccount(profile.id, profile, org.name);
-
-        // update the id to be globally unique
-        // eslint-disable-next-line no-param-reassign
-        profile.id = account.accountId;
-
-        cache_id_token(profile.id, id_token);
-
-        return cb(null, profile);
-      }
-    );
   }
 
   // The user is redirected here after the OIDC server receives a request from a client.
@@ -145,7 +109,7 @@ export default async (app, provider) => {
           return;
         }
 
-        const strategy = createPassportStrategy(sso_provider, req.params.key);
+        const strategy = createOIDCStrategy(sso_provider);
 
         res.locals.uid = req.session.interaction_uid;
 
