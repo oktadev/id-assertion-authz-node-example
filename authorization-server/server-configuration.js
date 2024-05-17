@@ -55,6 +55,7 @@ const configuration = {
       redirect_uri: `${process.env.AUTH_SERVER}/openid/callback/customer1`,
       client_id: process.env.CUSTOMER1_CLIENT_ID,
       client_secret: process.env.CUSTOMER1_CLIENT_SECRET,
+      use_saml_sso: process.env.USE_SAML_SSO === 'true',
       scope: 'profile email',
       pkce: true,
     },

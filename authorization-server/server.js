@@ -5,9 +5,10 @@ import * as path from 'node:path';
 import Provider from 'oidc-provider';
 import passport from 'passport';
 import jwtAuthorizationGrant from './jwt-authorization-grant.js';
-import routes from './routes.js';
 import makeConfiguration from './server-configuration.js';
 import tokenExchange from './token-exchange.js';
+import saml from './routes/saml.js';
+import oidc from './routes/oidc.js';
 
 const __dirname = dirname(import.meta.url);
 
@@ -47,7 +48,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 const provider = new Provider(ISSUER, await makeConfiguration());
-routes(app, provider);
+
+// Routes
+oidc(app, provider);
+saml(app, provider);
+
+// Grants
 await jwtAuthorizationGrant(app, provider);
 await tokenExchange(app, provider);
 app.use(provider.callback());
