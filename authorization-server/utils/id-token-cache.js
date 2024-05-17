@@ -18,6 +18,6 @@ export function cacheSubjectToken(subject, client_id, subjectToken, tokenType) {
 
 export function getSubjectToken(subject, client_id) {
   return (
-    cache[makeCacheKey(subject, client_id)] || { subjectToken: undefined, tokenType: undefined }
+    cache[makeCacheKey(subject, client_id)] ?? { subjectToken: undefined, tokenType: undefined }
   );
 }
