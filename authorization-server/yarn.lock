@@ -1570,12 +1570,10 @@ vite@^5.2.10:
   optionalDependencies:
     fsevents "~2.3.3"
 
-<<<<<<< HEAD
 yallist@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
-=======
 xml-crypto@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-6.0.0.tgz#9657ce63cbbaacc48b2c74a13d05cf0a9d339d47"
@@ -1626,7 +1624,6 @@ xpath@^0.0.34:
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.34.tgz#a769255e8816e0938e1e0005f2baa7279be8be12"
   integrity sha512-FxF6+rkr1rNSQrhUNYrAFJpRXNzlDoMxeXN5qI84939ylEv3qqPFKa85Oxr6tDaJKqwW6KKyo2v26TSv3k6LeA==
->>>>>>> main
 
 ylru@^1.2.0:
   version "1.4.0"
