@@ -50,9 +50,9 @@ model User {
   org       Organization    @relation(fields: [orgId], references: [id])
   orgId     Int
 
-  // same prisma error as in in auth token schema
+  // Prisma wont let us delete this index and replace it
   @@unique([orgId, externalId])
-  @@unique([email, orgId, externalId])
+  @@unique([orgId, email, externalId])
 
   Article  Article[]
   AuthorizationToken  AuthorizationToken[]

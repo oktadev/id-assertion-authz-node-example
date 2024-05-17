@@ -45,7 +45,7 @@ model User {
   name String
   externalId String?
   
-  @@unique([email, orgId, externalId])
+  @@unique([orgId, email, externalId])
   org       Organization    @relation(fields: [orgId], references: [id])
   orgId     Int
 
