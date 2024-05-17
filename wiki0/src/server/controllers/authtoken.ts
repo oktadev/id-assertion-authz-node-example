@@ -1,10 +1,24 @@
 import { Router } from 'express';
 import prisma from '../../../prisma/client';
+import createRedisClient from '../redis/client';
 
 const controller = Router();
 
+const getTokenFromRedis = async () => {
+  try {
+    const redisClient = await createRedisClient();
+    await redisClient.connect();
+    const token = await redisClient.get('jag_subject_token');
+    return token;
+  } catch (e) {
+    console.log('Failed to save token to redis');
+    return '';
+  }
+};
+
 controller.get('/', async (req, res) => {
   const user = req.user!;
+  const savedSubjectToken = await getTokenFromRedis();
   const tokens = await prisma.authorizationToken.findMany({
     where: {
       orgId: user.orgId,
@@ -19,7 +33,7 @@ controller.get('/', async (req, res) => {
     subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
     resource: `${process.env.TODO_AUTH_SERVER}/token`,
     scope: 'read write',
-    subject_token: '', // frontend can tack this id token on
+    subject_token: savedSubjectToken, // frontend can tack this id token on
     client_id: '<CLIENT_ID>',
     client_secret: '<CLIENT_SECRET>',
   };
