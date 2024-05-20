@@ -7,6 +7,7 @@ import passport from 'passport';
 import jwtAuthorizationGrant from './jwt-authorization-grant.js';
 import makeConfiguration from './server-configuration.js';
 import tokenExchange from './token-exchange.js';
+import {createClient} from "redis"
 import saml from './routes/saml.js';
 import oidc from './routes/oidc.js';
 
@@ -15,10 +16,20 @@ const __dirname = dirname(import.meta.url);
 
 const PORT = process.env.AUTH_SERVER_PORT;
 const ISSUER = process.env.AUTH_SERVER;
+const cookieSecret = process.env.COOKIE_SECRET;
 
 const app = express();
 
-const cookieSecret = process.env.COOKIE_SECRET;
+let redisClient = createClient();
+
+redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
+
+(async () => {
+  await redisClient.connect();
+})();
+
+// app.locals.redisClient = redisClient
+
 if (!cookieSecret) {
   throw new Error('Missing env variable COOKIE_SECRET');
 }
@@ -55,7 +66,7 @@ saml(app, provider);
 
 // Grants
 await jwtAuthorizationGrant(app, provider);
-await tokenExchange(app, provider);
+await tokenExchange(app, provider, redisClient);
 app.use(provider.callback());
 
 let server = null;

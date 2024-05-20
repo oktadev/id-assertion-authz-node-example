@@ -5,7 +5,7 @@ import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import { OAuthBadRequest, requestIdJwtAuthzGrant } from 'id-assert-authz-grant-client';
 import { getSubjectToken } from './utils/id-token-cache.js';
 // eslint-disable-next-line import/prefer-default-export
-export async function authorizationGrantTokenExchange(ctx, configuration) {
+export async function authorizationGrantTokenExchange(ctx, configuration, redisClient) {
   validatePresence(ctx, 'resource', 'subject_token', 'subject_token_type');
 
   const { resource, subject_token, subject_token_type, scope } = ctx.oidc.params;
@@ -33,10 +33,12 @@ export async function authorizationGrantTokenExchange(ctx, configuration) {
 
   // TODO store in redis for debug console
 
+  await redisClient.set(`jag_subject_token:${payload.sub}`, subjectToken);
+
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,
-    subjectToken: subjectToken,
+    subjectToken,
     // This is hardcoded to what we use for Okta.
     subjectTokenType: provider.use_saml_sso ? 'saml' : 'oidc',
     scopes: scope, // Can be undefined, will default to empty string

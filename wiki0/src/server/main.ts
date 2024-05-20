@@ -26,7 +26,11 @@ app.use(express.json());
 const redisClient = createClient({
   url: process.env.REDIS_SERVER,
 });
+
 redisClient.connect().catch(console.error);
+
+app.locals.redisClient = redisClient;
+
 const redisStore = new RedisStore({
   client: redisClient,
   prefix: 'wiki0:',

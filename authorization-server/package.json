@@ -23,6 +23,7 @@
     "oidc-provider": "^8.4.6",
     "passport": "^0.7.0",
     "passport-openidconnect": "aaronpk/passport-openidconnect#master",
+    "redis": "^4.6.14",
     "vite": "^5.2.10"
   }
 }

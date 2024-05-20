@@ -16,7 +16,7 @@ export default async (_, provider) => {
 
     // ctx.oidc.params holds the parsed parameters
     // ctx.oidc.client has the authenticated client
-    console.log('Doing JWT Authorization Grant', ctx.oidc);
+    console.log('Doing JWT Authorization Grant');
 
     const {
       features: { resourceIndicators },

@@ -5,6 +5,10 @@ const controller = Router();
 
 controller.get('/', async (req, res) => {
   const user = req.user!;
+
+  const savedSubjectToken = await req.app.locals.redisClient.get(
+    `jag_subject_token:${user.externalId}`
+  );
   const tokens = await prisma.authorizationToken.findMany({
     where: {
       orgId: user.orgId,
@@ -19,7 +23,7 @@ controller.get('/', async (req, res) => {
     subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
     resource: `${process.env.TODO_AUTH_SERVER}/token`,
     scope: 'read write',
-    subject_token: '', // frontend can tack this id token on
+    subject_token: savedSubjectToken ?? '',
     client_id: '<CLIENT_ID>',
     client_secret: '<CLIENT_SECRET>',
   };

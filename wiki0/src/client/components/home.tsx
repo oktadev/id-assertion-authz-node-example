@@ -75,7 +75,6 @@ function Home() {
 
         // Add the real id and jag tokens to the request for the debug console
         if (res.tokens?.length) {
-          request.subject_token = `${res.tokens[0].idToken?.slice(0, 15)}...`;
           response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
         }
 
@@ -111,11 +110,9 @@ function Home() {
         <div className="space-y-4 ">
           <DebugCard>
             <strong>ID Token </strong>
-            {tokens.length > 0 && (
-              <pre>
-                <TokenViewer token={tokens[0].idToken} />
-              </pre>
-            )}
+            <pre>
+              <TokenViewer token={requestInfo?.request?.subject_token} />
+            </pre>
           </DebugCard>
           <DebugCard>
             <strong>JAG Token </strong> (Wiki0 -&gt; Okta)

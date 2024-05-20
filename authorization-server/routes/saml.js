@@ -8,7 +8,7 @@ import { createSAMLStrategy } from '../utils/passport-strategy.js';
 
 const body = urlencoded({ extended: false });
 
-export default async (app, provider) => {
+export default async (app) => {
   // TODO: The OIDC resource mounts this route and fails
   if (!process.env.CUSTOMER1_SAML_ISSUER) {
     return;
