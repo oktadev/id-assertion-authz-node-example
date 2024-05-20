@@ -29,12 +29,11 @@ export async function authorizationGrantTokenExchange(ctx, configuration, redisC
   }
 
   // Lookup by payload.sub and get the last id assertion saved
-  const { subjectToken } = getSubjectToken(payload.sub, provider.client_id);
-
-  // TODO store in redis for debug console
+  const { subjectToken, tokenType } = getSubjectToken(payload.sub, provider.client_id);
 
   await redisClient.set(`jag_subject_token:${payload.sub}`, subjectToken);
-
+  await redisClient.set(`jag_subject_token_type:${payload.sub}`, tokenType);
+  
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,

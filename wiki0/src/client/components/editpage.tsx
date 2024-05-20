@@ -15,6 +15,14 @@ type RequestLogItem = {
 
 const API_BASE_URL = '/api/articles';
 
+const getParsedTokenString = (headers: string) => {
+  const parts = headers.split('Bearer ');
+  if (parts?.length === 2) {
+    return parts[1]?.replaceAll('"', '')?.replaceAll('}', '');
+  }
+  return '';
+};
+
 function Editor({
   page,
   savePage,
@@ -41,7 +49,7 @@ function Editor({
           <>
             {'{ \n   '}
             &quot;Authorization&quot;: &quot;Bearer{' '}
-            <TokenViewer token={r.requestHeaders.split('Bearer ')[1]} />
+            <TokenViewer token={getParsedTokenString(r.requestHeaders)} />
             {'\n}'}
           </>
         ) : (

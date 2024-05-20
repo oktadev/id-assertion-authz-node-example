@@ -120,8 +120,7 @@ const verify = async (
     });
   } catch (error: unknown) {
     // Errors if there was an issue making the request or parsing the response.
-    console.log('Failed to obtain authorization grant', { idToken });
-    console.log(error);
+    console.log('Failed to obtain authorization grant', { error });
 
     done(null, user);
     return;
@@ -129,10 +128,8 @@ const verify = async (
 
   if ('error' in authGrantResponse) {
     console.log('Failed to obtain authorization grant', {
-      idToken,
       error: authGrantResponse.error,
     });
-    console.log(authGrantResponse.error);
 
     done(null, user);
     return;
@@ -153,9 +150,8 @@ const verify = async (
   } catch (error: unknown) {
     // Errors if there was an issue making the request or parsing the response.
     console.log('Failed to exchange the authorization grant', {
-      authorizationGrant: authGrantToken.access_token,
+      error,
     });
-    console.log(error);
 
     done(null, user);
     return;
@@ -163,10 +159,8 @@ const verify = async (
 
   if ('error' in accessTokenResponse) {
     console.log('Failed to exchange authorization grant for access token', {
-      accessToken: authGrantToken.access_token,
       error: accessTokenResponse.error,
     });
-    console.log(accessTokenResponse.error);
 
     done(null, user);
     return;
