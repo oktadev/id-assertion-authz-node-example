@@ -27,11 +27,7 @@ const redisClient = createClient({
   url: process.env.REDIS_SERVER,
 });
 
-redisClient.on('error', (error) => console.error(`Redis Error : ${error}`));
-
-(async () => {
-  await redisClient.connect();
-})();
+redisClient.connect().catch(console.error);
 
 app.locals.redisClient = redisClient;
 
