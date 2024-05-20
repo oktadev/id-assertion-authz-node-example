@@ -16,9 +16,8 @@ function TokenViewer({ token, saml }: TokenViewerProps) {
     return <div className="text-gray-400">No JWT token found</div>;
   }
 
-  const displayToken = () => {
-    let tokenJson = '';
-    if (saml) {
+  const displayToken = (tokenToDisplay: string, isSaml: boolean) => {
+    if (isSaml) {
       return (
         <div className="max-w-md">
           Tip: Copy and Paste into{' '}
@@ -35,11 +34,10 @@ function TokenViewer({ token, saml }: TokenViewerProps) {
       );
     }
     try {
-      tokenJson = JSON.stringify(parseJwt(token), null, 2);
+      return JSON.stringify(parseJwt(tokenToDisplay), null, 2);
     } catch (e) {
-      tokenJson = 'Error parsing token';
+      return 'Error parsing token';
     }
-    return tokenJson;
   };
 
   return (
@@ -54,7 +52,7 @@ function TokenViewer({ token, saml }: TokenViewerProps) {
               </h3>
             </div>
             <div className="px-3 py-2 bg-gray-100 text-slate-600" style={{ fontSize: 12 }}>
-              <pre className="pt-3">{displayToken()}</pre>
+              <pre className="pt-3">{displayToken(token, saml)}</pre>
             </div>
           </div>
         }

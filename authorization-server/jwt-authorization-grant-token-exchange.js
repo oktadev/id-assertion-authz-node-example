@@ -33,7 +33,7 @@ export async function authorizationGrantTokenExchange(ctx, configuration, redisC
 
   await redisClient.set(`jag_subject_token:${payload.sub}`, subjectToken);
   await redisClient.set(`jag_subject_token_type:${payload.sub}`, tokenType);
-  
+
   const { error, payload: jwtAuthGrant } = await requestIdJwtAuthzGrant({
     tokenUrl: provider.token_endpoint,
     resource,

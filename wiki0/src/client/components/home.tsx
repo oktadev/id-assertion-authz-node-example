@@ -115,14 +115,6 @@ function Home() {
         </div>
 
         <div className="space-y-4 ">
-          {/* <DebugCard>
-            <strong>ID Assertion </strong>
-            {tokens.length > 0 && (
-              <pre>
-                <TokenViewer token={tokens[0].idToken} />
-              </pre>
-            )}
-          </DebugCard> */}
           <DebugCard>
             <strong>{requestInfo.isSaml ? 'SAML Assertion' : 'ID Token'}</strong>
             {tokens.length > 0 && (
