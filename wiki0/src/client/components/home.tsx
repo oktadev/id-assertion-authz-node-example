@@ -71,7 +71,7 @@ function Home() {
 
         // Debug console data
         let assertion = '';
-        // Add the real id and jag tokens to the requst for the debug console
+        // Add the real id and jag tokens to the request for the debug console
         const request = { ...res.requestBody };
         const response = { ...res.responseBody };
 
