@@ -24,10 +24,11 @@ const redisClient = createClient({
   url: process.env.REDIS_SERVER,
 });
 
-redisClient.on("error", err => console.log(err));
+redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
 
 await redisClient.connect()
 
+// app.locals.redisClient = redisClient
 
 if (!cookieSecret) {
   throw new Error('Missing env variable COOKIE_SECRET');

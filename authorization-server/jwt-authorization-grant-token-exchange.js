@@ -31,6 +31,7 @@ export async function authorizationGrantTokenExchange(ctx, configuration, redisC
   // Lookup by payload.sub and get the last id assertion saved
   const { subjectToken, tokenType } = getSubjectToken(payload.sub, provider.client_id);
 
+  // We store this info to redis purely for informational purposes to surface to the debug console
   await redisClient.set(`jag_subject_token:${payload.sub}`, subjectToken);
   await redisClient.set(`jag_subject_token_type:${payload.sub}`, tokenType);
 
