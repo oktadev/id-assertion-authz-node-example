@@ -219,16 +219,8 @@ export TODO_DATABASE_URL=<DB_URL>
 ```
 
 ```
-npx prisma migrate dev --name <some nice description of the changes you made> --schema <project>/prisma/schema.prisma
+yarn dlx prisma migrate dev --name <some nice description of the changes you made> --schema <project>/prisma/schema.prisma
 ```
-
-**Run a one off typescript file (useful for seeding db data)**
-
-```
-npx tsx path/to/file
-```
-
-E.g. `npx tsx todo0/prisma/seed_script.ts`
 
 **Remove all Redis keys with a given prefix**
 
