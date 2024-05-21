@@ -20,13 +20,13 @@ const cookieSecret = process.env.COOKIE_SECRET;
 
 const app = express();
 
-let redisClient = createClient();
+const redisClient = createClient({
+  url: process.env.REDIS_SERVER,
+});
 
 redisClient.on("error", (error) => console.error(`Redis Error : ${error}`));
 
-(async () => {
-  await redisClient.connect();
-})();
+await redisClient.connect()
 
 // app.locals.redisClient = redisClient
 
