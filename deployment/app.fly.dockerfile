@@ -21,16 +21,23 @@ RUN apt-get update && apt-get install nodejs -y
 # Install Yarn Package Manager
 RUN npm install --global yarn
 
-COPY todo0 todo0
-COPY wiki0 wiki0
+# Copy packages
+COPY todo0 packages/todo0
+COPY wiki0 packages/wiki0
+COPY id-assert-authz-grant-client packages/id-assert-authz-grant-client
+
 COPY tsconfig.json tsconfig.json
-COPY package.json package.json
+COPY .yarnrc.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
 COPY yarn.lock yarn.lock
 COPY deployment deployment
-COPY id-assert-authz-grant-client id-assert-authz-grant-client
+COPY package.json package.json
 
-RUN yarn preinstall
+# Rewrite package.json to point workspaces to the right location
+RUN echo -E $(jq '.workspaces = ["packages/*"]' package.json) | jq . > package.json
+
 RUN yarn install
+RUN yarn postinstall
 RUN yarn build:todo
 RUN yarn build:wiki
 

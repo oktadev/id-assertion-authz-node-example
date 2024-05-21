@@ -4,10 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx prisma generate --schema=todo0/prisma/schema.prisma && npx prisma generate --schema=wiki0/prisma/schema.prisma",
-    "server:install": "cd ./authorization-server && yarn install && cd ../",
-    "preinstall": "yarn build:request && yarn link id-assert-authz-grant-client",
-    "build:request": "cd id-assert-authz-grant-client && yarn link && yarn install && yarn build && cd ..",
+    "postinstall": "yarn dlx prisma generate --schema=todo0/prisma/schema.prisma && yarn dlx prisma generate --schema=wiki0/prisma/schema.prisma",
     "dev:todo": "cd todo0 && nodemon -e ts -w src/server -x 'tsx src/server/main.ts'",
     "dev:wiki": "cd wiki0 && nodemon -e ts -w src/server -x 'tsx src/server/main.ts'",
     "auth:todo": "cd ./authorization-server && yarn server:todo",
@@ -16,10 +13,10 @@
     "start:wiki0": "cd wiki0 && NODE_ENV=production tsx src/server/main.ts",
     "build:todo": "cd ./todo0/ && vite build",
     "build:wiki": "cd ./wiki0/ && vite build",
-    "resetdb": "cd todo0 && npx prisma migrate reset --schema=prisma/schema.prisma && cd ../wiki0 && npx prisma migrate reset --schema=prisma/schema.prisma && cd .. && npx tsx testdata/reset_data.ts",
-    "migratedb": "cd todo0 && npx prisma migrate dev --schema prisma/schema.prisma && cd - && cd wiki0 && npx prisma migrate dev --schema prisma/schema.prisma",
-    "lint": "npx --yes eslint . --ext .js,.jsx,.ts,.tsx --cache",
-    "lint:fix": "npx --yes eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "resetdb": "cd todo0 && yarn dlx prisma migrate reset --schema=prisma/schema.prisma && cd ../wiki0 && yarn dlx prisma migrate reset --schema=prisma/schema.prisma && cd .. && yarn dlx tsx testdata/reset_data.ts",
+    "migratedb": "cd todo0 && yarn dlx prisma migrate dev --schema prisma/schema.prisma && cd - && cd wiki0 && yarn dlx prisma migrate dev --schema prisma/schema.prisma",
+    "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx --cache",
+    "lint:fix": "yarn eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "author": "",
   "license": "ISC",
@@ -40,7 +37,7 @@
     "find-config": "^1.0.0",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.9.0",
-    "id-assert-authz-grant-client": "file:./id-assert-authz-grant-client",
+    "id-assert-authz-grant-client": "workspaces:*",
     "jwks-rsa": "^3.1.0",
     "passport": "0.5.0",
     "passport-jwt": "^4.0.1",
@@ -89,5 +86,12 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.17.2"
-  }
+  },
+  "workspaces": [
+    "authorization-server",
+    "id-assert-authz-grant-client",
+    "todo0",
+    "wiki0"
+  ],
+  "packageManager": "yarn@4.2.2"
 }

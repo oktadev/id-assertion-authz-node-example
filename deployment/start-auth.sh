@@ -1,2 +1,1 @@
-cd authorization-server
-yarn server:$SERVER_START_APP_NAME
+yarn auth:$SERVER_START_APP_NAME
