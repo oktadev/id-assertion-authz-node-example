@@ -20,12 +20,20 @@ RUN apt-get update && apt-get install nodejs -y
 # Install Yarn Package Manager
 RUN npm install --global yarn
 
-COPY authorization-server authorization-server
+# Copy packages
+COPY authorization-server packages/authorization-server
+COPY id-assert-authz-grant-client packages/id-assert-authz-grant-client
+
 COPY package.json package.json
+COPY .yarnrc.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
 COPY yarn.lock yarn.lock
 COPY deployment deployment
-COPY id-assert-authz-grant-client id-assert-authz-grant-client
 
-RUN yarn preinstall
-RUN cd authorization-server && yarn install
+# Rewrite package.json to point workspaces to the right location
+RUN echo -E $(jq '.workspaces = ["packages/*"]' package.json) | jq . > package.json
+
+RUN yarn install
+RUN yarn postinstall
+
 ENTRYPOINT ./deployment/start-auth.sh
