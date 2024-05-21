@@ -14,7 +14,7 @@ controller.get('/', async (req, res) => {
     },
   });
 
-  // Tack on hardcoded request body for debug console demonstration purposes
+  // We get this info from redis purely for informational purposes to surface to the debug console
   const savedSubjectToken = await req.app.locals.redisClient.get(
     `jag_subject_token:${user.externalId}`
   );
