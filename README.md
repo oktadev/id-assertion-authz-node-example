@@ -160,7 +160,7 @@ Follow the section [Configuration](#Configuration)
 This install dependencies at the root and in the authorization sever, builds a local dependency package, and runs the initial DB schema migration.
 
 ```
-yarn preinstall && yarn install && yarn postinstall && yarn server:install
+yarn install && yarn postinstall
 ```
 
 ### Database

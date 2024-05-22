@@ -13,6 +13,8 @@ dist-ssr
 *.local
 .env
 .env.*
+!.env.default
+!.env.*.default
 .eslintcache
 
 # Editor directories and files
@@ -34,3 +36,6 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Prisma
+**/prisma/client

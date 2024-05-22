@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("TODO_DATABASE_URL")
+}
+
+model Todo {
+  id        Int     @id @default(autoincrement())
+  task      String
+  completed Boolean @default(false)
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+
+  // User has many todos
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+
+  // Org has many todos
+  org       Organization    @relation(fields: [orgId], references: [id])
+  orgId     Int
+}
+
+
+model Organization {
+  id       Int    @id @default(autoincrement())
+  domain    String @unique
+  name String
+  User     User[]
+  Todo     Todo[]
+
+  // Auth server fields
+  auth_server_key        String @default("") @unique
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String
+  name String
+  externalId String?
+
+  @@unique([orgId, email, externalId])
+  org       Organization    @relation(fields: [orgId], references: [id])
+  orgId     Int
+
+
+  Todo     Todo[]
+
+  @@unique([orgId, externalId])
+}
