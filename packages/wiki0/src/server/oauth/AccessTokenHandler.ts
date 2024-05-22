@@ -1,7 +1,6 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { User } from '@prisma/client/wiki';
-// eslint-disable-next-line import/no-relative-packages
-import { PrismaClient as prisma } from '../../../prisma/client';
+import prisma from '../prisma';
 
 class AccessTokenHandler {
   /**
