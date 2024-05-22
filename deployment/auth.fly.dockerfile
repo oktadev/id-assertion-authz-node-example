@@ -31,5 +31,6 @@ COPY yarn.lock yarn.lock
 COPY deployment deployment
 
 RUN yarn install
+RUN yarn postinstall
 
 ENTRYPOINT ./deployment/start-auth.sh

@@ -33,7 +33,8 @@ COPY yarn.lock yarn.lock
 COPY deployment deployment
 COPY package.json package.json
 
-RUN yarn Install
+RUN yarn install
+RUN yarn postinstall
 RUN yarn build:todo
 RUN yarn build:wiki
 
