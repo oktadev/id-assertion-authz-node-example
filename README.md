@@ -124,6 +124,67 @@ Stop the running node processes in the terminal, and stop the VSCode Dev Contain
 <br />
 <br />
 
+## How to integrate
+
+### Requesting App Steps
+This section should outline the best practices:
+ * Do not add to login flow
+ * Only request when needed
+ * Do not store JAGs, Store ID/Refresh, and Access/Refresh
+
+#### Okta Workforce Identity Cloud is your Authorization Server
+
+##### Steps for your App Code
+1. Add this SDK/Library
+1. Map to an authorization code
+1. Cache ID Token AND Refresh token
+1. Create a request
+1. Parse Response
+1. Error handling
+
+#### Okta Customer Identity Cloud is your Authorization Server
+
+##### Steps for your App Code
+1. Add this SDK/Library
+1. Map to an authorization code
+1. Cache ID Token AND Refresh token
+1. Create a request
+1. Parse Response
+1. Error handling
+
+#### You have your own non-Okta Authorization Server
+
+##### Authorization Server Steps
+1. Add this SDK/Library
+2. Add the JAG support to the /token endpoint
+
+##### Steps for your App Code
+1. Add this SDK/Library
+1. Map to an authorization code
+1. Cache ID Token AND Refresh token
+1. Create a request
+1. Parse Response
+1. Error handling
+
+
+### Resource App Steps
+This section should outline the best practices
+
+#### Okta Workforce Identity Cloud is your Authorization Server
+1. Is there anything to do here? 
+
+#### Okta Customer Identity Cloud is your Authorization Server
+1. Is there anything to do here? 
+
+#### You have a custom Authorization Server
+
+##### Authorization Server Step
+1. Add this SDK/Library
+2. Add the JAG support to the /token endpoint
+
+<br />
+<br />
+
 # Non-VSCode Alternative Option
 
 Alternative option for users who want to run this application locally without using VSCode Dev Containers.
