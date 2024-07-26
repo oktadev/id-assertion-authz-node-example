@@ -136,10 +136,58 @@ The Requesting App is the application that is requesting or querying objects or 
 #### Okta Workforce Identity Cloud is your Authorization Server
 
 ##### Steps for your App Code
-1. Add this SDK/Library
+1. Add this SDK/Library - COMING SOON!
 1. Map to an authorization code
 1. Cache ID Token AND Refresh token
 1. Create a request
+``` TypeScript  
+function Home() {
+  const [tokens, setTokens] = useState<AuthTokenType[]>([]);
+  const [requestInfo, setRequestInfo] = useState<Record<string, any>>({});
+  const idpTokenUrl = useMemo(() => debugIDPEndpoint(tokens), [tokens]);
+  const exchangeRequest = useMemo(() => debugExchangeRequest(tokens), [tokens]);
+  useEffect(() => {
+    const getTokens = async () => {
+      try {
+        const apiResponse = await fetch(API_BASE_URL, {
+          credentials: 'same-origin',
+          mode: 'same-origin',
+        });
+
+        const res = await apiResponse.json();
+        setTokens(res.tokens);
+
+        // Debug console data
+        let assertion = '';
+        // Add the real id and jag tokens to the request for the debug console
+        const request = { ...res.requestBody };
+        const response = { ...res.responseBody };
+
+        // Add the real id and jag tokens to the request for the debug console
+        if (res.tokens?.length) {
+          assertion = request?.subject_token;
+          request.subject_token = `${assertion?.slice(0, 15)}...`;
+          response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
+        }
+
+        setRequestInfo({
+          request,
+          response,
+          isSaml: request?.subject_token_type?.includes('saml'),
+          assertion,
+          url: res.url,
+        });
+      } catch (error: unknown) {
+        console.error(error);
+      }
+    };
+
+    getTokens();
+  }, []);
+
+  return (<pageData />)
+```
+   
 1. Parse Response
 1. Error handling
 
