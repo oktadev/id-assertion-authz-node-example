@@ -125,12 +125,13 @@ Stop the running node processes in the terminal, and stop the VSCode Dev Contain
 <br />
 
 ## How to integrate
+This section outlines the steps needed to implement ID Assertion Authorization Grant on a Requesting App (an app that sends an API request on behalf of a logged in user), a Resource App (an app that receives an API request and validates the ID Assertion Authorization Grant), and a custom Authorization Server. The section will also cover best practices based on the architecture of the given apps.
 
 ### Requesting App Steps
-This section should outline the best practices:
- * Do not add to login flow
- * Only request when needed
- * Do not store JAGs, Store ID/Refresh, and Access/Refresh
+The Requesting App is the application that is requesting or querying objects or pulling data from another application. This section describes the specific steps to build the ID Assertion Authorization Grant into the application. The ID Assertion Authorization Grant is required for every application connected to the Requesting App. This can result in many JAG tokens stored in the Requesting App. To prevent performance issues, follow these best practices:
+ 1. **Do not add to login flow**. It is not necessary to preload all the JAG tokens, so it is not necessary to mint all of the possible JAG tokens at the time of login. The side effects can be extended login times for users.
+ 1. **Only request when needed**. JAG tokens should be requested at the last responsible moment. JAG tokens are not meant to be long lived. Loading does not need to be bulk loaded and optimized. Trying to optimize the requests for multiple JAG tokens can result in poor performance at scale.
+ 1. **Do not store JAG Tokens. Store ID, Access and Refresh Tokens**. JAGs are really short lived. As mentioned earlier, JAGs are passed from Requesting Apps to Resource Apps to exchange for an Access Token to access the Resource App. The Access Token is the valuable artifact to be stored and protected. The JAG token is effectively useless once exchanged, so it should be discarded.
 
 #### Okta Workforce Identity Cloud is your Authorization Server
 
