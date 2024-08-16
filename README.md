@@ -1,6 +1,6 @@
 # id-assertion-authz-node-example
 
-This repo is proof-of-concept example of the proposed [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow. This flow is a subset of the Token Exchange grant which allows identity assertions received by a client via SSO to be exchanged with a trusted Identity Provider for an id-jag token. Such a token can then be exchanged for an access token with the resource authorization server. For for information, watch the explainer video [here](https://www.youtube.com/watch?v=I0vdmg79Ga4).
+This repo is proof-of-concept example of the proposed [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow. This flow is a subset of the Token Exchange grant which allows identity assertions received by a client via SSO to be exchanged with a trusted Identity Provider for an `id-jag` token. Such a token can then be exchanged for an access token with the resource authorization server. For for information, watch the explainer video [here](https://www.youtube.com/watch?v=I0vdmg79Ga4).
 
 <img src="images/id_assertion_authz_grant_flow.gif" alt="gif" width="450"/>
 
@@ -121,119 +121,6 @@ Running at http://localhost:5001/
 
 Stop the running node processes in the terminal, and stop the VSCode Dev Container or stop the container in Docker Desktop.
 
-<br />
-<br />
-
-## How to integrate
-This section outlines the steps needed to implement ID Assertion Authorization Grant on a Requesting App (an app that sends an API request on behalf of a logged in user), a Resource App (an app that receives an API request and validates the ID Assertion Authorization Grant), and a custom Authorization Server. The section will also cover best practices based on the architecture of the given apps.
-
-### Requesting App Steps
-The Requesting App is the application that is requesting or querying objects or pulling data from another application. This section describes the specific steps to build the ID Assertion Authorization Grant into the application. The ID Assertion Authorization Grant is required for every application connected to the Requesting App. This can result in many JAG tokens stored in the Requesting App. To prevent performance issues, follow these best practices:
- 1. **Do not add to login flow**. It is not necessary to preload all the JAG tokens, so it is not necessary to mint all of the possible JAG tokens at the time of login. The side effects can be extended login times for users.
- 1. **Only request when needed**. JAG tokens should be requested at the last responsible moment. JAG tokens are not meant to be long lived. Loading does not need to be bulk loaded and optimized. Trying to optimize the requests for multiple JAG tokens can result in poor performance at scale.
- 1. **Do not store JAG Tokens. Store ID, Access and Refresh Tokens**. JAGs are really short lived. As mentioned earlier, JAGs are passed from Requesting Apps to Resource Apps to exchange for an Access Token to access the Resource App. The Access Token is the valuable artifact to be stored and protected. The JAG token is effectively useless once exchanged, so it should be discarded.
-
-#### Okta Workforce Identity Cloud is your Authorization Server
-
-##### Steps for your App Code
-1. Add this SDK/Library - COMING SOON!
-1. Map to an authorization code
-1. Cache ID Token AND Refresh token
-1. Create a request
-``` TypeScript  
-function Home() {
-  const [tokens, setTokens] = useState<AuthTokenType[]>([]);
-  const [requestInfo, setRequestInfo] = useState<Record<string, any>>({});
-  const idpTokenUrl = useMemo(() => debugIDPEndpoint(tokens), [tokens]);
-  const exchangeRequest = useMemo(() => debugExchangeRequest(tokens), [tokens]);
-  useEffect(() => {
-    const getTokens = async () => {
-      try {
-        const apiResponse = await fetch(API_BASE_URL, {
-          credentials: 'same-origin',
-          mode: 'same-origin',
-        });
-
-        const res = await apiResponse.json();
-        setTokens(res.tokens);
-
-        // Debug console data
-        let assertion = '';
-        // Add the real id and jag tokens to the request for the debug console
-        const request = { ...res.requestBody };
-        const response = { ...res.responseBody };
-
-        // Add the real id and jag tokens to the request for the debug console
-        if (res.tokens?.length) {
-          assertion = request?.subject_token;
-          request.subject_token = `${assertion?.slice(0, 15)}...`;
-          response.access_token = `${res.tokens[0].jagToken?.slice(0, 15)}...`;
-        }
-
-        setRequestInfo({
-          request,
-          response,
-          isSaml: request?.subject_token_type?.includes('saml'),
-          assertion,
-          url: res.url,
-        });
-      } catch (error: unknown) {
-        console.error(error);
-      }
-    };
-
-    getTokens();
-  }, []);
-
-  return (<pageData />)
-```
-   
-1. Parse Response
-1. Error handling
-
-#### Okta Customer Identity Cloud is your Authorization Server
-
-##### Steps for your App Code
-1. Add this SDK/Library
-1. Map to an authorization code
-1. Cache ID Token AND Refresh token
-1. Create a request
-1. Parse Response
-1. Error handling
-
-#### You have your own non-Okta Authorization Server
-
-##### Authorization Server Steps
-1. Add this SDK/Library
-2. Add the JAG support to the /token endpoint
-
-##### Steps for your App Code
-1. Add this SDK/Library
-1. Map to an authorization code
-1. Cache ID Token AND Refresh token
-1. Create a request
-1. Parse Response
-1. Error handling
-
-
-### Resource App Steps
-This section should outline the best practices
-
-#### Okta Workforce Identity Cloud is your Authorization Server
-1. Is there anything to do here? 
-
-#### Okta Customer Identity Cloud is your Authorization Server
-1. Is there anything to do here? 
-
-#### You have a custom Authorization Server
-
-##### Authorization Server Step
-1. Add this SDK/Library
-2. Add the JAG support to the /token endpoint
-
-<br />
-<br />
-
 # Non-VSCode Alternative Option
 
 Alternative option for users who want to run this application locally without using VSCode Dev Containers.
@@ -338,3 +225,49 @@ yarn dlx prisma migrate dev --name <some nice description of the changes you mad
 # PREFIX could be, for example, "todo0:"
 redis-cli --scan --pattern "<PREFIX>" | xargs redis-cli del
 ```
+
+
+# How to Integrate into an Existing Service
+This section outlines the steps needed to implement ID Assertion Authorization Grant in your existing application.
+There are three actors in this flow, the Identity Provider (IdP), the Requesting Application, and the Resource application.
+
+1. The Identity Provider issues `ID-JAG` tokens, and is the SSO provider for the Requesting and Resource apps for a given user.
+
+1. The **Requesting Application** is the Client application which will make the token exchange request to the IdP, ultimately requesting protected resource access from the Resource Server. 
+
+1. The **Resource Application** is the application which owns the protected resources and must issue access tokens to the Requesting Application using the flow.
+
+You app can support this flow as a **Requesting App**, a **Resource App**, or both! We recommend integrating in only on way to get started. The section will also cover best practices based on the architecture of the given apps.
+
+## Requesting App Steps
+The Requesting App is the application that is requesting or querying objects or pulling data from another application. This section describes the specific steps to build the ID Assertion Authorization Grant into the application. The Requesting App must make a separate request to IdP for an `ID-JAG` token for each unique resource the user wants to access. To prevent performance issues, follow these best practices:
+
+> **Tip!**  Checkout the Debug Console in the App for detailed views of the requests!
+
+1. Configure SSO with an IdP which supports this flow.
+1. After the Login SSO flow for a user, store the `id_token` or the `refresh_token` returned from the IdP. These are needed to make the token exchange request. (If the `id_token` expires before you want to make the exchange, use the `refresh_token` to receive a new `id_token`.)
+
+1. When you want to load a resource for a user in your application logic, make a token exchange request to the IdP within the lifetime of the `id_token`. Follow [this code example](https://github.com/oktadev/id-assertion-authz-node-example/blob/2a4068213845f4907c90b40823395b14f5dc20a6/packages/wiki0/src/server/controllers/oidc.ts#L110), and/or see the specifics of the request in Section 5 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
+
+
+1. Using the result of the exchange, make an `access_token` request to the authorization server. Follow [this code example](https://github.com/oktadev/id-assertion-authz-node-example/blob/2a4068213845f4907c90b40823395b14f5dc20a6/packages/wiki0/src/server/controllers/oidc.ts#L143), and/or see the specifics of the request in Section 6 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
+
+1. Store and use the `access_token` as your normally would with the 3rd party resource server.
+
+
+### Best Practices for Requesting Apps
+ 1. **Do not add to login flow**. It is not necessary to preload all the JAG tokens, so it is not necessary to mint all of the possible JAG tokens at the time of login. The side effects can be extended login times for users.
+ 1. **Only request when needed**. JAG tokens should be requested at the last responsible moment. JAG tokens are not meant to be long lived. Loading does not need to be bulk loaded and optimized. Trying to optimize the requests for multiple JAG tokens can result in poor performance at scale.
+ 1. **Do not store JAG Tokens. Store ID, Access and Refresh Tokens**. JAGs are really short lived. As mentioned earlier, JAGs are passed from Requesting Apps to Resource Apps to exchange for an Access Token to access the Resource App. The Access Token is the valuable artifact to be stored and protected. The JAG token is effectively useless once exchanged, so it should be discarded.
+
+
+## Resource App Steps
+
+The Resource App is the application that owns protected resources normally accessed via OAuth2.0 by Requesting App users. This section describes the specific steps to support the ID Assertion Authorization Grant into the application. The Resource App is responsible for validating  `ID-JAG` tokens before issuing OAuth `access_tokens` as it normally would.
+
+> **Tip!**  Checkout the Debug Console in the App for detailed views of the requests!
+
+1. Configure SSO with an IdP which supports this flow.
+1. Modify your Authorization Server logic accept these requests at your OAuth2.0 token endpoint. Seethe specifics of the incoming request in Section 6 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
+1. Validate the `ID-JAG` tokens properly before issuing an `access_token` as your normally would. Ensure all validations your authorization makes in regular OAuth2.0 flows also apply to this exhcange when evaluating user atuhorization, such as scope validation. Follow [this code example](id-assertion-authz-node-example/packages/authorization-server/jwt-authorization-grant.js), and/or see the specifics of the processing rules in Section 6.1 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
+1. Respond with an access token, as outlined in Section 6.1 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
