@@ -242,7 +242,8 @@ You app can support this flow as a **Requesting App**, a **Resource App**, or bo
 ## Requesting App Steps
 The Requesting App is the application that is requesting or querying objects or pulling data from another application. This section describes the specific steps to build the ID Assertion Authorization Grant into the application. The Requesting App must make a separate request to IdP for an `ID-JAG` token for each unique resource the user wants to access. To prevent performance issues, follow these best practices:
 
-> **Tip!**  Checkout the Debug Console in the App for detailed views of the requests!
+> [!TIP]
+> Checkout the Debug Console in the App for detailed views of the requests!
 
 1. Configure SSO with an IdP which supports this flow.
 1. After the Login SSO flow for a user, store the `id_token` or the `refresh_token` returned from the IdP. These are needed to make the token exchange request. (If the `id_token` expires before you want to make the exchange, use the `refresh_token` to receive a new `id_token`.)
@@ -265,7 +266,8 @@ The Requesting App is the application that is requesting or querying objects or 
 
 The Resource App is the application that owns protected resources normally accessed via OAuth2.0 by Requesting App users. This section describes the specific steps to support the ID Assertion Authorization Grant into the application. The Resource App is responsible for validating  `ID-JAG` tokens before issuing OAuth `access_tokens` as it normally would.
 
-> **Tip!**  Checkout the Debug Console in the App for detailed views of the requests!
+> [!TIP]
+> Checkout the Debug Console in the App for detailed views of the requests!
 
 1. Configure SSO with an IdP which supports this flow.
 1. Modify your Authorization Server logic accept these requests at your OAuth2.0 token endpoint. Seethe specifics of the incoming request in Section 6 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
