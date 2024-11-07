@@ -17,11 +17,6 @@ primary_region = "sjc"
   APP_RESOURCE="https://wiki0.app/"
   CLIENT1_CALLBACK="https://wiki0.app/api/openid/callback/"
   CUSTOMER1_EMAIL_DOMAIN="tables.fake"
-  CUSTOMER1_AUTH_ISSUER="https://localgrid.clouditude.com"
-  USE_SAML_SSO="false"
-  CUSTOMER1_SAML_ENTRY_POINT=""
-  CUSTOMER1_SAML_ISSUER=""
-  CUSTOMER1_SAML_CERTIFICATE=""
 
 [http_service]
   internal_port = 5000
