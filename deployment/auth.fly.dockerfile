@@ -21,16 +21,23 @@ RUN apt-get update && apt-get install nodejs -y
 RUN npm install --global yarn
 
 # Copy packages
-COPY packages/authorization-server packages/authorization-server
-COPY packages/id-assert-authz-grant-client packages/id-assert-authz-grant-client
-
-COPY package.json package.json
+# Need to keep code in separate working directory for yarn workspaces for some reason, not root path
 COPY .yarnrc.yml .yarnrc.yml
 COPY .yarn/releases .yarn/releases
-COPY yarn.lock yarn.lock
+
+
+RUN mkdir cwo-app
+WORKDIR cwo-app
+
+RUN mkdir deployment
+RUN mkdir packages
 COPY deployment deployment
+COPY package.json package.json
+COPY yarn.lock yarn.lock
+COPY packages/authorization-server packages/authorization-server
+COPY packages/id-assert-authz-grant-client packages/id-assert-authz-grant-client
 
 RUN yarn install
 RUN yarn postinstall
 
-ENTRYPOINT ./deployment/start-auth.sh
+ENTRYPOINT deployment/start-auth.sh

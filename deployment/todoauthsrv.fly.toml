@@ -17,7 +17,6 @@ primary_region = "sjc"
   APP_RESOURCE="https://todo0.app/"
   CLIENT1_CALLBACK="https://todo0.app/api/openid/callback/"
   CUSTOMER1_EMAIL_DOMAIN="tables.fake"
-  CUSTOMER1_AUTH_ISSUER="https://localgrid.clouditude.com"
 
 [http_service]
   internal_port = 5001
