@@ -31,10 +31,10 @@ export default async (_, provider) => {
     // Validate the typ in the header
     const header = jose.decodeProtectedHeader(assertion);
 
-    if (header.typ !== 'authorization-grant+jwt' && header.typ !== 'oauth-id-jag+jwt') {
+    if (header.typ !== 'oauth-id-jag+jwt') {
       throw new CustomOIDCProviderError(
         'invalid_grant',
-        'invalid JWT type, expected typ: authorization-grant+jwt'
+        'invalid JWT type, expected typ: oauth-id-jag+jwt'
       );
     }
 
