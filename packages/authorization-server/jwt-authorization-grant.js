@@ -81,11 +81,11 @@ export default async (_, provider) => {
       );
     }
 
-    // Validate the audience is this server's token endpoint
-    if (claims.aud !== `${process.env.AUTH_SERVER}/token`) {
+    // Validate the audience is this server's issuer URL
+    if (claims.aud !== `${process.env.AUTH_SERVER}`) {
       throw new CustomOIDCProviderError(
         'invalid_grant',
-        "The audience does not match this server's token endpoint"
+        "The audience does not match this server's issuer URL"
       );
     }
 
