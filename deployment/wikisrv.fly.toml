@@ -12,8 +12,8 @@ primary_region = "sjc"
 [env]
   APP_NAME = "wiki0"
   AUTH_SERVER="https://wiki-auth-srv.fly.dev"
-  WIKI_SERVER="https://wiki0.app"
-  TODO_SERVER="https://todo0.app"
+  WIKI_SERVER="https://wiki0.dev"
+  TODO_SERVER="https://todo0.dev"
   TODO_AUTH_SERVER="https://todo-auth-srv.fly.dev"
 
 [http_service]
