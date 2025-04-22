@@ -31,10 +31,10 @@ export default async (_, provider) => {
     // Validate the typ in the header
     const header = jose.decodeProtectedHeader(assertion);
 
-    if (header.typ !== 'authorization-grant+jwt' && header.typ !== 'oauth-id-jag+jwt') {
+    if (header.typ !== 'oauth-id-jag+jwt') {
       throw new CustomOIDCProviderError(
         'invalid_grant',
-        'invalid JWT type, expected typ: authorization-grant+jwt'
+        'invalid JWT type, expected typ: oauth-id-jag+jwt'
       );
     }
 
@@ -81,11 +81,11 @@ export default async (_, provider) => {
       );
     }
 
-    // Validate the audience is this server's token endpoint
-    if (claims.aud !== `${process.env.AUTH_SERVER}/token`) {
+    // Validate the audience is this server's issuer URL
+    if (claims.aud !== `${process.env.AUTH_SERVER}`) {
       throw new CustomOIDCProviderError(
         'invalid_grant',
-        "The audience does not match this server's token endpoint"
+        "The audience does not match this server's issuer URL"
       );
     }
 
@@ -120,7 +120,7 @@ export default async (_, provider) => {
     console.log('Client requested scopes', ctx.oidc.params.scope);
 
     const client_requested_scopes = ctx.oidc.params.scope ? ctx.oidc.params.scope.split(' ') : [];
-    const idp_authorized_scopes = claims.scope.split(' ');
+    const idp_authorized_scopes = claims.scope ? claims.scope.split(' ') : "";
     console.log('IdP scopes', idp_authorized_scopes);
 
     at.scope = Array.from(
