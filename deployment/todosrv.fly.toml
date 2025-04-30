@@ -12,7 +12,7 @@ primary_region = "sjc"
 [env]
   APP_NAME = "todo0"
   AUTH_SERVER="https://todo-auth-srv.fly.dev"
-  TODO_SERVER="https://todo0.app"
+  TODO_SERVER="https://todo0.dev"
 
 [http_service]
   internal_port = 3001
