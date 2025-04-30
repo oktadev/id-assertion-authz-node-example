@@ -73,9 +73,14 @@ const verify = async (
 
   if (!user) {
     // Ensure the profile response has the correct fields present to update or create a new user
-    if (!profile.displayName || !profile.emails) {
+
+    if (!profile.emails) {
       done(new Error(`Invalid profile response: ${JSON.stringify(profile)}`));
       return;
+    }
+
+    if (!profile.displayName) {
+      profile.displayName = profile.emails[0]?.value || "" 
     }
 
     user = await prisma.user.findFirst({
