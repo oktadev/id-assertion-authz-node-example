@@ -1,4 +1,4 @@
-ame: Fly Deploy
+name: Fly Deploy
 on:
   release:
     types: [published]
