@@ -78,10 +78,6 @@ const verify = async (
     done(new Error(`Invalid profile response: ${JSON.stringify(profile)}`));
     return;
   }
-  
-  if (!profile.displayName) {
-    profile.displayName = profile.emails[0]?.value || ""
-  }
 
   try {
     user = await prisma.user.findFirst({
@@ -103,7 +99,7 @@ const verify = async (
           org: { connect: { id: org.id } },
           externalId: profile.id,
           email: profile.emails![0].value,
-          name: profile.displayName,
+          name: profile.displayName ?? profile.emails[0]?.value
         },
       });
     }

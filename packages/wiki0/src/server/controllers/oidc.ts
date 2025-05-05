@@ -79,10 +79,6 @@ const verify = async (
       return;
     }
 
-    if (!profile.displayName) {
-      profile.displayName = profile.emails[0]?.value || "" 
-    }
-
     user = await prisma.user.findFirst({
       where: {
         orgId: org.id,
@@ -102,7 +98,7 @@ const verify = async (
           org: { connect: { id: org.id } },
           externalId: profile.id,
           email: profile.emails![0].value,
-          name: profile.displayName,
+          name: profile.displayName ?? profile.emails[0]?.value,
         },
       });
     }
