@@ -4,29 +4,6 @@ on: [workflow_dispatch]
   #   branches:
   #     - main
 jobs:
-  deployTodo:
-    name: Deploy Todo0 app
-    runs-on: ubuntu-latest
-    # runs-on: ubuntu-22.04
-    concurrency: todo-app
-    steps:
-      - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy -c ./deployment/todosrv.fly.toml
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_TODO_TOKEN }}
-
-  deployWiki:
-    name: Deploy Wiki0 app
-    runs-on: ubuntu-latest
-    concurrency: wiki-app
-    steps:
-      - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy -c ./deployment/wikisrv.fly.toml
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_WIKI_TOKEN }}
-
   deployWikiAuth:
     name: Deploy Wiki0 Auth Server
     runs-on: ubuntu-latest
@@ -34,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy -c ./deployment/wikiauthsrv.fly.toml
+      - run: flyctl deploy -c ./deployment/wikiauthsrv.fly.toml --access-token=$FLY_API_TOKEN
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_WIKI_AUTH_TOKEN }}
 
@@ -45,6 +22,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy -c ./deployment/todoauthsrv.fly.toml
+      - run: flyctl deploy -c ./deployment/todoauthsrv.fly.toml --access-token=$FLY_API_TOKEN
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_TODO_AUTH_TOKEN }}
+
+  deployTodo:
+    name: Deploy Todo0 app
+    runs-on: ubuntu-latest
+    # runs-on: ubuntu-22.04
+    concurrency: todo-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy -c ./deployment/todosrv.fly.toml --access-token=$FLY_API_TOKEN
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_TODO_TOKEN }}
+
+  deployWiki:
+    name: Deploy Wiki0 app
+    runs-on: ubuntu-latest
+    concurrency: wiki-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy -c ./deployment/wikisrv.fly.toml --access-token=$FLY_API_TOKEN
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_WIKI_TOKEN }}
