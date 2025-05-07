@@ -1,7 +1,5 @@
 name: Fly Deploy
-on:
-  release:
-    types: [published]
+on: [workflow_dispatch]
   # push:
   #   branches:
   #     - main
