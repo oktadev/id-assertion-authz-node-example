@@ -17,6 +17,8 @@ primary_region = "sjc"
   APP_RESOURCE="https://wiki0.dev/"
   CLIENT1_CALLBACK="https://wiki0.dev/api/openid/callback/"
   CUSTOMER1_EMAIL_DOMAIN="tables.fake"
+  CUSTOMER2_EMAIL_DOMAIN="tables.fake2"
+  CUSTOMER3_EMAIL_DOMAIN="tables.fake3"
 
 [http_service]
   internal_port = 5000
