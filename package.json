@@ -16,7 +16,11 @@
     "resetdb": "yarn workspace wiki0 resetdb && yarn workspace todo0 resetdb",
     "migratedb": "yarn workspace wiki0 migratedb && yarn workspace todo0 migratedb",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "setup:env": "bash scripts/setup-env.sh",
+    "bootstrap": "yarn setup:env && yarn install && yarn postinstall && yarn resetdb",
+    "dev:all": "concurrently \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
+    "open:apps": "bash scripts/open-apps.sh"
   },
   "author": "",
   "license": "ISC",
@@ -33,7 +37,8 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.1"
+    "eslint-plugin-react-hooks": "^4.6.1",
+    "concurrently": "^8.2.2"
   },
   "workspaces": [
     "./packages/*"
