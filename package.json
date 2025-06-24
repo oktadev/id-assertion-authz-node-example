@@ -17,10 +17,10 @@
     "migratedb": "yarn workspace wiki0 migratedb && yarn workspace todo0 migratedb",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "setup:env": "bash scripts/setup-env.sh",
-    "bootstrap": "yarn setup:env && yarn install && yarn postinstall && yarn resetdb",
+    "setup:env": "node scripts/setup-env.js",
+    "bootstrap": "node scripts/bootstrap.js",
     "dev:all": "concurrently \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
-    "open:apps": "bash scripts/open-apps.sh"
+    "open:apps": "node scripts/open-apps.js"
   },
   "author": "",
   "license": "ISC",
