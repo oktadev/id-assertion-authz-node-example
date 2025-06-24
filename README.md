@@ -4,8 +4,6 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 
 ![Test Flow](images/id_assertion_authz_grant_flow.gif)
 
----
-
 # Table of Contents
 
 - [Quickstart & Dev Setup](#quickstart--dev-setup)
@@ -14,8 +12,6 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 - [Non-VSCode Alternative Option](#non-vscode-alternative-option)
 - [Dev Tips](#dev-tips)
 - [How to Integrate into an Existing Service](#how-to-integrate-into-an-existing-service)
-
----
 
 # Quickstart & Dev Setup
 
@@ -137,8 +133,6 @@ After starting all services, you can verify that your environment is working as 
 # Troubleshooting
 
 If you have any trouble, try re-authenticating to both applications by signing out and signing in again.
-
----
 
 # Non-VSCode Alternative Option
 
