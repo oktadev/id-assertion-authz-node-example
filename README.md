@@ -76,7 +76,7 @@ CUSTOMER1_SAML_CERTIFICATE="<FILL IN>"
 > - You can run this application in either SAML or OIDC mode. In SAML mode, the Wiki0 authorization server will use SAML to SSO to the IdP as opposed to OIDC.
 > - Choose SAML or OIDC mode by setting `USE_SAML_SSO="true"` in `wiki0/.env`. For OIDC, leave it unset or set to "false".
 
-## 3. Install & Seed
+## 3. Install Dependencies & Seed the Database
 
 ```sh
 yarn bootstrap
@@ -107,6 +107,26 @@ yarn dev:all
 ```sh
 yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 ```
+
+## 5. Verify Your Setup
+
+After starting all services, you can verify that your environment is working as expected by following these steps:
+
+1. Open both application UIs (todo0 and wiki0) in your browser. You can use `yarn open:apps` or manually visit the URLs shown in the terminal output.
+2. Log in to both applications using the test credentials provided (for example, email: `bob@tables.fake`)
+3. Perform a basic operation in each app (e.g., create a todo item in todo0, create or edit a wiki page in wiki0).
+4. Confirm that the operation succeeds and the UI updates as expected.
+
+> **Visual Guide:**
+> See the GIF or video below for a walkthrough of a successful test (replace with your actual media):
+>
+> ![Test Flow](images/id_assertion_authz_grant_flow.gif)
+
+### What to do if a test fails
+
+- If an operation does not work as expected (e.g., you cannot log in, create, or edit items), check the terminal output for errors.
+- Common issues include misconfigured `.env` files, missing database migrations, or services not running.
+- Review the "Common Issues" and "Troubleshooting" sections above for guidance.
 
 # Common Issues
 
