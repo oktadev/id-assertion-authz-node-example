@@ -100,6 +100,7 @@ yarn dev:all
 >   - `yarn dev:todo`
 >   - `yarn auth:todo`
 
+## Optionally, open the application UIs in your browser
 ```sh
 yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 ```

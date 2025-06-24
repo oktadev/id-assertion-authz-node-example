@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 // setup-env.js: Cross-platform replacement for setup-env.sh
-const fs = require('fs');
-const path = require('path');
+import { copyFileSync, existsSync } from 'fs';
 
 function copyIfNotExists(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.copyFileSync(src, dest);
+  if (!existsSync(dest)) {
+    copyFileSync(src, dest);
     return true;
   }
   return false;
@@ -20,7 +19,7 @@ const files = [
 
 // Copy default env files if they do not exist
 files.forEach(([src, dest]) => {
-  if (fs.existsSync(src)) {
+  if (existsSync(src)) {
     copyIfNotExists(src, dest);
   }
 });
