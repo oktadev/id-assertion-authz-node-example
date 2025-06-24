@@ -55,7 +55,7 @@ CUSTOMER1_CLIENT_ID="<FILL IN>"
 
 > **How to retrieve these values:**
 >
-> - These values are provided by your Identity Provider (IdP) when you register your application.
+> - These values are provided by your Identity Provider (IdP) when you register your OIDC application.
 > - Typically, you can find them in your IdP's admin console or developer portal under the application/client settings.
 > - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
 > - If unsure, consult your IdP documentation or administrator for guidance.
@@ -82,18 +82,37 @@ CUSTOMER1_SAML_CERTIFICATE="<FILL IN>"
 yarn bootstrap
 ```
 
+> **Note:**
+> The `yarn bootstrap` command will also run `yarn resetdb` to initialize your databases. During this process, you will see a prompt:
+>
+> `Are you sure you want to reset your database? All data will be lost.`
+>
+> If this is your first time running the project, type `y` and press Enter at each prompt to allow the database to be reset and seeded with initial data. You may be prompted more than once (once for each database).
+
 ## 4. Start All Services
 
 ```sh
 yarn dev:all
-yarn open:apps
+```
+
+> **Note:**
+>
+> - This command launches all backend and frontend services in parallel, each on its own port, so you can develop and test the full system at once.
+> - If you prefer, you can manually open 4 terminals and run the following commands individually for more control:
+>   - `yarn dev:wiki`
+>   - `yarn auth:wiki`
+>   - `yarn dev:todo`
+>   - `yarn auth:todo`
+
+```sh
+yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 ```
 
 # Common Issues
 
 - **App not starting?** Ensure all `.env` files are present and filled in.
 - **Database errors?** Try `yarn resetdb` to re-seed the database.
-- **Ports in use?** Make sure no other apps are running on ports 3000, 3001, 5000, or 5001.
+- **Ports in use?** Make sure no other apps are running on ports `3000`, `3001`, `5000`, or `5001`.
 
 # Troubleshooting
 
