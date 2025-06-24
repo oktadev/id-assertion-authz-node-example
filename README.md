@@ -2,7 +2,7 @@
 
 A proof-of-concept for the [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow, demonstrating secure token exchange between SSO-enabled applications using Node.js. For a visual overview, see the [explainer video](https://www.youtube.com/watch?v=I0vdmg79Ga4).
 
-<img src="images/id_assertion_authz_grant_flow.gif" alt="Identity Assertion Grant Flow" width="450"/>
+![Test Flow](images/id_assertion_authz_grant_flow.gif)
 
 ---
 
@@ -169,7 +169,7 @@ npm install --global yarn
 
 ### Configuration
 
-Follow the section [Configuration](#Configuration)
+Follow the section [Configure Environment](#2-configure-environment) to set up your environment variables.
 
 ### Installation
 
@@ -198,7 +198,7 @@ docker-compose up
 
 #### Running Apps
 
-Then, follow the section [Running Locally](#Running-Locally)
+Then, follow the section [Quickstart & Dev Setup](#quickstart--dev-setup)
 
 ## Cleanup
 
