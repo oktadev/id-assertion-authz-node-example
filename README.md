@@ -23,12 +23,14 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 
 ## 1. Clone and Open in VS Code
 
+> **Note:** If you are using GitHub Codespaces, you can skip this step as the repository will be automatically cloned for you.
+
 ```sh
 git clone https://github.com/oktadev/id-assertion-authz-node-example.git
 cd id-assertion-authz-node-example
 ```
 
-- Press `Cmd+Shift+P` → "Dev Containers: Open Folder in Container"
+- Open VS Code Command Palette and run "Dev Containers: Open Folder in Container". To open Command Palette, select **View** → **Command Palette...**, MacOS keyboard shortcut `Cmd+Shift+P`, or Windows keyboard shortcut `Ctrl+Shift+P`.
 
 ## 2. Configure Environment
 
@@ -79,11 +81,14 @@ yarn bootstrap
 ```
 
 > **Note:**
-> The `yarn bootstrap` command will also run `yarn resetdb` to initialize your databases. During this process, you will see a prompt:
+> The `yarn bootstrap` command will also run `yarn resetdb` to initialize your databases. During this process, you’ll see a prompt:
 >
 > `Are you sure you want to reset your database? All data will be lost.`
 >
-> If this is your first time running the project, type `y` and press Enter at each prompt to allow the database to be reset and seeded with initial data. You may be prompted more than once (once for each database).
+> This prompt appears for each application (both wiki and todo) to make sure you really want to erase all existing data and start fresh.
+>
+> - Type `y` and press Enter at each prompt to confirm you want to reset and re-seed the databases for both apps.
+> - This is required the first time you run the project, or whenever you want to start with clean test data in both the wiki and todo apps.
 
 ## 4. Start All Services
 
@@ -101,6 +106,9 @@ yarn dev:all
 >   - `yarn auth:todo`
 
 ## Optionally, open the application UIs in your browser
+
+Open a new terminal window or tab before running this command
+
 ```sh
 yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 ```
