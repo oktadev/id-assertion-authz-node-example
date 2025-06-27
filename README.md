@@ -44,12 +44,18 @@ Edit the following files to fill in required values:
 - `packages/authorization-server/.env.wiki`
 - `wiki0/.env` (for SAML config if needed)
 
-Required fields:
+**Required fields:**
 
-```
-CUSTOMER1_AUTH_ISSUER="<FILL IN>"
-CUSTOMER1_CLIENT_ID="<FILL IN>"
-```
+| File                                      | Variable Name             | Values                                |
+| ----------------------------------------- | ------------------------- | ------------------------------------- |
+| `packages/authorization-server/.env.todo` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
+|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `todo0_client_id`                     |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `todo0_client_secret`                 |
+| `packages/authorization-server/.env.wiki` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
+|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `wiki0_client_id`                     |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `wiki0_client_secret`                 |
 
 > **How to retrieve these values:**
 >
@@ -61,14 +67,12 @@ CUSTOMER1_CLIENT_ID="<FILL IN>"
 
 #### For SAML
 
-In `.env.wiki` : You must also specify your SAML configuraiton:
-
-```
-USE_SAML_SSO="true"
-CUSTOMER1_SAML_ENTRY_POINT="<FILL IN>"
-CUSTOMER1_SAML_ISSUER="<FILL IN>"
-CUSTOMER1_SAML_CERTIFICATE="<FILL IN>"
-```
+| File         | Variable Name                | Values      |
+| ------------ | ---------------------------- | ----------- |
+| `wiki0/.env` | `USE_SAML_SSO`               | `"true"`    |
+|              | `CUSTOMER1_SAML_ENTRY_POINT` | `<FILL IN>` |
+|              | `CUSTOMER1_SAML_ISSUER`      | `<FILL IN>` |
+|              | `CUSTOMER1_SAML_CERTIFICATE` | `<FILL IN>` |
 
 > **Note:**
 >
