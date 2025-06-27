@@ -15,10 +15,16 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 
 # Quickstart & Dev Setup
 
-**Requirements:**
+**Highly Recommended:**
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [VS Code](https://code.visualstudio.com/)
+- **Run in GitHub Codespaces** - Just click "Code" → "Create codespace on main" in the GitHub UI and your environment will be ready in minutes.
+
+  ![Codespaces Screenshot](images/codespace.png)
+
+**Alternative (Local Dev):**
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required for local containers)
+- [VS Code](https://code.visualstudio.com/) (required for Dev Containers)
 - [Dev Containers VSCode Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ## 1. Clone and Open in VS Code
@@ -37,6 +43,8 @@ cd id-assertion-authz-node-example
 ```sh
 yarn setup:env
 ```
+
+> **Note:** The `yarn setup:env` command copies template `.env.default` files to `.env` so you can fill in your credentials.
 
 Edit the following files to fill in required values:
 
