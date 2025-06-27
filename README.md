@@ -53,6 +53,7 @@ CUSTOMER1_CLIENT_ID="<FILL IN>"
 
 > **How to retrieve these values:**
 >
+> - Please follow the instructions in this Google Doc for step-by-step guidance on retrieving your credentials: [How to Retrieve OIDC Credentials in Okta Preview](https://docs.google.com/document/d/e/2PACX-1vT22InWxAxzQcCKu-wBii-66NEeCDW8hcCSsrfCnZXYX_AK73I1Qv7Lf1Bg-Y6nQGO-cDhCBEE-N2kz/pub)
 > - These values are provided by your Identity Provider (IdP) when you register your OIDC application.
 > - Typically, you can find them in your IdP's admin console or developer portal under the application/client settings.
 > - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
@@ -122,10 +123,7 @@ After starting all services, you can verify that your environment is working as 
 3. Perform a basic operation in each app (e.g., create a todo item in todo0, create or edit a wiki page in wiki0).
 4. Confirm that the operation succeeds and the UI updates as expected.
 
-> **Visual Guide:**
-> See the GIF or video below for a walkthrough of a successful test (replace with your actual media):
->
-> ![Test Flow](images/id_assertion_authz_grant_flow.gif)
+![Test Flow](images/screenshot.png)
 
 ### What to do if a test fails
 
