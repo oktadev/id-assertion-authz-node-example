@@ -17,9 +17,7 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 
 **Highly Recommended:**
 
-- **Run in [GitHub Codespaces](https://github.com/features/codespaces) for the fastest, zero-install developer experience.**
-
-  - Just click "Code" → "Create codespace on main" in the GitHub UI and your environment will be ready in minutes.
+- **Run in GitHub Codespaces** - Just click "Code" → "Create codespace on main" in the GitHub UI and your environment will be ready in minutes.
 
   ![Codespaces Screenshot](images/codespace.png)
 
