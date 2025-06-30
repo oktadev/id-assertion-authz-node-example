@@ -70,7 +70,6 @@ Edit the following files to fill in required values:
 
 > **How to retrieve these values:**
 >
-> - Please follow the instructions in this Google Doc for step-by-step guidance on retrieving your credentials: [How to Retrieve OIDC Credentials in Okta Preview](https://docs.google.com/document/d/e/2PACX-1vT22InWxAxzQcCKu-wBii-66NEeCDW8hcCSsrfCnZXYX_AK73I1Qv7Lf1Bg-Y6nQGO-cDhCBEE-N2kz/pub)
 > - These values are provided by your Identity Provider (IdP) when you register your OIDC application.
 > - Typically, you can find them in your IdP's admin console or developer portal under the application/client settings.
 > - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
