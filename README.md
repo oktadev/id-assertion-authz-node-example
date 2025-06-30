@@ -1,3 +1,5 @@
+<span style="color: #b91c1c; background: #fee2e2; border: 1px solid #f87171; padding: 12px; display: block; border-radius: 6px; font-weight: bold;">If you are interested in testing Cross-App Access with Okta IdP, please sign up for our <a href="https://www.okta.com/saas-security/sign-up/?_gl=1*pp31c*_gcl_au*NjgzNDkyOTQxLjE3NTA4Nzg2Njk.*_ga*MTk5NjYyODgxMi4xNzUwMjg1MDM3*_ga_QKMSDV5369*czE3NTEyOTY4OTYkbzgkZzEkdDE3NTEyOTg0MjEkajM5JGwwJGgw" target="_blank" rel="noopener noreferrer">early access offering</a>.</span>
+
 # Identity Assertion Authorization Grant – Node Example
 
 A proof-of-concept for the [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow, demonstrating secure token exchange between SSO-enabled applications using Node.js. For a visual overview, see the [explainer video](https://www.youtube.com/watch?v=I0vdmg79Ga4).
@@ -125,6 +127,13 @@ Open a new terminal window or tab before running this command
 ```sh
 yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 ```
+
+> **Note:**
+>
+> - If you are running inside a dev container or remote environment, the browser may not open automatically.
+> - In that case, please open the following URLs manually in your browser:
+>   - [http://localhost:3000/](http://localhost:3000/) (Wiki0)
+>   - [http://localhost:3001/](http://localhost:3001/) (Todo0)
 
 ## 5. Verify Your Setup
 
