@@ -20,10 +20,10 @@ function App() {
     if (authState.isAuthenticated === false) {
       navigate('/signin');
     }
-  }, [authState.isAuthenticated]);
+  }, [authState.isAuthenticated, navigate]);
 
   return (
-    <div>
+    <div className="app-main-bg">
       <main>
         <Routes>
           <Route path="/signin" element={<Signin />} />
