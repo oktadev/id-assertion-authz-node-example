@@ -1,0 +1,144 @@
+/* Shadcn-inspired palette and style tweaks */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;700&display=swap');
+
+:root {
+  --main-font: 'Inter', 'Roboto', Arial, sans-serif;
+  --shadcn-bg: #f8fafc;
+  --shadcn-card: #fff;
+  --shadcn-border: #e4e4e7;
+  --shadcn-primary: #18181b;
+  --shadcn-muted: #71717a;
+  --shadcn-accent: #6366f1;
+  --shadcn-accent-hover: #4f46e5;
+  --shadcn-success: #22c55e;
+  --shadcn-danger: #ef4444;
+}
+
+body {
+  font-family: var(--main-font);
+  /* Soft blue gradient background */
+  background: linear-gradient(135deg, #e0f7fa 0%, #f8fafc 100%);
+}
+
+/* Sidebar beautification */
+.sidebar-fancy {
+  background: var(--shadcn-card);
+  border-right: 1px solid var(--shadcn-border);
+  box-shadow: 2px 0 24px 0 rgba(24, 24, 27, 0.04);
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  padding-top: 2rem;
+}
+.sidebar-fancy .sidebar-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--shadcn-accent);
+  letter-spacing: 0.05em;
+  margin-bottom: 2rem;
+}
+.sidebar-fancy .sidebar-item {
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-fancy .sidebar-item:hover {
+  background: #f1f5f9;
+  color: var(--shadcn-accent);
+}
+
+.app-main-bg {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 3rem;
+}
+
+.todo-card {
+  background: var(--shadcn-card);
+  border: 1px solid var(--shadcn-border);
+  box-shadow: 0 4px 24px 0 rgba(24, 24, 27, 0.04);
+  border-radius: 1.25rem;
+}
+.todo-card:hover {
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.18);
+}
+
+.todo-item {
+  background: var(--shadcn-card);
+  border: 1px solid var(--shadcn-border);
+  color: var(--shadcn-primary);
+  box-shadow: none;
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.todo-item:hover {
+  border: 1.5px solid var(--shadcn-accent);
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.08);
+}
+
+.todo-checkbox:checked + label {
+  text-decoration: line-through;
+  color: var(--shadcn-muted);
+  opacity: 0.7;
+}
+
+.add-task-btn {
+  background: linear-gradient(90deg, var(--shadcn-accent) 0%, var(--shadcn-accent-hover) 100%);
+  color: #fff;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.add-task-btn:hover {
+  background: linear-gradient(90deg, var(--shadcn-accent-hover) 0%, var(--shadcn-accent) 100%);
+  box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.18);
+}
+
+/* Profile card beautification */
+.profile-card {
+  background: var(--shadcn-card);
+  border: 1px solid var(--shadcn-border);
+  box-shadow: 0 4px 24px 0 rgba(24, 24, 27, 0.04);
+  border-radius: 1.25rem;
+  padding: 2.5rem 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.profile-title {
+  color: var(--shadcn-accent);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+.profile-table-row {
+  border-bottom: 1px solid #e0e7ef;
+  padding: 0.75rem 0;
+}
+.profile-table-row:last-child {
+  border-bottom: none;
+}
+.profile-logout-btn {
+  background: linear-gradient(90deg, var(--shadcn-danger) 0%, var(--shadcn-accent) 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.75rem 2.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.profile-logout-btn:hover {
+  background: linear-gradient(90deg, var(--shadcn-accent) 0%, var(--shadcn-danger) 100%);
+  box-shadow: 0 4px 16px 0 rgba(99, 102, 241, 0.18);
+}
