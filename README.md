@@ -53,7 +53,6 @@ Edit the following files to fill in required values:
 
 - `packages/authorization-server/.env.todo`
 - `packages/authorization-server/.env.wiki`
-- `wiki0/.env` (for SAML config if needed)
 
 **Required fields:**
 
@@ -61,12 +60,12 @@ Edit the following files to fill in required values:
 | ----------------------------------------- | ------------------------- | ------------------------------------- |
 | `packages/authorization-server/.env.todo` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
 |                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `todo0_client_id`                     |
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `todo0_client_secret`                 |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<OIDC client id at IdP>`             |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<OIDC client secret at IdP>`         |
 | `packages/authorization-server/.env.wiki` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
 |                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `wiki0_client_id`                     |
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `wiki0_client_secret`                 |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<OIDC client id at IdP>`             |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<OIDC client secret at IdP>`         |
 
 > **How to retrieve these values:**
 >
@@ -74,20 +73,6 @@ Edit the following files to fill in required values:
 > - Typically, you can find them in your IdP's admin console or developer portal under the application/client settings.
 > - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
 > - If unsure, consult your IdP documentation or administrator for guidance.
-
-#### For SAML
-
-| File         | Variable Name                | Values      |
-| ------------ | ---------------------------- | ----------- |
-| `wiki0/.env` | `USE_SAML_SSO`               | `"true"`    |
-|              | `CUSTOMER1_SAML_ENTRY_POINT` | `<FILL IN>` |
-|              | `CUSTOMER1_SAML_ISSUER`      | `<FILL IN>` |
-|              | `CUSTOMER1_SAML_CERTIFICATE` | `<FILL IN>` |
-
-> **Note:**
->
-> - You can run this application in either SAML or OIDC mode. In SAML mode, the Wiki0 authorization server will use SAML to SSO to the IdP as opposed to OIDC.
-> - Choose SAML or OIDC mode by setting `USE_SAML_SSO="true"` in `wiki0/.env`. For OIDC, leave it unset or set to "false".
 
 ## 3. Install Dependencies & Seed the Database
 
@@ -237,7 +222,7 @@ docker-compose down
 
 # Troubleshooting
 
-If you have any trouble, try re-authenticating to ~both~ applications by signing out and signing in again.
+If you have any trouble, try re-authenticating to both applications by signing out and signing in again.
 
 # Dev Tips
 
