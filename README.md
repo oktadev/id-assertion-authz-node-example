@@ -220,10 +220,6 @@ docker-compose down
 <br />
 <br />
 
-# Troubleshooting
-
-If you have any trouble, try re-authenticating to both applications by signing out and signing in again.
-
 # Dev Tips
 
 **Access the mysql database directly with the following:**
