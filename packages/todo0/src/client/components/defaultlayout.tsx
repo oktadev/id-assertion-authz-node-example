@@ -14,7 +14,7 @@ function DefaultLayout() {
   const handleLogoutClick = () => setShowConfirm(true);
   const handleCancel = () => setShowConfirm(false);
   const handleConfirm = async () => {
-    setShowConfirm(false);
+    handleCancel();
     if (authState.isAuthenticated) {
       await onRevokeAuthFn();
     }
