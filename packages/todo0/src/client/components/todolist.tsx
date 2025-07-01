@@ -129,7 +129,7 @@ function Todos() {
                 + Add task
               </button>
             </div>
-            {todoList.length > 0 && (
+            {todoList.length > 0 ? (
               <div className="bg-slate-50 px-4 py-3 mb-2">
                 <ul className="max-w">
                   {todoList.map((todo) => (
