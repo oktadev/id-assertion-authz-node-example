@@ -203,8 +203,7 @@ function Todos() {
                   ))}
                 </ul>
               </div>
-            )}
-            {todoList.length === 0 && (
+            ) : (
               <p className="w-3/5 mx-24 py-6 text-center text-zinc-800 text-base font-semibold font-['Inter']">
                 Plan your day: What stuff do you need to get done? Add a task to get started!
               </p>
