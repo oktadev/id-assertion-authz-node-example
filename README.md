@@ -20,7 +20,12 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 
 **Highly Recommended:**
 
-- **Run in GitHub Codespaces** - Just click "Code" → "Create codespace on main" in the GitHub UI and your environment will be ready in minutes.
+- **Run in GitHub Codespaces**
+
+  - Click "Code" → "Create a codespace on main" in the GitHub UI and your environment will be ready in minutes.
+  - Or, launch instantly:
+
+    [<img src="https://github.com/codespaces/badge.svg" title="Open in Github Codespace" width="150" height="20">](https://github.com/codespaces/new?repo=oktadev/id-assertion-authz-node-example)
 
   ![Codespaces Screenshot](images/codespace.png)
 
