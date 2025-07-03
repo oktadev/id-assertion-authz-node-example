@@ -1,4 +1,4 @@
-import { Avatar, Button, Card } from 'flowbite-react';
+import { Button, Card } from 'flowbite-react';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IPage } from './types';
@@ -23,19 +23,34 @@ type SinglePageProps = {
   onDeletePage: (page: IPage) => void;
 };
 
+function formatDate(dateString?: string): string {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
 const SinglePage: FC<SinglePageProps> = function ({ page, onDeletePage }: SinglePageProps) {
   const contentPreview = useMemo(() => formatContentForPreview(page.content), [page.content]);
+  // Try to use updatedAt, fallback to createdAt, fallback to nothing
+  const lastUpdated = (page as any).updatedAt || (page as any).createdAt || '';
 
   return (
-    <Card href={`/pages/${page.id}/edit`}>
-      <div className="flex justify-between">
-        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <Card
+      href={`/pages/${page.id}/edit`}
+      className="transition-transform duration-200 hover:scale-[1.025] hover:shadow-xl border border-gray-200 rounded-xl bg-white/90 p-6 min-h-[220px] flex flex-col justify-between"
+    >
+      <div className="flex justify-between items-start mb-2">
+        <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-2">
           {page.title}
         </h5>
         <button
           type="button"
           aria-label="Delete Page"
-          className="rounded-full p-2 hover:bg-gray-300"
+          className="rounded-full p-2 hover:bg-red-100 transition-colors"
           onClick={(event) => {
             event.preventDefault();
             onDeletePage(page);
@@ -50,12 +65,29 @@ const SinglePage: FC<SinglePageProps> = function ({ page, onDeletePage }: Single
           </svg>
         </button>
       </div>
-      <div className="flex gap-2 justify-start">
-        <Avatar rounded className="" size="sm" />
-        <p className="pt-2 text-gray-800 text-sm">Created by {page.user.name}</p>
+      <div className="flex gap-2 items-center mb-2">
+        <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center border border-gray-200">
+          <svg
+            className="w-5 h-5 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z" />
+          </svg>
+        </div>
+        <span className="text-gray-700 text-xs">
+          Created by <span className="font-semibold">{page.user.name}</span>
+        </span>
       </div>
-      <p className="min-h-20 text-sm font-normal text-gray-700">{contentPreview}</p>
-      <p className="font-normal text-gray-700 text-sm dark:text-gray-300">Some sub title here</p>
+      <p className="min-h-16 text-sm text-gray-700 line-clamp-3 mb-2">{contentPreview}</p>
+      <div className="flex justify-between items-center mt-auto pt-2">
+        <span className="text-xs text-gray-400">
+          {'\n'}
+          Last updated: {lastUpdated ? formatDate(lastUpdated) : 'N/A'}
+        </span>
+        <span className="text-xs text-gray-400 italic">ID: {page.id}</span>
+      </div>
     </Card>
   );
 };
@@ -112,30 +144,41 @@ function PageList() {
 
   return (
     <div className="p-8">
-      <div className="gap-4 mb-6 grid grid-cols-2 justify-between">
-        <div className="flex-start">
-          <h1>Pages</h1>
-        </div>
-        <div className="justify-self-end">
-          <Button
-            size="xl"
-            // className="flex-initial"
-            onClick={() => {
-              createDemoPage();
-            }}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Pages</h1>
+        <Button
+          size="lg"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow focus:ring-2 focus:ring-blue-300 focus:outline-none"
+          onClick={() => createDemoPage()}
+        >
+          + Create Page
+        </Button>
+      </div>
+      {pageList.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-gray-400 bg-white/80 rounded-2xl shadow-inner border border-dashed border-gray-200">
+          <svg
+            className="w-16 h-16 mb-4 text-blue-200"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
           >
-            Create
-          </Button>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span className="text-lg text-gray-500 font-medium">
+            No pages yet. Click{' '}
+            <span className="text-blue-600 font-semibold">&quot;Create Page&quot;</span> to get
+            started!
+            {'\n'}
+          </span>
         </div>
-      </div>
-
-      <div className="gap-8 mb-4 grid grid-cols-2 justify-between">
-        {pageList.map((p) => (
-          <div key={p.id} className="flex-1">
-            <SinglePage page={p} onDeletePage={onDeletePage} />
-          </div>
-        ))}
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {pageList.map((p) => (
+            <SinglePage key={p.id} page={p} onDeletePage={onDeletePage} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

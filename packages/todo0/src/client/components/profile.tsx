@@ -37,25 +37,24 @@ function Profile() {
     }
   }, [authState.isAuthenticated]);
 
-  const userData = Object.entries(user).map(([key, value], index) => (
-    <li key={key} className={index % 2 === 0 ? 'table-row bg-slate-50' : 'table-row'}>
-      <span className="pl-2 py-2 table-cell font-['Inter'] ">{key}</span>
-      <span className="table-cell">{value}</span>
-    </li>
-  ));
-
   return (
     authState.isAuthenticated && (
-      <div>
-        <h1 className="text-left mt-24 mb-6 mx-24 w-96 text-stone-900 text-5xl font-bold font-['Inter']">
-          My Profile
-        </h1>
-        <ul className="w-3/5 text-left mx-24 table mt-10">{userData}</ul>
-        <button
-          type="button"
-          onClick={onRevokeAuth}
-          className="mx-24 mt-10 py-2 px-20 bg-slate-400 rounded-md text-white text-center"
-        >
+      <div className="profile-card">
+        <h1 className="profile-title">My Profile</h1>
+        <div className="flex flex-col gap-4 mt-10">
+          {Object.entries(user).map(([key, value], index) => (
+            <div
+              key={key}
+              className={`flex justify-between items-center rounded-lg px-4 py-3 ${
+                index % 2 === 0 ? 'bg-slate-50' : 'bg-white'
+              }`}
+            >
+              <span className="font-semibold text-slate-700 capitalize">{key}</span>
+              <span className="text-slate-600 break-all text-right">{value}</span>
+            </div>
+          ))}
+        </div>
+        <button type="button" onClick={onRevokeAuth} className="profile-logout-btn">
           Log out
         </button>
       </div>

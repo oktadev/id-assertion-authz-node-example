@@ -16,7 +16,11 @@
     "resetdb": "yarn workspace wiki0 resetdb && yarn workspace todo0 resetdb",
     "migratedb": "yarn workspace wiki0 migratedb && yarn workspace todo0 migratedb",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "setup:env": "node scripts/setup-env.js",
+    "bootstrap": "node scripts/bootstrap.js",
+    "dev:all": "concurrently \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
+    "open:apps": "node scripts/open-apps.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +28,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
