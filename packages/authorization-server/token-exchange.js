@@ -1,5 +1,5 @@
-import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import { OAuthTokenType } from 'id-assert-authz-grant-client';
+import { CustomOIDCProviderError } from 'oidc-provider/lib/helpers/errors.js';
 import { authorizationGrantTokenExchange } from './jwt-authorization-grant-token-exchange.js';
 import makeConfiguration from './server-configuration.js';
 
@@ -14,6 +14,7 @@ export default async (_, provider, redisclient) => {
     'scope',
     'subject_token',
     'subject_token_type',
+    'audience',
     // Other parameters we aren't using
     // 'actor_token',
     // 'actor_token_type'

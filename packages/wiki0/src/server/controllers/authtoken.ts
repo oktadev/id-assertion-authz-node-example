@@ -30,7 +30,7 @@ controller.get('/', async (req, res) => {
     grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
     requested_token_type: 'urn:ietf:params:oauth:token-type:id-jag',
     subject_token_type: subjectTokenType,
-    resource: process.env.TODO_AUTH_SERVER,
+    audience: process.env.TODO_AUTH_SERVER,
     scope: 'read write',
     subject_token: savedSubjectToken ?? '',
     client_id: '<CLIENT_ID>',

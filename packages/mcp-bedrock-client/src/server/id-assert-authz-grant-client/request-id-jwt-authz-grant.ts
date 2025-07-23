@@ -15,8 +15,7 @@ import { ClientAssertionOption, ClientIdOption, ExchangeTokenResult } from './ty
 
 export type GetJwtAuthGrantBaseOptions = {
   tokenUrl: string;
-  resource?: string;
-  audience: string;
+  resource: string;
   subjectTokenType: SubjectTokenType;
   subjectToken: string;
   scopes?: string | Set<string> | string[];
@@ -27,8 +26,7 @@ export type SubjectTokenType = 'oidc' | 'saml';
 type RequestFields = {
   grant_type: OAuthGrantType.TOKEN_EXCHANGE;
   requested_token_type: OAuthTokenType.JWT_ID_JAG;
-  resource?: string;
-  audience: string;
+  resource: string;
   scope: string;
   subject_token: string;
   subject_token_type: OAuthTokenType;
@@ -37,7 +35,7 @@ type RequestFields = {
 export const requestIdJwtAuthzGrant = async (
   opts: GetJwtAuthGrantBaseOptions & (ClientIdOption | ClientAssertionOption)
 ): Promise<ExchangeTokenResult> => {
-  const { resource, subjectToken, subjectTokenType, audience, scopes, tokenUrl } = opts;
+  const { resource, subjectToken, subjectTokenType, scopes, tokenUrl } = opts;
 
   if (!tokenUrl || typeof tokenUrl !== 'string') {
     throw new InvalidArgumentError('opts.tokenUrl', 'A valid url is required.');
@@ -91,7 +89,6 @@ export const requestIdJwtAuthzGrant = async (
   const requestData: RequestFields & (ClientIdFields | ClientAssertionFields) = {
     grant_type: OAuthGrantType.TOKEN_EXCHANGE,
     requested_token_type: OAuthTokenType.JWT_ID_JAG,
-    audience,
     resource,
     scope,
     subject_token: subjectToken,

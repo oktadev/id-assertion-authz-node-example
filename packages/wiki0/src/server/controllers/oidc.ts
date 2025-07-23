@@ -110,7 +110,7 @@ const verify = async (
   try {
     authGrantResponse = await requestIdJwtAuthzGrant({
       tokenUrl: `${process.env.AUTH_SERVER}/token`,
-      resource: process.env.TODO_AUTH_SERVER,
+      audience: process.env.TODO_AUTH_SERVER,
       subjectToken: idToken.toString(),
       // This is hardcoded to what we use for Okta.
       // TODO: Should be using cached value from where we got the id token
