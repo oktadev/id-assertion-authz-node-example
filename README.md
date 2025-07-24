@@ -65,12 +65,12 @@ Edit the following files to fill in required values:
 | ----------------------------------------- | ------------------------- | ------------------------------------- |
 | `packages/authorization-server/.env.todo` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
 |                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `<OIDC client id at IdP>`             |
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `<OIDC client secret at IdP>`         |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<Resource app OIDC client id at IdP>`|
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Resource app OIDC client secret at IdP>`|
 | `packages/authorization-server/.env.wiki` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
 |                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `<OIDC client id at IdP>`             |
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `<OIDC client secret at IdP>`         |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<Requesting app OIDC client id at IdP>`|
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Requesting app OIDC client secret at IdP>`|
 
 > **How to retrieve these values:**
 >

@@ -25,9 +25,13 @@ files.forEach(([src, dest]) => {
 });
 
 console.log('\n[setup:env] Default .env files copied (if not already present).');
+
+
+console.log('Please edit the following files if needed (uncommon):');
+console.log('  - packages/wiki0/.env');
+console.log('  - packages/todo0/.env');
+
 console.log('Please edit the following files to fill in required values:');
 console.log('  - packages/authorization-server/.env.todo');
 console.log('  - packages/authorization-server/.env.wiki');
-console.log('  - packages/wiki0/.env (for SAML config if needed)');
-console.log('  - packages/todo0/.env (if needed)');
-console.log('Required fields: CUSTOMER1_AUTH_ISSUER, CUSTOMER1_CLIENT_ID, etc.');
+console.log('Required fields: CUSTOMER1_AUTH_ISSUER, CUSTOMER1_CLIENT_ID, CUSTOMER1_CLIENT_SECRET.');
