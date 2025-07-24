@@ -6,7 +6,7 @@ import instance from 'oidc-provider/lib/helpers/weak_cache.js';
 import { getSubjectToken } from './utils/id-token-cache.js';
 // eslint-disable-next-line import/prefer-default-export
 export async function authorizationGrantTokenExchange(ctx, configuration, redisClient) {
-  validatePresence(ctx, 'resource', 'audience', 'subject_token', 'subject_token_type');
+  validatePresence(ctx, 'audience', 'subject_token', 'subject_token_type');
 
   const { resource, subject_token, audience, subject_token_type, scope } = ctx.oidc.params;
 
