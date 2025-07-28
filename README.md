@@ -12,7 +12,6 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 - [Quickstart & Dev Setup](#quickstart--dev-setup)
 - [Common Issues](#common-issues)
 - [Troubleshooting](#troubleshooting)
-- [Non-VSCode Alternative Option](#non-vscode-alternative-option)
 - [Dev Tips](#dev-tips)
 - [How to Integrate into an Existing Service](#how-to-integrate-into-an-existing-service)
 
@@ -58,6 +57,7 @@ Edit the following files to fill in required values:
 
 - `packages/authorization-server/.env.todo`
 - `packages/authorization-server/.env.wiki`
+- `packages/mcp-bedrock-client/.env` <!-- Added line -->
 
 **Required fields:**
 
@@ -71,13 +71,16 @@ Edit the following files to fill in required values:
 |                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
 |                                           | `CUSTOMER1_CLIENT_ID`     | `<OIDC client id at IdP>`             |
 |                                           | `CUSTOMER1_CLIENT_SECRET` | `<OIDC client secret at IdP>`         |
+| `packages/mcp-bedrock-client/.env`        | `AWS_ACCESS_KEY_ID`       | `<your AWS access key id>`            |
+|                                           | `AWS_SECRET_ACCESS_KEY`   | `<your AWS secret access key>`        |
 
 > **How to retrieve these values:**
 >
 > - These values are provided by your Identity Provider (IdP) when you register your OIDC application.
-> - Typically, you can find them in your IdP's admin console or developer portal under the application/client settings.
+> - For AWS credentials, visit your AWS IAM console and create or retrieve an access key for your user.
+> - Typically, you can find IdP values in your IdP's admin console or developer portal under the application/client settings.
 > - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
-> - If unsure, consult your IdP documentation or administrator for guidance.
+> - If unsure, consult your IdP or AWS documentation or administrator for guidance.
 
 ## 3. Install Dependencies & Seed the Database
 
@@ -97,18 +100,37 @@ yarn bootstrap
 
 ## 4. Start All Services
 
+You can start all backend and frontend services in parallel using one of the following commands:
+
 ```sh
 yarn dev:all
 ```
 
-> **Note:**
+> **`yarn dev:all`** This command launches all backend and frontend services in parallel, each on its own port, so you can develop and test the full system at once.
 >
-> - This command launches all backend and frontend services in parallel, each on its own port, so you can develop and test the full system at once.
 > - If you prefer, you can manually open 4 terminals and run the following commands individually for more control:
 >   - `yarn dev:wiki`
 >   - `yarn auth:wiki`
 >   - `yarn dev:todo`
 >   - `yarn auth:todo`
+
+Or, to start the MCP Bedrock Client instead of Wiki0:
+
+```sh
+yarn dev:mcp
+```
+
+> **`yarn dev:mcp`** replaces the Wiki0 client app with the MCP Bedrock Client.
+> Use this if you want to run the MCP client app that interacts with the Todo MCP server.
+>
+> **Note:**
+>
+> - This command launches all backend and frontend services in parallel, each on its own port, so you can develop and test the full system at once.
+> - If you prefer, you can manually open 4 terminals and run the following commands individually for more control:
+>   - `yarn auth:wiki`
+>   - `yarn dev:todo`
+>   - `yarn auth:todo`
+>   - `yarn dev:mcp-bedrock-client`
 
 ## Optionally, open the application UIs in your browser
 
@@ -122,7 +144,7 @@ yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
 >
 > - If you are running inside a dev container or remote environment, the browser may not open automatically.
 > - In that case, please open the following URLs manually in your browser:
->   - [http://localhost:3000/](http://localhost:3000/) (Wiki0)
+>   - [http://localhost:3000/](http://localhost:3000/) (MCP Client / Wiki0)
 >   - [http://localhost:3001/](http://localhost:3001/) (Todo0)
 
 ## 5. Verify Your Setup
@@ -168,61 +190,3 @@ Make sure to replace the content in `<>`.
 export WIKI_DATABASE_URL=<DB_URL>
 export TODO_DATABASE_URL=<DB_URL>
 ```
-
-```
-yarn dlx prisma migrate dev --name <some nice description of the changes you made> --schema <project>/prisma/schema.prisma
-```
-
-**Remove all Redis keys with a given prefix**
-
-```
-# PREFIX could be, for example, "todo0:"
-redis-cli --scan --pattern "<PREFIX>" | xargs redis-cli del
-```
-
-# How to Integrate into an Existing Service
-
-This section outlines the steps needed to implement ID Assertion Authorization Grant in your existing application.
-There are three actors in this flow, the Identity Provider (IdP), the Requesting Application, and the Resource application.
-
-1. The Identity Provider issues `ID-JAG` tokens, and is the SSO provider for the Requesting and Resource apps for a given user.
-
-1. The **Requesting Application** is the Client application which will make the token exchange request to the IdP, ultimately requesting protected resource access from the Resource Server.
-
-1. The **Resource Application** is the application which owns the protected resources and must issue access tokens to the Requesting Application using the flow.
-
-You app can support this flow as a **Requesting App**, a **Resource App**, or both! We recommend integrating in only on way to get started. The section will also cover best practices based on the architecture of the given apps.
-
-## Requesting App Steps
-
-The Requesting App is the application that is requesting or querying objects or pulling data from another application. This section describes the specific steps to build the ID Assertion Authorization Grant into the application. The Requesting App must make a separate request to IdP for an `ID-JAG` token for each unique resource the user wants to access. To prevent performance issues, follow these best practices:
-
-> [!TIP]
-> Checkout the Debug Console in the App for detailed views of the requests!
-
-1. Configure SSO with an IdP which supports this flow.
-1. After the Login SSO flow for a user, store the `id_token` or the `refresh_token` returned from the IdP. These are needed to make the token exchange request. (If the `id_token` expires before you want to make the exchange, use the `refresh_token` to receive a new `id_token`.)
-
-1. When you want to load a resource for a user in your application logic, make a token exchange request to the IdP within the lifetime of the `id_token`. Follow [this code example](https://github.com/oktadev/id-assertion-authz-node-example/blob/2a4068213845f4907c90b40823395b14f5dc20a6/packages/wiki0/src/server/controllers/oidc.ts#L110), and/or see the specifics of the request in Section 5 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
-
-1. Using the result of the exchange, make an `access_token` request to the authorization server. Follow [this code example](https://github.com/oktadev/id-assertion-authz-node-example/blob/2a4068213845f4907c90b40823395b14f5dc20a6/packages/wiki0/src/server/controllers/oidc.ts#L143), and/or see the specifics of the request in Section 6 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
-
-1. Store and use the `access_token` as your normally would with the 3rd party resource server.
-
-### Best Practices for Requesting Apps
-
-1.  **Do not add to login flow**. It is not necessary to preload all the JAG tokens, so it is not necessary to mint all of the possible JAG tokens at the time of login. The side effects can be extended login times for users.
-1.  **Only request when needed**. JAG tokens should be requested at the last responsible moment. JAG tokens are not meant to be long lived. Loading does not need to be bulk loaded and optimized. Trying to optimize the requests for multiple JAG tokens can result in poor performance at scale.
-1.  **Do not store JAG Tokens. Store ID, Access and Refresh Tokens**. JAGs are really short lived. As mentioned earlier, JAGs are passed from Requesting Apps to Resource Apps to exchange for an Access Token to access the Resource App. The Access Token is the valuable artifact to be stored and protected. The JAG token is effectively useless once exchanged, so it should be discarded.
-
-## Resource App Steps
-
-The Resource App is the application that owns protected resources normally accessed via OAuth2.0 by Requesting App users. This section describes the specific steps to support the ID Assertion Authorization Grant into the application. The Resource App is responsible for validating `ID-JAG` tokens before issuing OAuth `access_tokens` as it normally would.
-
-> [!TIP]
-> Checkout the Debug Console in the App for detailed views of the requests!
-
-1. Configure SSO with an IdP which supports this flow.
-1. Modify your Authorization Server logic accept these requests at your OAuth2.0 token endpoint. Seethe specifics of the incoming request in Section 6 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
-1. Validate the `ID-JAG` tokens properly before issuing an `access_token` as your normally would. Ensure all validations your authorization makes in regular OAuth2.0 flows also apply to this exhcange when evaluating user atuhorization, such as scope validation. Follow [this code example](id-assertion-authz-node-example/packages/authorization-server/jwt-authorization-grant.js), and/or see the specifics of the processing rules in Section 6.1 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
-1. Respond with an access token, as outlined in Section 6.1 of the [spec](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant).
