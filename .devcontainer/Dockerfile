@@ -1,29 +1,30 @@
-FROM ubuntu:jammy
+FROM alpine:latest
 
-# Install deps
-RUN apt update && apt upgrade -y && apt install -y \
-    curl \
-    mariadb-client \
-    wget
-
-RUN apt-get update && apt-get install -y \
-    git \
-    gnupg \
-    jq \
-    redis-tools
-
-# Install Node
-RUN mkdir -p /etc/apt/keyrings
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-ARG NODE_MAJOR=20
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-RUN apt-get update && apt-get install nodejs -y
-
-# Install Yarn Package Manager
-RUN npm install --global yarn
-
-# Install fly.io which is used for deployments and connecting to production services
-RUN curl -L https://fly.io/install.sh | sh
-
+# Set environment variables for Fly.io before installing it
 ENV FLYCTL_INSTALL="/root/.fly"
 ENV PATH="$FLYCTL_INSTALL/bin:$PATH"
+
+# Install core dependencies using apk (Alpine's package manager)
+RUN echo "Starting core dependency installation at $(date)" && \
+    apk update && \
+    apk add --no-cache \
+        curl \
+        mariadb-client \
+        wget \
+        git \
+        gnupg \
+        jq \
+        redis \
+        openssl \
+    && echo "Finished core dependency installation at $(date)"
+
+# Install Node.js and npm (from Alpine repositories)
+ARG NODE_MAJOR=20
+RUN echo "Starting Node.js installation at $(date)" && \
+    apk add --no-cache nodejs npm && \
+    echo "Finished Node.js installation at $(date)"
+
+# Install Yarn Package Manager globally
+RUN echo "Starting Yarn installation at $(date)" && \
+    npm install --global yarn && \
+    echo "Finished Yarn installation at $(date)"

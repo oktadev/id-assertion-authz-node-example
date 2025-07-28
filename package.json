@@ -16,15 +16,25 @@
     "resetdb": "yarn workspace wiki0 resetdb && yarn workspace todo0 resetdb",
     "migratedb": "yarn workspace wiki0 migratedb && yarn workspace todo0 migratedb",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --cache",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "setup:env": "node scripts/setup-env.js",
+    "bootstrap": "node scripts/bootstrap.js",
+    "dev:all": "concurrently --names \"wiki,auth-wiki,todo,auth-todo\" --prefix-colors \"blue,magenta,green,red\" --output-path logs/dev-all.log \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
+    "dev:mcp": "concurrently --names \"mcp,auth-wiki,todo,auth-todo\" --prefix-colors \"cyan,magenta,green,red\"  --output-path logs/dev-mcp.log \"yarn dev:mcp-bedrock-client\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
+    "open:apps": "node scripts/open-apps.js",
+    "build:mcp-bedrock-client": "yarn workspace mcp-bedrock-client build",
+    "dev:mcp-bedrock-client": "yarn workspace mcp-bedrock-client dev",
+    "start:mcp-bedrock-client": "yarn workspace mcp-bedrock-client start",
+    "clean:mcp-bedrock-client": "yarn workspace mcp-bedrock-client clean"
   },
   "author": "",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.32.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^8.10.0",
@@ -33,7 +43,10 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.1"
+    "eslint-plugin-react-hooks": "^4.6.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3"
   },
   "workspaces": [
     "./packages/*"

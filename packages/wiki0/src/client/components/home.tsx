@@ -186,24 +186,25 @@ function Home() {
       <div className="p-8">
         <h1 className="mb-4">What is Wiki0?</h1>
         <div>
-          Lorem ipsum dolor sit amet consectetur. Dictum lobortis auctor gravida sagittis sem vitae
-          integer. Arcu sed quam sit faucibus vitae fringilla faucibus. Diam non faucibus
-          pellentesque viverra eget eget amet. Sem duis viverra sodales tempor cras cras quis.
-          Mollis nisl enim bibendum lectus bibendum arcu. Adipiscing ridiculus pulvinar est nisi
-          risus aliquet.
+          Wiki0 is a sample collaborative wiki application included in this project. It demonstrates
+          how the Identity Assertion Authorization Grant flow enables secure, cross-application data
+          sharing. When a user pastes a Todo0 task link into a Wiki0 page, the task details are
+          automatically unfurled, showcasing SSO and token exchange in action between Wiki0 and
+          Todo0.
         </div>
         <ul className="list-disc pt-4 pl-4 pb-4">
-          <li>Proin facilisi enim et egestas quis tortor.</li>
-          <li>Quisque euismod elementum suscipit amet et arcu mattis.</li>
-          <li>Tristique leo aliquet diam sit elit leo pulvinar metus ultricies.</li>
+          <li>
+            Paste a Todo0 task link into a Wiki0 page to see automatic unfurling of task details.
+          </li>
+          <li>Demonstrates secure token exchange and SSO integration.</li>
+          <li>Part of the end-to-end OAuth2 Identity Assertion Authorization Grant demo.</li>
         </ul>
         <div>
-          Magna malesuada quis imperdiet leo eget netus posuere.Ac commodo ut a id.Sed egestas eget
-          urna cursus tincidunt fermentum quis.Pellentesque aliquet pharetra a pellentesque lectus
-          nulla ullamcorper nunc.Neque blandit porta amet enim eget arcu Connected Apps
+          Wiki0 and Todo0 together show how modern applications can securely share data and
+          authenticate users across domains using industry-standard protocols.
         </div>
         <div className="flex justify-center align-center items-center mt-16">
-          <img src={homeLogo} alt="" />
+          <img src={homeLogo} alt="Wiki0 Home Logo" />
         </div>
       </div>
     </div>
