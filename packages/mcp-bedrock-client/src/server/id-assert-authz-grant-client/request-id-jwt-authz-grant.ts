@@ -1,8 +1,8 @@
 import qs from 'qs';
 import { InvalidArgumentError, InvalidPayloadError } from './exceptions';
 import HttpResponse from './http-response';
-import OAuthBadRequest from './oauth-bad-request';
 import OauthTokenExchangeResponse from './oauth-token-exchange-response';
+import OAuthBadRequest from './oauth-bad-request';
 import {
   ClientAssertionFields,
   ClientIdFields,
