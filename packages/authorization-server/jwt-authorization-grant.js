@@ -120,7 +120,7 @@ export default async (_, provider) => {
     console.log('Client requested scopes', ctx.oidc.params.scope);
 
     const client_requested_scopes = ctx.oidc.params.scope ? ctx.oidc.params.scope.split(' ') : [];
-    const idp_authorized_scopes = claims.scope ? claims.scope.split(' ') : "";
+    const idp_authorized_scopes = claims.scope ? claims.scope.split(' ') : '';
     console.log('IdP scopes', idp_authorized_scopes);
 
     at.scope = Array.from(
