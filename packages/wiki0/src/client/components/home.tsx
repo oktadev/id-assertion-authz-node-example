@@ -119,7 +119,7 @@ function Home() {
             <strong>{requestInfo.isSaml ? 'SAML Assertion' : 'ID Token'}</strong>
             {tokens.length > 0 && (
               <pre>
-                <TokenViewer token={requestInfo.assertion} saml={requestInfo.isSaml} />
+                <TokenViewer token={tokens[0].idToken} saml={requestInfo.isSaml} />
               </pre>
             )}
           </DebugCard>

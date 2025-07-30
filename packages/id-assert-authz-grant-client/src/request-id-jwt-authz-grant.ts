@@ -1,8 +1,8 @@
 import qs from 'qs';
 import { InvalidArgumentError, InvalidPayloadError } from './exceptions';
 import HttpResponse from './http-response';
-import OauthTokenExchangeResponse from './oauth-token-exchange-response';
 import OAuthBadRequest from './oauth-bad-request';
+import OauthTokenExchangeResponse from './oauth-token-exchange-response';
 import {
   ClientAssertionFields,
   ClientIdFields,
@@ -15,7 +15,8 @@ import { ClientAssertionOption, ClientIdOption, ExchangeTokenResult } from './ty
 
 export type GetJwtAuthGrantBaseOptions = {
   tokenUrl: string;
-  resource: string;
+  resource?: string;
+  audience: string;
   subjectTokenType: SubjectTokenType;
   subjectToken: string;
   scopes?: string | Set<string> | string[];
@@ -26,7 +27,8 @@ export type SubjectTokenType = 'oidc' | 'saml';
 type RequestFields = {
   grant_type: OAuthGrantType.TOKEN_EXCHANGE;
   requested_token_type: OAuthTokenType.JWT_ID_JAG;
-  resource: string;
+  resource?: string;
+  audience: string;
   scope: string;
   subject_token: string;
   subject_token_type: OAuthTokenType;
@@ -35,14 +37,14 @@ type RequestFields = {
 export const requestIdJwtAuthzGrant = async (
   opts: GetJwtAuthGrantBaseOptions & (ClientIdOption | ClientAssertionOption)
 ): Promise<ExchangeTokenResult> => {
-  const { resource, subjectToken, subjectTokenType, scopes, tokenUrl } = opts;
+  const { resource, subjectToken, subjectTokenType, audience, scopes, tokenUrl } = opts;
 
   if (!tokenUrl || typeof tokenUrl !== 'string') {
     throw new InvalidArgumentError('opts.tokenUrl', 'A valid url is required.');
   }
 
-  if (!resource || typeof resource !== 'string') {
-    throw new InvalidArgumentError('opts.resource', 'A valid string is required.');
+  if (!audience || typeof audience !== 'string') {
+    throw new InvalidArgumentError('opts.audience', 'A valid string is required.');
   }
 
   if (!subjectToken || typeof subjectToken !== 'string') {
@@ -89,6 +91,7 @@ export const requestIdJwtAuthzGrant = async (
   const requestData: RequestFields & (ClientIdFields | ClientAssertionFields) = {
     grant_type: OAuthGrantType.TOKEN_EXCHANGE,
     requested_token_type: OAuthTokenType.JWT_ID_JAG,
+    audience,
     resource,
     scope,
     subject_token: subjectToken,

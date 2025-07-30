@@ -41,8 +41,8 @@ export const requestIdJwtAuthzGrant = async (
     throw new InvalidArgumentError('opts.tokenUrl', 'A valid url is required.');
   }
 
-  if (!resource || typeof resource !== 'string') {
-    throw new InvalidArgumentError('opts.resource', 'A valid string is required.');
+  if (!audience || typeof audience !== 'string') {
+    throw new InvalidArgumentError('opts.audience', 'A valid string is required.');
   }
 
   if (!subjectToken || typeof subjectToken !== 'string') {
