@@ -15,7 +15,6 @@ const files = [
   ['packages/wiki0/.env.default', 'packages/wiki0/.env'],
   ['packages/authorization-server/.env.wiki.default', 'packages/authorization-server/.env.wiki'],
   ['packages/authorization-server/.env.todo.default', 'packages/authorization-server/.env.todo'],
-  ['packages/mcp-bedrock-client/.env.default', 'packages/mcp-bedrock-client/.env'],
 ];
 
 // Copy default env files if they do not exist
@@ -26,14 +25,10 @@ files.forEach(([src, dest]) => {
 });
 
 console.log('\n[setup:env] Default .env files copied (if not already present).');
-
-
 console.log('Please edit the following files if needed (uncommon):');
 console.log('  - packages/wiki0/.env');
 console.log('  - packages/todo0/.env');
-
 console.log('Please edit the following files to fill in required values:');
 console.log('  - packages/authorization-server/.env.todo');
 console.log('  - packages/authorization-server/.env.wiki');
-console.log('  - packages/mcp-bedrock-client/.env (for AWS credentials and Bedrock config)');
 console.log('Required fields: CUSTOMER1_AUTH_ISSUER, CUSTOMER1_CLIENT_ID, CUSTOMER1_CLIENT_SECRET');

@@ -1,6 +1,12 @@
 > ⚠️ **Important:**
 > To run this Cross-App Access demo app, you'll need an Okta Preview account. If you don't already have one, or if you're interested in testing Cross-App Access with Okta as your Identity Provider (IdP), please [sign up for our early access offering](https://www.okta.com/saas-security/sign-up/?_gl=1*pp31c*_gcl_au*NjgzNDkyOTQxLjE3NTA4Nzg2Njk.*_ga*MTk5NjYyODgxMi4xNzUwMjg1MDM3*_ga_QKMSDV5369*czE3NTEyOTY4OTYkbzgkZzEkdDE3NTEyOTg0MjEkajM5JGwwJGgw).
 
+[![Node.js Version](https://img.shields.io/badge/node.js-20.x-brightgreen?logo=node.js)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/oktadev/id-assertion-authz-node-example)](https://snyk.io/test/github/oktadev/id-assertion-authz-node-example)
+[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?logo=prettier)](https://prettier.io/)
+[![Last Commit](https://img.shields.io/github/last-commit/oktadev/id-assertion-authz-node-example)](https://github.com/oktadev/id-assertion-authz-node-example/commits/main)
+
 # Identity Assertion Authorization Grant – Node Example
 
 A proof-of-concept for the [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow, demonstrating secure token exchange between SSO-enabled applications using Node.js. For a visual overview, see the [explainer video](https://www.youtube.com/watch?v=I0vdmg79Ga4).
@@ -13,14 +19,12 @@ A proof-of-concept for the [Identity Assertion Authorization Grant](https://data
 - [Common Issues](#common-issues)
 - [Troubleshooting](#troubleshooting)
 - [Dev Tips](#dev-tips)
-- [How to Integrate into an Existing Service](#how-to-integrate-into-an-existing-service)
 
 # Quickstart & Dev Setup
 
 **Highly Recommended:**
 
 - **Run in GitHub Codespaces**
-
   - Click "Code" → "Create a codespace on main" in the GitHub UI and your environment will be ready in minutes.
   - Or, launch instantly:
 
@@ -57,31 +61,26 @@ Edit the following files to fill in required values:
 
 - `packages/authorization-server/.env.todo`
 - `packages/authorization-server/.env.wiki`
-- `packages/mcp-bedrock-client/.env` <!-- Added line -->
 
 **Required fields:**
 
-| File                                      | Variable Name             | Values                                |
-| ----------------------------------------- | ------------------------- | ------------------------------------- |
-| `packages/authorization-server/.env.todo` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
-|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `<Resource app OIDC client id at IdP>`|
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Resource app OIDC client secret at IdP>`|
-| `packages/authorization-server/.env.wiki` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                         |
-|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com` |
-|                                           | `CUSTOMER1_CLIENT_ID`     | `<Requesting app OIDC client id at IdP>`|
-|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Requesting app OIDC client secret at IdP>`|
-| `packages/mcp-bedrock-client/.env`        | `AWS_ACCESS_KEY_ID`       | `<your AWS access key id>`            |
-|                                           | `AWS_SECRET_ACCESS_KEY`   | `<your AWS secret access key>`        |
-
+| File                                      | Variable Name             | Values                                       |
+| ----------------------------------------- | ------------------------- | -------------------------------------------- |
+| `packages/authorization-server/.env.todo` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                                |
+|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com`        |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<Resource app OIDC client id at IdP>`       |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Resource app OIDC client secret at IdP>`   |
+| `packages/authorization-server/.env.wiki` | `CUSTOMER1_EMAIL_DOMAIN`  | `tables.fake`                                |
+|                                           | `CUSTOMER1_AUTH_ISSUER`   | `https://{orgDomain}.oktapreview.com`        |
+|                                           | `CUSTOMER1_CLIENT_ID`     | `<Requesting app OIDC client id at IdP>`     |
+|                                           | `CUSTOMER1_CLIENT_SECRET` | `<Requesting app OIDC client secret at IdP>` |
 
 > **How to retrieve these values:**
 >
 > - These values are provided by your Identity Provider (IdP) when you register your OIDC application.
-> - For AWS credentials, visit your AWS IAM console and create or retrieve an access key for your user.
 > - Typically, you can find IdP values in your IdP's admin console or developer portal under the application/client settings.
-> - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL" and "Client ID" fields.
-> - If unsure, consult your IdP or AWS documentation or administrator for guidance.
+> - For example, in Okta, Azure AD, Auth0, or similar providers, look for the "Issuer URL", "Client ID" and "Client Secret" fields.
+> - If unsure, consult your IdP administrator for guidance.
 
 ## 3. Install Dependencies & Seed the Database
 
@@ -115,38 +114,12 @@ yarn dev:all
 >   - `yarn dev:todo`
 >   - `yarn auth:todo`
 
-Or, to start the MCP Bedrock Client instead of Wiki0:
+## Open the Application UIs
 
-```sh
-yarn dev:mcp
-```
+To access the application interfaces, open your browser and navigate to:
 
-> **`yarn dev:mcp`** replaces the Wiki0 client app with the MCP Bedrock Client.
-> Use this if you want to run the MCP client app that interacts with the Todo MCP server.
->
-> **Note:**
->
-> - This command launches all backend and frontend services in parallel, each on its own port, so you can develop and test the full system at once.
-> - If you prefer, you can manually open 4 terminals and run the following commands individually for more control:
->   - `yarn auth:wiki`
->   - `yarn dev:todo`
->   - `yarn auth:todo`
->   - `yarn dev:mcp-bedrock-client`
-
-## Optionally, open the application UIs in your browser
-
-Open a new terminal window or tab before running this command
-
-```sh
-yarn open:apps # Opens both todo0 and wiki0 application UIs in your browser.
-```
-
-> **Note:**
->
-> - If you are running inside a dev container or remote environment, the browser may not open automatically.
-> - In that case, please open the following URLs manually in your browser:
->   - [http://localhost:3000/](http://localhost:3000/) (MCP Client / Wiki0)
->   - [http://localhost:3001/](http://localhost:3001/) (Todo0)
+- [http://localhost:3001/](http://localhost:3001/) (Todo0)
+- [http://localhost:3000/](http://localhost:3000/) (Wiki0)
 
 ## 5. Verify Your Setup
 
