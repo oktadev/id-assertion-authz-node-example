@@ -20,12 +20,7 @@
     "setup:env": "node scripts/setup-env.js",
     "bootstrap": "node scripts/bootstrap.js",
     "dev:all": "concurrently --names \"wiki,auth-wiki,todo,auth-todo\" --prefix-colors \"blue,magenta,green,red\" --output-path logs/dev-all.log \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
-    "dev:mcp": "concurrently --names \"mcp,auth-wiki,todo,auth-todo\" --prefix-colors \"cyan,magenta,green,red\"  --output-path logs/dev-mcp.log \"yarn dev:mcp-bedrock-client\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
-    "open:apps": "node scripts/open-apps.js",
-    "build:mcp-bedrock-client": "yarn workspace mcp-bedrock-client build",
-    "dev:mcp-bedrock-client": "yarn workspace mcp-bedrock-client dev",
-    "start:mcp-bedrock-client": "yarn workspace mcp-bedrock-client start",
-    "clean:mcp-bedrock-client": "yarn workspace mcp-bedrock-client clean"
+    "open:apps": "node scripts/open-apps.js"
   },
   "author": "",
   "license": "ISC",
