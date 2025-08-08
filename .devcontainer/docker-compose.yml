@@ -15,6 +15,7 @@ services:
 
     network_mode: host
     extra_hosts:
+      - '${IDENTITY_PROVIDER_HOST:-localhost}:host-gateway'
       - 'dev-redis:172.20.0.3'
       - 'dev-db:172.20.0.2'
 
