@@ -13,11 +13,15 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    network_mode: host
+    extra_hosts:
+      - 'rain.okta1.com:host-gateway'
+      - 'dev-redis:172.20.0.3'
+      - 'dev-db:172.20.0.2'
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+      - db
+      - redis
 
   db:
     image: mariadb:latest
@@ -26,11 +30,22 @@ services:
     restart: unless-stopped
     volumes:
       - mysqldata:/var/lib/mysql
+    networks:
+      devcontainer-network:
+        ipv4_address: 172.20.0.2
   redis:
     image: redis:latest
     restart: unless-stopped
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    networks:
+      devcontainer-network:
+        ipv4_address: 172.20.0.3
+
+networks:
+  devcontainer-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
 
 volumes:
   mysqldata:

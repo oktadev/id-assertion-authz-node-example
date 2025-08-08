@@ -24,18 +24,18 @@ services:
     volumes:
       - mysqldata:/var/lib/mysql
     ports:
-      - "127.0.0.1:3306:3306"
+      - '127.0.0.1:3306:3306'
     expose:
-    - "127.0.0.1:3306"
+      - '127.0.0.1:3306'
   redis:
     image: redis:latest
     restart: unless-stopped
     # # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     # network_mode: service:db
     ports:
-      - "127.0.0.1:6379:6379"
+      - '127.0.0.1:6379:6379'
     expose:
-    - "127.0.0.1:6379"
+      - '127.0.0.1:6379'
 
 volumes:
   mysqldata:
