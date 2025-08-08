@@ -15,7 +15,6 @@ services:
 
     network_mode: host
     extra_hosts:
-      - 'rain.okta1.com:host-gateway'
       - 'dev-redis:172.20.0.3'
       - 'dev-db:172.20.0.2'
 
