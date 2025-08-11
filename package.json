@@ -19,8 +19,7 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "setup:env": "node scripts/setup-env.js",
     "bootstrap": "node scripts/bootstrap.js",
-    "dev:all": "concurrently --names \"wiki,auth-wiki,todo,auth-todo\" --prefix-colors \"blue,magenta,green,red\" --output-path logs/dev-all.log \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\"",
-    "open:apps": "node scripts/open-apps.js"
+    "dev:all": "concurrently --names \"wiki,auth-wiki,todo,auth-todo\" --prefix-colors \"blue,magenta,green,red\" --output-path logs/dev-all.log \"yarn dev:wiki\" \"yarn auth:wiki\" \"yarn dev:todo\" \"yarn auth:todo\""
   },
   "author": "",
   "license": "ISC",
