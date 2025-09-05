@@ -164,3 +164,11 @@ Make sure to replace the content in `<>`.
 export WIKI_DATABASE_URL=<DB_URL>
 export TODO_DATABASE_URL=<DB_URL>
 ```
+
+**If you are using Docker desktop use `localhost` in `.env` files**
+
+```
+REDIS_SERVER="redis://localhost:6379"
+TODO_DATABASE_URL="mysql://root:avocado@localhost:3306/todo"
+WIKI_DATABASE_URL="mysql://root:avocado@localhost:3306/wiki"
+```
