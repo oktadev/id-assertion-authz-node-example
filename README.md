@@ -8,8 +8,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/oktadev/id-assertion-authz-node-example)](https://github.com/oktadev/id-assertion-authz-node-example/commits/main)
 
 # Identity Assertion Authorization Grant – Node Example
-
-A proof-of-concept for the [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/html/draft-parecki-oauth-identity-assertion-authz-grant) flow, demonstrating secure token exchange between SSO-enabled applications using Node.js. For a visual overview, see the [explainer video](https://www.youtube.com/watch?v=I0vdmg79Ga4).
+A proof-of-concept for the [Identity Assertion Authorization Grant](https://datatracker.ietf.org/doc/draft-ietf-oauth-identity-assertion-authz-grant) flow, demonstrating secure token exchange between SSO-enabled applications using Node.js. For a visual overview, see the [explainer video](https://www.youtube.com/watch?v=I0vdmg79Ga4).
 
 ![Test Flow](images/id_assertion_authz_grant_flow.gif)
 
